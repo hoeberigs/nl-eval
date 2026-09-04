@@ -1,0 +1,40 @@
+name: Validate
+
+# The item set is the product here, so every change to it is checked: gold
+# answers present among their options, no duplicates, and answer positions
+# balanced. No API keys and no spend.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -e .
+      - name: Validate item set
+        run: nl-eval --validate
+      - name: Tests
+        run: python tests/test_scoring.py
+      - name: Control providers must behave
+        run: |
+          nl-eval --provider echo --model echo --out /tmp/echo.json > /dev/null
+          python - <<'PY'
+          import json
+          d = json.load(open('/tmp/echo.json'))['summary']
+          assert d['accuracy'] == 0.0, f"echo provider scored {d['accuracy']}, expected 0"
+          print("echo control ok")
+          PY
+          nl-eval --provider always-a --model always-a --out /tmp/a.json > /dev/null
+          python - <<'PY'
+          import json
+          d = json.load(open('/tmp/a.json'))['summary']
+          lift = d['lift_over_chance']
+          assert lift < 0.10, f"always-a lift {lift:.3f} over chance: answer key is unbalanced"
+          print(f"position-bias control ok (lift {lift:+.3f})")
+          PY

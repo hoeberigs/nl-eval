@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nl-eval"
+version = "0.1.0"
+description = "A Dutch-language evaluation suite for language models"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Linda Hoeberigs" }]
+keywords = ["evaluation", "benchmark", "dutch", "nederlands", "llm"]
+dependencies = []
+
+[project.optional-dependencies]
+openai = ["openai>=1.40"]
+anthropic = ["anthropic>=0.34"]
+
+[project.scripts]
+nl-eval = "nleval.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/hoeberigs/nl-eval"
+
+[tool.setuptools.packages.find]
+where = ["src"]
