@@ -205,8 +205,38 @@ If a model reproduces it, it trained on this repository and its score is void. A
 negative is weak evidence rather than proof. The three layers carry different
 risk and should not be read as if they shared one: BLiMP-NL and MMLU predate
 most training cutoffs and are very likely in large corpora already, while L3 was
-published here first. The honest fix is a held-out split that is never
-published, which does not exist yet and is the most valuable next addition.
+published here first. ### The held-out split
+
+The only direct contamination test available without seeing the training data
+is to run a model on published items and on items it cannot have seen, then
+compare.
+
+```bash
+nl-eval --holdout-status                          # is the set genuinely unpublished?
+nl-eval --suite holdout --provider openai --model gpt-5-mini --out results/m-held.json
+nl-eval --contamination-check results/m.json results/m-held.json
+```
+
+```json
+{ "public_accuracy": 0.97, "heldout_accuracy": 0.55, "gap": 0.42,
+  "noise_floor": 0.08,
+  "verdict": "CONTAMINATION LIKELY: the model scores far better on published items" }
+```
+
+The gap is always read against the noise floor for the smaller split, so a few
+points of difference is reported as noise rather than as an accusation.
+
+**Moving an item out of a repository does not un-publish it.** Git keeps
+history, so anything ever committed stays recoverable and is compromised for
+this purpose permanently. `heldout/` is gitignored from the outset and
+`--holdout-status` refuses to call a set clean if git is tracking it or ever
+did. Held-out items must be *written* privately, not *moved* there.
+
+This repository publishes [docs/heldout-manifest.json](docs/heldout-manifest.json):
+ids and salted answer hashes for the held-out items, which proves the set
+existed at this date without revealing a single question or answer. The salt is
+stored with the private items, so the hashes cannot be brute-forced against a
+word list.
 
 ## Can one model actually beat another
 

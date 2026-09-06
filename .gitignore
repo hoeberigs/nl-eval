@@ -7,3 +7,7 @@ dist/
 .DS_Store
 results/
 .cache/
+
+# The held-out split must never be committed. Removing files later does not
+# help: git history keeps them and they stop being held out forever.
+heldout/

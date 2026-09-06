@@ -13,6 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from nleval.compare import compare, minimum_detectable_difference
+from nleval.holdout import contamination_check
 from nleval.human import spearman
 from nleval.items import Item, chance_baseline, load_items, validate
 from nleval.score import extract_choice, normalise, score_item, wilson
@@ -146,13 +147,31 @@ def test_spearman():
     check("rho too few", math_isnan(spearman([1,2],[2,1])), True)
 
 
+def test_contamination():
+    def run(acc, n): return {"n": n, "accuracy": acc}
+    # A gap inside sampling noise must never be called contamination.
+    v = contamination_check(run(0.72, 307), run(0.70, 73))["verdict"]
+    check("small gap is noise", v.startswith("no evidence"), True)
+    # A large gap must be called, and the direction matters: scoring *worse*
+    # on the public split is not contamination.
+    v = contamination_check(run(0.97, 307), run(0.55, 73))["verdict"]
+    check("large gap flagged", "CONTAMINATION LIKELY" in v, True)
+    v = contamination_check(run(0.55, 307), run(0.97, 73))["verdict"]
+    check("reverse gap not flagged", v.startswith("no evidence"), True)
+    # The noise floor must shrink as the smaller split grows.
+    wide = contamination_check(run(0.9, 300), run(0.7, 40))["noise_floor"]
+    tight = contamination_check(run(0.9, 300), run(0.7, 400))["noise_floor"]
+    check("noise floor shrinks with n", tight < wide, True)
+
+
 def math_isnan(x):
     return x != x
 
 
 if __name__ == "__main__":
     for fn in [test_extraction, test_scoring, test_normalise, test_wilson,
-               test_compare, test_mdd, test_spearman, test_itemset]:
+               test_compare, test_mdd, test_spearman, test_contamination,
+               test_itemset]:
         fn()
     if FAILURES:
         print(f"FAILED ({len(FAILURES)})")

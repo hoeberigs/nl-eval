@@ -236,8 +236,24 @@ n 928   accuracy 0.371   chance 0.387   lift <b>-0.016</b>
       they shared one. BLiMP-NL and Global-MMLU predate most training cutoffs and
       are very likely in large corpora already; the hand-written layer was
       published here first. The honest fix is a <b>held-out split that is never
-      published</b>. It does not exist yet, so every score here should be read as
-      an upper bound.</p>
+      published</b>, and this suite now has one.</p>
+    <p class="t">Run a model on the published items and on items it cannot have
+      seen, then compare. The gap is always read against the noise floor for the
+      smaller split, so a few points of difference is reported as noise rather
+      than as an accusation.</p>
+<pre><b>$ nl-eval --contamination-check results/m.json results/m-held.json</b>
+public 0.97   held-out 0.55   gap 0.42   noise floor 0.08
+<b>CONTAMINATION LIKELY: the model scores far better on published items</b></pre>
+    <p class="t"><b>Moving an item out of a repository does not un-publish it.</b>
+      Git keeps history, so anything ever committed is compromised for this
+      purpose permanently. The held-out directory is gitignored from the outset
+      and the status command refuses to call a set clean if git is tracking it or
+      ever did: held-out items must be written privately, not moved there.</p>
+    <p class="t">The repository publishes a
+      <a href="heldout-manifest.json">commitment manifest</a> — ids and salted
+      answer hashes only. It proves the set existed at this date without
+      revealing a single question or answer, and the salt stays with the private
+      items so the hashes cannot be brute-forced.</p>
   </section>
 
   <section>

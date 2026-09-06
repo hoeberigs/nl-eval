@@ -1,0 +1,377 @@
+{
+ "note": "Commitment to a held-out set. Ids and salted answer hashes only: neither the questions nor the answers are published, and the salt is kept with the private items so the hashes cannot be brute-forced.",
+ "items": 73,
+ "categories": [
+  "heldout_de_het",
+  "heldout_false_friends",
+  "heldout_idioms",
+  "heldout_spelling"
+ ],
+ "entries": [
+  {
+   "id": "h-de_het-001",
+   "category": "heldout_de_het",
+   "answer_hash": "21c77f04b06a8fe51b128681fd43b21f"
+  },
+  {
+   "id": "h-de_het-002",
+   "category": "heldout_de_het",
+   "answer_hash": "0b0d0202161d21aa769fa03ead506a55"
+  },
+  {
+   "id": "h-de_het-003",
+   "category": "heldout_de_het",
+   "answer_hash": "bfe861e58d85deac2c2a78f5ef573d23"
+  },
+  {
+   "id": "h-de_het-004",
+   "category": "heldout_de_het",
+   "answer_hash": "a59eba762e55ab54da35e9be8b951ba0"
+  },
+  {
+   "id": "h-de_het-005",
+   "category": "heldout_de_het",
+   "answer_hash": "bdc31e333f870a8a15f2da5b5452a10c"
+  },
+  {
+   "id": "h-de_het-006",
+   "category": "heldout_de_het",
+   "answer_hash": "9389c4bc62fed2e85bb4d2c44689ec8a"
+  },
+  {
+   "id": "h-de_het-007",
+   "category": "heldout_de_het",
+   "answer_hash": "34418dc853fa317b718a9924a90c0610"
+  },
+  {
+   "id": "h-de_het-008",
+   "category": "heldout_de_het",
+   "answer_hash": "ea54f0fa415cb9626a55fd016ed4287f"
+  },
+  {
+   "id": "h-de_het-009",
+   "category": "heldout_de_het",
+   "answer_hash": "7a59de57a1f8703e2a87f6e166619c08"
+  },
+  {
+   "id": "h-de_het-010",
+   "category": "heldout_de_het",
+   "answer_hash": "c762c3e9e922f3e39364b300dfce6ac1"
+  },
+  {
+   "id": "h-de_het-011",
+   "category": "heldout_de_het",
+   "answer_hash": "63ea814f11bfb06cc48987440a6f6d34"
+  },
+  {
+   "id": "h-de_het-012",
+   "category": "heldout_de_het",
+   "answer_hash": "8649840ca2d5af2554ec73feae2aabf5"
+  },
+  {
+   "id": "h-de_het-013",
+   "category": "heldout_de_het",
+   "answer_hash": "ddf061da496456a4af805354294022eb"
+  },
+  {
+   "id": "h-de_het-014",
+   "category": "heldout_de_het",
+   "answer_hash": "40be0228948b9b8e9283bba4496c4dcb"
+  },
+  {
+   "id": "h-de_het-015",
+   "category": "heldout_de_het",
+   "answer_hash": "7d0f357c02b4261f6170545bd0b791ea"
+  },
+  {
+   "id": "h-de_het-016",
+   "category": "heldout_de_het",
+   "answer_hash": "177622e2d284531cac895399dd97def2"
+  },
+  {
+   "id": "h-de_het-017",
+   "category": "heldout_de_het",
+   "answer_hash": "b01663635ede84a7072850d541bc8a32"
+  },
+  {
+   "id": "h-de_het-018",
+   "category": "heldout_de_het",
+   "answer_hash": "3acce56651958ebe7617a95c836b0a67"
+  },
+  {
+   "id": "h-de_het-019",
+   "category": "heldout_de_het",
+   "answer_hash": "87dc36693371ba0996756d68b97cd069"
+  },
+  {
+   "id": "h-de_het-020",
+   "category": "heldout_de_het",
+   "answer_hash": "f64dedc24e8b78c8ff4e751f4fc9e3d0"
+  },
+  {
+   "id": "h-de_het-021",
+   "category": "heldout_de_het",
+   "answer_hash": "f4c31395b30de7e1d83f37d9c9ecfc05"
+  },
+  {
+   "id": "h-de_het-022",
+   "category": "heldout_de_het",
+   "answer_hash": "b5f9484674b9ed615df7f76e05acc1f4"
+  },
+  {
+   "id": "h-de_het-023",
+   "category": "heldout_de_het",
+   "answer_hash": "abc06a216f31ecfe25329dd9c02299f2"
+  },
+  {
+   "id": "h-de_het-024",
+   "category": "heldout_de_het",
+   "answer_hash": "47ff63cca365c60ef2bf119f65db260a"
+  },
+  {
+   "id": "h-de_het-025",
+   "category": "heldout_de_het",
+   "answer_hash": "2971ee8003323d674809d0ccf2866605"
+  },
+  {
+   "id": "h-de_het-026",
+   "category": "heldout_de_het",
+   "answer_hash": "c365b33f80d741bea5193f3912ba8c33"
+  },
+  {
+   "id": "h-de_het-027",
+   "category": "heldout_de_het",
+   "answer_hash": "6cff12687833f34ffbddd0db92815f50"
+  },
+  {
+   "id": "h-de_het-028",
+   "category": "heldout_de_het",
+   "answer_hash": "67fdbf4fb1bc1174867bb057813a3122"
+  },
+  {
+   "id": "h-de_het-029",
+   "category": "heldout_de_het",
+   "answer_hash": "26640c8a38413a9bbd8fe7adc170b49b"
+  },
+  {
+   "id": "h-de_het-030",
+   "category": "heldout_de_het",
+   "answer_hash": "7a7fd7f404c011baf24468d106d05082"
+  },
+  {
+   "id": "h-de_het-031",
+   "category": "heldout_de_het",
+   "answer_hash": "82f6342acf192bd1ff23b1d51ea97b95"
+  },
+  {
+   "id": "h-de_het-032",
+   "category": "heldout_de_het",
+   "answer_hash": "a14a3f2c55c390ea6016dbd542e7eca2"
+  },
+  {
+   "id": "h-de_het-033",
+   "category": "heldout_de_het",
+   "answer_hash": "306d6a6b0761a20e4a903fc5dde2ef7e"
+  },
+  {
+   "id": "h-de_het-034",
+   "category": "heldout_de_het",
+   "answer_hash": "188fa3806f38dc8f528b1bd68bbae264"
+  },
+  {
+   "id": "h-de_het-035",
+   "category": "heldout_de_het",
+   "answer_hash": "5951c31c512933437c7d9667ae690fed"
+  },
+  {
+   "id": "h-de_het-036",
+   "category": "heldout_de_het",
+   "answer_hash": "96bbad43bf9d1d723605c261aeb21f13"
+  },
+  {
+   "id": "h-de_het-037",
+   "category": "heldout_de_het",
+   "answer_hash": "a933d833e6ce00264c6511ba52ff5cb1"
+  },
+  {
+   "id": "h-de_het-038",
+   "category": "heldout_de_het",
+   "answer_hash": "3e0ab4337871cba7592357488fa5d1d6"
+  },
+  {
+   "id": "h-de_het-039",
+   "category": "heldout_de_het",
+   "answer_hash": "a2507e1a891691c8985833e04e42cb32"
+  },
+  {
+   "id": "h-de_het-040",
+   "category": "heldout_de_het",
+   "answer_hash": "d7179bd1b3f9b77990472f7a8f8dff7c"
+  },
+  {
+   "id": "h-false_friends-001",
+   "category": "heldout_false_friends",
+   "answer_hash": "4f48537f9448d03fe98f7c9cec1337db"
+  },
+  {
+   "id": "h-false_friends-002",
+   "category": "heldout_false_friends",
+   "answer_hash": "af111393f6fe455c86de8ab7e40f4cbb"
+  },
+  {
+   "id": "h-false_friends-003",
+   "category": "heldout_false_friends",
+   "answer_hash": "dd6900b7a9e3f8b0acd1dc4858f14e50"
+  },
+  {
+   "id": "h-false_friends-004",
+   "category": "heldout_false_friends",
+   "answer_hash": "06ca2868920cefa000c1e219b951515a"
+  },
+  {
+   "id": "h-false_friends-005",
+   "category": "heldout_false_friends",
+   "answer_hash": "d15b8e6ee9d0b043086140c78ffdbbae"
+  },
+  {
+   "id": "h-false_friends-006",
+   "category": "heldout_false_friends",
+   "answer_hash": "c0d183be1e9be0aba26a551e5d8c6793"
+  },
+  {
+   "id": "h-false_friends-007",
+   "category": "heldout_false_friends",
+   "answer_hash": "a57be9830f4d870994dc90dd8e173993"
+  },
+  {
+   "id": "h-false_friends-008",
+   "category": "heldout_false_friends",
+   "answer_hash": "65134e94cd54360214a88251e804e735"
+  },
+  {
+   "id": "h-idioms-001",
+   "category": "heldout_idioms",
+   "answer_hash": "1aa58964a0f4aa88f76189648489a386"
+  },
+  {
+   "id": "h-idioms-002",
+   "category": "heldout_idioms",
+   "answer_hash": "18a029debbb265b072e4f41e131531bb"
+  },
+  {
+   "id": "h-idioms-003",
+   "category": "heldout_idioms",
+   "answer_hash": "47e7c29599a6f319f0f559ba2f0a3eeb"
+  },
+  {
+   "id": "h-idioms-004",
+   "category": "heldout_idioms",
+   "answer_hash": "051731e58866cadb100fac812a4e299a"
+  },
+  {
+   "id": "h-idioms-005",
+   "category": "heldout_idioms",
+   "answer_hash": "444a2af8a8e5d28d9974b26779eed052"
+  },
+  {
+   "id": "h-idioms-006",
+   "category": "heldout_idioms",
+   "answer_hash": "a6d33908c4eb12aefb604b46acc3545a"
+  },
+  {
+   "id": "h-idioms-007",
+   "category": "heldout_idioms",
+   "answer_hash": "5c9d7c0421ce246e06f59eb7313d2397"
+  },
+  {
+   "id": "h-idioms-008",
+   "category": "heldout_idioms",
+   "answer_hash": "d5b716d6147abb17dff002750999efd0"
+  },
+  {
+   "id": "h-idioms-009",
+   "category": "heldout_idioms",
+   "answer_hash": "8c2bcf3007eb69cfaf989c01db779f85"
+  },
+  {
+   "id": "h-idioms-010",
+   "category": "heldout_idioms",
+   "answer_hash": "d87f7d0793248532bf7f22eeb9658ef3"
+  },
+  {
+   "id": "h-spelling-001",
+   "category": "heldout_spelling",
+   "answer_hash": "bd63f1bbe7a97b87ba74380ce8829f4f"
+  },
+  {
+   "id": "h-spelling-002",
+   "category": "heldout_spelling",
+   "answer_hash": "1cc9d5593cd4e18bb5e1de3fb7e08e32"
+  },
+  {
+   "id": "h-spelling-003",
+   "category": "heldout_spelling",
+   "answer_hash": "79e435bf428ddc9e62cb7104951b24aa"
+  },
+  {
+   "id": "h-spelling-004",
+   "category": "heldout_spelling",
+   "answer_hash": "adc6e7b61ea00f6b7b2655b322a79bd8"
+  },
+  {
+   "id": "h-spelling-005",
+   "category": "heldout_spelling",
+   "answer_hash": "680265fb43ebf16dcd6179ce44a6c369"
+  },
+  {
+   "id": "h-spelling-006",
+   "category": "heldout_spelling",
+   "answer_hash": "775e9b3e85dbf78cc40d4e04deab9b77"
+  },
+  {
+   "id": "h-spelling-007",
+   "category": "heldout_spelling",
+   "answer_hash": "c09d2179781b1dfac0d2c8f00770f038"
+  },
+  {
+   "id": "h-spelling-008",
+   "category": "heldout_spelling",
+   "answer_hash": "5d377b23b9d0fbbf2c159005722fcb20"
+  },
+  {
+   "id": "h-spelling-009",
+   "category": "heldout_spelling",
+   "answer_hash": "c61c850f2e2f067aa6b3d6197d004126"
+  },
+  {
+   "id": "h-spelling-010",
+   "category": "heldout_spelling",
+   "answer_hash": "19bdb2e29ef80363b09c22f0db0aedcf"
+  },
+  {
+   "id": "h-spelling-011",
+   "category": "heldout_spelling",
+   "answer_hash": "5841635ba6dd458a391ef04bb60e3c57"
+  },
+  {
+   "id": "h-spelling-012",
+   "category": "heldout_spelling",
+   "answer_hash": "9ea34c2a7d1251b970e0aba386cd879a"
+  },
+  {
+   "id": "h-spelling-013",
+   "category": "heldout_spelling",
+   "answer_hash": "03fb479af2d45a384bac2dc08cb307e0"
+  },
+  {
+   "id": "h-spelling-014",
+   "category": "heldout_spelling",
+   "answer_hash": "1858c63944ac56079cd51ef73877d351"
+  },
+  {
+   "id": "h-spelling-015",
+   "category": "heldout_spelling",
+   "answer_hash": "7a4cf1b2f8747f0dcc9d425e7bb506d0"
+  }
+ ]
+}

@@ -15,7 +15,8 @@ DEFAULT_ITEMS = Path(__file__).resolve().parents[2] / "items"
 
 
 SUITES = {
-    "core":  "the 189 hand-written items in items/ (applied Dutch)",
+    "core":  "the hand-written items in items/ (applied Dutch)",
+    "holdout": "the private held-out items in heldout/, never committed",
     "blimp": "BLiMP-NL minimal pairs, native Dutch grammar (CC-BY-4.0)",
     "mmlu":  "Global-MMLU Dutch, translated knowledge (Apache-2.0)",
     "all":   "every layer, scored and reported separately",
@@ -36,6 +37,14 @@ def _load(args) -> list:
     items: list = []
     if "core" in want:
         items += load_items(Path(args.items))
+    if "holdout" in want:
+        from .holdout import load_heldout
+        held = load_heldout()
+        if not held:
+            print("no held-out items found under heldout/ (see --holdout-status)",
+                  file=sys.stderr)
+            sys.exit(4)
+        items += held
     if "blimp" in want or "mmlu" in want:
         from .sources import SourceError, load_blimp, load_mmlu
         try:
@@ -79,6 +88,12 @@ def main(argv=None) -> int:
     ap.add_argument("--publish", metavar="DIR",
                     help="collect every report in DIR into docs/results.json and exit")
     ap.add_argument("--estimate", action="store_true", help="print the cost estimate and exit")
+    ap.add_argument("--holdout-status", action="store_true",
+                    help="report the held-out set and whether git ever saw it")
+    ap.add_argument("--holdout-manifest", action="store_true",
+                    help="publish ids and salted answer hashes, never the items")
+    ap.add_argument("--contamination-check", nargs=2, metavar=("PUBLIC.json","HELDOUT.json"),
+                    help="compare a model's public score against its held-out score")
     ap.add_argument("--canary", action="store_true",
                     help="ask the model for this suite's canary GUID; a clean model cannot produce it")
     ap.add_argument("--human-ratings", metavar="FILE",
@@ -116,6 +131,30 @@ def main(argv=None) -> int:
         out = Path("docs/results.json")
         payload = collect(Path(args.publish), meta, out)
         print(f"wrote {out} with {len(payload['runs'])} run(s)", file=sys.stderr)
+        return 0
+
+    if args.holdout_status:
+        from .holdout import status
+        st = status()
+        print(json.dumps(st, indent=2, ensure_ascii=False))
+        return 0 if st["clean"] or not st["items"] else 1
+
+    if args.holdout_manifest:
+        from .holdout import MANIFEST, write_manifest
+        try:
+            payload = write_manifest()
+        except RuntimeError as e:
+            print(str(e), file=sys.stderr)
+            return 4
+        print(f"wrote {MANIFEST} committing to {payload['items']} held-out items",
+              file=sys.stderr)
+        return 0
+
+    if args.contamination_check:
+        from .holdout import contamination_check
+        docs = [json.loads(Path(f).read_text(encoding="utf-8"))["summary"]
+                for f in args.contamination_check]
+        print(json.dumps(contamination_check(docs[0], docs[1]), indent=2, ensure_ascii=False))
         return 0
 
     if args.canary:
