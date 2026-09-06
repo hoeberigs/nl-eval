@@ -1,62 +1,86 @@
 # nl-eval
 
-A Dutch-language evaluation suite for language models. **189 items across 10 categories**, every
-one objectively scorable.
+A Dutch-language evaluation suite for language models, in three layers: **native
+Dutch grammar**, **translated breadth**, and **applied Dutch** that no existing
+benchmark covers.
 
-Most multilingual evaluations test Dutch by translating English items, which measures translation
-quality rather than Dutch. This suite tests the things that are hard *because* they are Dutch:
-`de`/`het` assignment, the tussen-n, diminutive formation, separable verbs and subclause word
-order, idioms, English false friends, and the `u`/`je` register distinction that governs every
-piece of Dutch business correspondence.
+```bash
+nl-eval --suite all          # all three layers, scored separately
+nl-eval --suite core         # the 189 hand-written items, no network needed
+nl-eval --validate           # check the item set, no API calls, no spend
+```
+
+## Why not just translate an English benchmark
+
+That is the obvious move and it is the weaker one.
+
+1. **It is already done.** [Global-MMLU](https://huggingface.co/datasets/CohereLabs/Global-MMLU)
+   ships a Dutch subset of ~14.3k questions under Apache-2.0. Re-translating
+   MMLU duplicates free work.
+2. **Translated items largely measure translated English.** The questions keep
+   their source-language shape, and culture-bound knowledge does not survive
+   the trip. A model can score well on translated Dutch while handling actual
+   Dutch badly.
+3. **The hardest Dutch has no English source.** There is no English sentence
+   that becomes *"welk lidwoord hoort bij beleid"*. `de`/`het`, the tussen-n,
+   and the u/je register that governs Dutch business correspondence cannot be
+   produced by translating anything.
+
+So this suite uses translation only where breadth is the point, takes its
+grammar layer from a corpus built in Dutch, and hand-writes the rest.
+
+## The three layers
+
+| Layer | Source | What it measures | Licence |
+|---|---|---|---|
+| **L1 grammar** | [BLiMP-NL](https://huggingface.co/datasets/juletxara/blimp-nl) — 9,000 minimal pairs, 22 phenomena, 84 paradigms, human acceptability from 30+ raters | Native Dutch syntax | CC-BY-4.0 |
+| **L2 breadth** | Global-MMLU (nl), ~14.3k | Knowledge and reasoning, comparable across languages | Apache-2.0 |
+| **L3 applied** | 189 hand-written items, 10 categories | Orthography, register, notation, civics, false friends, BE/NL | MIT |
+
+L1 and L2 are **fetched at run time and never redistributed**. They download on
+first use into a gitignored cache under `.cache/sources/`, so their licences
+stay with their publishers and this repository ships only the adapter. Full
+citations in [ATTRIBUTION.md](ATTRIBUTION.md).
+
+`--suite core` needs no network at all.
+
+### The layers are never blended into one number
+
+A single headline mixing native grammar with translated knowledge cannot be read
+as either. The runner scores per category, and the chance baseline is published
+next to every score because it differs by layer: L1 is two-option (0.50), L2 is
+four-option (0.25), L3 is mixed (0.339).
 
 ## No judge, by design
 
-Every item is multiple choice or exact string match. Nothing here needs an LLM judge, which means:
+Every item is multiple choice or exact string match. Nothing needs an LLM to
+grade it, which means:
 
-- **It costs cents, not euros.** A full run is roughly 30k input tokens.
-- **It is deterministic.** Re-running gives the same score, so a change in the number is a change
-  in the model.
-- **It has no judge bias.** An LLM-judged Dutch suite inherits the judge's own Dutch weaknesses,
-  which is precisely what is under test.
+- **A full core run costs about €0.01** on a small model (~30k input tokens).
+- **Scores are deterministic.** A change in the number is a change in the model.
+- **No judge bias.** An LLM-judged Dutch suite inherits the judge's own Dutch
+  weaknesses, which is exactly what is under test.
 
-## Controls come with the suite
+## Controls ship with the suite
 
-An evaluation that cannot be gamed by accident needs its own controls, so two are built in and
-cost nothing to run:
+An evaluation that cannot be gamed by accident needs its own baselines, so two
+are built in and cost nothing:
 
 ```bash
 nl-eval --provider echo       # answers nothing at all
 nl-eval --provider always-a   # always answers "A"
 ```
 
-| Control | Accuracy | Chance baseline | Reading |
+| Control | Accuracy | Chance | Reading |
 |---|---|---|---|
 | `echo` | 0.000 | 0.339 | The scorer awards no free marks; 189/189 replies logged unparseable |
-| `always-a` | 0.355 | 0.339 | +1.6pp over chance, so the answer key is position-balanced |
+| `always-a` | 0.354 | 0.339 | +1.6pp over chance, so the answer key is position-balanced |
 
-If `always-a` ever scores well above chance, the answer key has drifted onto one letter and the
-suite is measuring formatting habits. `--validate` checks for this automatically.
+If `always-a` ever scores well above chance, the answer key has drifted onto one
+letter and the suite is measuring letter preference. `--validate` checks this
+automatically, including for the externally-sourced layers.
 
-The chance baseline is **0.339**, not 0.25: `de_het` and `spelling` are two-option items. It is
-published next to every score, because an accuracy figure means nothing until you know what zero
-knowledge looks like.
-
-## Categories
-
-| Category | Items | What it probes |
-|---|---:|---|
-| `de_het` | 40 | Article assignment, including the `-heid`/`-ing`/`ge-` regularities |
-| `spelling` | 27 | Tussen-n, `d`/`t`/`dt`, 't kofschip, past participles of loanwords |
-| `civics` | 24 | Provinces and their capitals, institutions, national dates |
-| `idioms` | 22 | Figurative meaning, with literal readings as distractors |
-| `diminutives` | 18 | `-je`/`-tje`/`-pje`/`-kje`/`-etje` and vowel doubling |
-| `false_friends` | 18 | `eventueel`, `actueel`, `brutaal`, `miljard` vs `biljoen` |
-| `word_order` | 12 | V2, verb-final subclauses, separable verbs, `om ... te` |
-| `register` | 10 | `u`/`uw` vs `je`/`jouw` consistency within a sentence |
-| `formatting` | 10 | Decimal comma, thousands point, dates, postcodes, currency |
-| `variants` | 8 | Belgian versus Netherlands Dutch |
-
-## Usage
+## Running it
 
 ```bash
 git clone https://github.com/hoeberigs/nl-eval.git
@@ -65,48 +89,51 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -e .
 ```
 
-Check the item set and see the chance baseline, no API calls:
+Free, no key, no network:
 
 ```bash
 nl-eval --validate
+nl-eval --provider echo --suite core
 ```
 
-Estimate what a run would cost before running it:
+Free, local model via [Ollama](https://ollama.com):
 
 ```bash
-nl-eval --estimate --model gpt-5-mini
+ollama pull qwen2.5:7b
+nl-eval --provider ollama --model qwen2.5:7b --suite all
 ```
 
-Run against a model:
+Hosted models:
 
 ```bash
 export OPENAI_API_KEY=...
-nl-eval --provider openai --model gpt-5-mini --max-spend 0.50
+nl-eval --provider openai --model gpt-5-mini --suite all --max-spend 0.50
 ```
 
 ```bash
 export ANTHROPIC_API_KEY=...
-nl-eval --provider anthropic --model claude-haiku-4-5-20251001 --max-spend 0.50
+nl-eval --provider anthropic --model claude-haiku-4-5-20251001 --suite core --max-spend 0.50
 ```
 
 ### The spend ceiling is enforced, not advisory
 
-`--max-spend` is a euro ceiling checked **before the first API call**. The run refuses to start if
-the estimate exceeds it and tells you what to cut. The default is €1.00, and the price table
-deliberately over-estimates, because the purpose is to prevent an accidental spend and being
-cautious is the correct direction to be wrong in.
+`--max-spend` is a euro ceiling checked **before the first API call**. The run
+refuses to start if the estimate exceeds it and says what to cut. The default is
+€1.00 and the price table deliberately over-estimates: the purpose is to prevent
+an accidental spend, so being wrong in the cautious direction is correct.
 
 Narrow a run rather than raising the ceiling:
 
 ```bash
-nl-eval --provider openai --model gpt-5 --category de_het,spelling --limit 40
+nl-eval --suite core --category de_het,spelling --limit 40
 ```
 
 ## Interpreting a result
 
-Report the accuracy **with its interval and against the baseline**. Per-category samples run from
-8 to 40 items, so a category score carries a wide Wilson interval and small differences between
-two models on one category are usually noise. The suite emits these automatically:
+Report accuracy **with its interval and against the baseline**. Per-category
+samples run from 8 to 40 items in L3, so a category score carries a wide Wilson
+interval and small differences between two models on one category are usually
+noise. The suite emits these automatically:
 
 ```json
 {
@@ -119,25 +146,37 @@ two models on one category are usually noise. The suite emits these automaticall
 }
 ```
 
-Watch `unparsed_replies`. A model that ignores the output format is being scored on instruction
-following as much as on Dutch, and a high count means the headline number is understated.
+Watch `unparsed_replies`. A model that ignores the output format is being scored
+on instruction-following as much as on Dutch, and a high count means the
+headline number is understated.
 
-## Adding items
+## Publishing a leaderboard
 
-Items are JSONL, one object per line, in `items/`:
-
-```json
-{"id": "de_het-041", "category": "de_het", "type": "mcq",
- "prompt": "Welk lidwoord hoort bij \"vergunning\"?",
- "choices": ["de", "het"], "answer": "de",
- "note": "Woorden op -ing zijn de-woorden."}
+```bash
+nl-eval --provider openai --model gpt-5-mini --out results/gpt-5-mini.json
+nl-eval --publish results        # writes docs/results.json
 ```
 
-Then run `nl-eval --validate`, which checks that gold answers appear among their own options, that
-no item is duplicated, and that answer positions stay balanced.
+`docs/` is served by GitHub Pages. Control runs are kept and labelled rather
+than filtered out: a leaderboard that hides its own baselines is asking to be
+taken on trust.
 
-`tools_build_items.py` regenerates the files from source lists and assigns answer positions
-round-robin, which is how the balance is maintained as items are added.
+## Known limits
+
+- **BLiMP-NL is scored as a forced choice here**, not by comparing the
+  log-probability of each sentence as the corpus intends. A forced choice can be
+  right for the wrong reason. Where a provider exposes log-probs, prefer that and
+  state which mode a published score used.
+- **The human acceptability ratings are not yet used.** They are the most
+  valuable part of BLiMP-NL, because they allow scoring model–human correlation
+  rather than bare accuracy. That is the next thing worth building.
+- **Multiple choice is recognition, not production.** A model can pick
+  `pannenkoek` from two options and still misspell it when writing freely.
+- **L3 is written by one author** and has not been reviewed by a second native
+  speaker. Answers follow the official spelling (*Woordenlijst Nederlandse
+  Taal*) and standard Netherlands Dutch, except in `variants`. A native review
+  is advisable before publishing L3 results.
+- **L2 inherits Global-MMLU's translation quality**, including any errors in it.
 
 ## Tests
 
@@ -145,22 +184,13 @@ round-robin, which is how the balance is maintained as items are added.
 python tests/test_scoring.py
 ```
 
-These cover answer extraction, which is where an eval most easily goes wrong in silence. One case
-in there is not hypothetical: an early version scored the reply "alpha, beta, gamma, delta" as a
-confident "A", because the last word ends in that letter. A model listing every option would have
-been given credit for choosing one.
-
-## Limits
-
-- **Multiple choice is recognition, not production.** A model can pick `pannenkoek` from two
-  options and still misspell it when writing freely.
-- **Coverage is uneven by design.** Categories are sized by how many items could be written with
-  confident gold answers, not to equal weight.
-- **Prescriptive norms.** Answers follow the official spelling (`Woordenlijst Nederlandse Taal`)
-  and standard Netherlands Dutch, except in `variants`.
-- **No open generation, translation or long-form coherence.** Those need a judge, which this suite
-  deliberately avoids.
+These cover answer extraction, where an eval most easily goes wrong in silence.
+One case is not hypothetical: an early version scored the reply
+"alpha, beta, gamma, delta" as a confident "A", because the last word ends in
+that letter. A model listing every option would have been credited with choosing
+one.
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE).
+MIT for this repository. The external layers keep their own licences; see
+[ATTRIBUTION.md](ATTRIBUTION.md).

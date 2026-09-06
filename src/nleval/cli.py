@@ -14,8 +14,40 @@ from .runner import BudgetExceeded, estimate_cost, run, write_report
 DEFAULT_ITEMS = Path(__file__).resolve().parents[2] / "items"
 
 
+SUITES = {
+    "core":  "the 189 hand-written items in items/ (applied Dutch)",
+    "blimp": "BLiMP-NL minimal pairs, native Dutch grammar (CC-BY-4.0)",
+    "mmlu":  "Global-MMLU Dutch, translated knowledge (Apache-2.0)",
+    "all":   "every layer, scored and reported separately",
+}
+
+
 def _load(args) -> list:
-    items = load_items(Path(args.items))
+    """Assemble the requested layers.
+
+    The layers stay separate in the report by design: a single number blending
+    native grammar with translated knowledge cannot be read as either, so the
+    runner scores per category and the suites keep distinct category names.
+    """
+    want = [w.strip() for w in (args.suite or "core").split(",")]
+    if "all" in want:
+        want = ["core", "blimp", "mmlu"]
+
+    items: list = []
+    if "core" in want:
+        items += load_items(Path(args.items))
+    if "blimp" in want or "mmlu" in want:
+        from .sources import SourceError, load_blimp, load_mmlu
+        try:
+            if "blimp" in want:
+                items += load_blimp(per_phenomenon=args.per_phenomenon)
+            if "mmlu" in want:
+                items += load_mmlu(limit=args.mmlu_limit)
+        except SourceError as e:
+            print(f"could not load an external source:\n  {e}", file=sys.stderr)
+            print("  (external layers download on first use and are cached under "
+                  ".cache/sources; --suite core needs no network)", file=sys.stderr)
+            sys.exit(4)
     if args.category:
         wanted = {c.strip().lower() for c in args.category.split(",")}
         items = [i for i in items if i.category.lower() in wanted]
@@ -29,6 +61,12 @@ def main(argv=None) -> int:
     ap.add_argument("--items", default=str(DEFAULT_ITEMS))
     ap.add_argument("--provider", default="echo", choices=sorted(providers.REGISTRY))
     ap.add_argument("--model", default="echo")
+    ap.add_argument("--suite", default="core",
+                    help="comma-separated layers: " + ", ".join(SUITES))
+    ap.add_argument("--per-phenomenon", type=int, default=20,
+                    help="BLiMP-NL items sampled per linguistic phenomenon (22 phenomena)")
+    ap.add_argument("--mmlu-limit", type=int, default=300,
+                    help="Global-MMLU Dutch questions to pull")
     ap.add_argument("--category", help="comma-separated categories")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--out", default="results/report.json")
@@ -36,8 +74,29 @@ def main(argv=None) -> int:
                     help="hard ceiling in EUR; the run refuses to start above it")
     ap.add_argument("--sleep", type=float, default=0.0)
     ap.add_argument("--validate", action="store_true", help="check the item set and exit")
+    ap.add_argument("--publish", metavar="DIR",
+                    help="collect every report in DIR into docs/results.json and exit")
     ap.add_argument("--estimate", action="store_true", help="print the cost estimate and exit")
     args = ap.parse_args(argv)
+
+    if args.publish:
+        from .publish import collect
+        cats: dict[str, int] = {}
+        # Describe the suite that was actually requested, not just the local
+        # items directory: publishing --suite all while reporting only the core
+        # item count understates the benchmark on its own leaderboard.
+        allitems = _load(argparse.Namespace(**{**vars(args), "category": None, "limit": None}))
+        for i in allitems:
+            cats[i.category] = cats.get(i.category, 0) + 1
+        meta = {
+            "total": len(allitems),
+            "categories": dict(sorted(cats.items())),
+            "chance_baseline": round(chance_baseline(allitems), 4),
+        }
+        out = Path("docs/results.json")
+        payload = collect(Path(args.publish), meta, out)
+        print(f"wrote {out} with {len(payload['runs'])} run(s)", file=sys.stderr)
+        return 0
 
     items = _load(args)
     if not items:

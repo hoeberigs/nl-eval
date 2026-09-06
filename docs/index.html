@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nl-eval — a Dutch evaluation suite for language models</title>
+<meta name="description" content="Three layers: native Dutch grammar from BLiMP-NL, translated breadth from Global-MMLU, and hand-written applied Dutch. No LLM judge, controls included.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fbfaf8'/%3E%3Crect x='5' y='7' width='22' height='3' fill='%23111'/%3E%3Crect x='5' y='14' width='14' height='3' fill='%23111'/%3E%3Crect x='5' y='21' width='19' height='3' fill='%23111'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#fbfaf8; --paper-2:#f2f0ea;
+  --ink:#14161a;      /* 16.5:1 */
+  --ink-2:#4a4f57;    /*  8.3:1 */
+  --ink-3:#6d727a;    /*  5.1:1 */
+  --rule:#dcd8cf; --rule-2:#b9b4a8;
+  --ok:#1a7f5a; --warn:#a8480f; --info:#1d4ed8;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#14161a; --paper-2:#1c1f24;
+    --ink:#eeece5; --ink-2:#b6b2a8; --ink-3:#8d8981;
+    --rule:#2b2f35; --rule-2:#464b53;
+    --ok:#3ddc97; --warn:#ff8a5b; --info:#7ab8ff;
+  }
+}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);
+  font-family:Archivo,-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:17px;line-height:1.6;font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto;padding:0 22px;overflow-x:clip}
+main,section{min-width:0;max-width:100%}
+
+header{padding:40px 0 26px;border-bottom:2px solid var(--ink)}
+h1{font-size:clamp(30px,4.6vw,44px);font-weight:700;letter-spacing:-.025em;line-height:1.05}
+.sub{margin-top:14px;font-size:19px;color:var(--ink-2);max-width:58ch}
+.sub b{color:var(--ink);font-weight:600}
+.links{margin-top:18px;font-size:15px;color:var(--ink-3);display:flex;gap:18px;flex-wrap:wrap}
+.links a{color:var(--ink-2)}
+
+section{padding:38px 0;border-bottom:1px solid var(--rule)}
+section:last-of-type{border-bottom:none}
+h2{font-size:22px;font-weight:700;letter-spacing:-.012em}
+h2 .k{display:block;font-size:13px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+p.t{margin-top:14px;max-width:64ch;color:var(--ink-2)}
+p.t + p.t{margin-top:11px}
+p.t b{color:var(--ink);font-weight:600}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:2px 5px;border-radius:3px}
+pre{margin-top:16px;background:var(--paper-2);border:1px solid var(--rule);border-radius:5px;
+  padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;color:var(--ink-2)}
+pre b{color:var(--ink);font-weight:600}
+
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;margin-top:20px}
+table{width:100%;border-collapse:collapse;font-size:16px;min-width:560px}
+th{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600;
+  text-align:left;padding:0 16px 9px 0;border-bottom:1px solid var(--rule-2);white-space:nowrap}
+td{padding:10px 16px 10px 0;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+td:first-child{color:var(--ink);font-weight:500}
+th.n,td.n{text-align:right;padding-right:0}
+tbody tr:last-child td{border-bottom:none}
+tr.control td{color:var(--ink-3)}
+tr.control td:first-child{color:var(--ink-2);font-weight:400}
+.pill{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 7px;border-radius:3px;background:var(--paper-2);color:var(--ink-3);margin-left:8px}
+.pill.ctl{color:var(--info)}
+.bar{height:10px;background:var(--paper-2);border-radius:2px;position:relative;min-width:60px}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ok);display:block}
+.bar i.low{background:var(--ink-3)}
+.layers td:first-child{white-space:nowrap}
+.empty{margin-top:20px;border-left:3px solid var(--info);background:var(--paper-2);
+  padding:14px 18px;color:var(--ink-2);font-size:16px}
+.empty b{color:var(--ink)}
+footer{padding:26px 0 64px;font-size:14px;color:var(--ink-3)}
+footer a{color:var(--ink-2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>nl-eval</h1>
+  <p class="sub">A Dutch evaluation suite for language models, in three layers:
+    <b>native grammar</b>, <b>translated breadth</b>, and <b>applied Dutch</b>
+    that no existing benchmark covers. No LLM judge, so a run is deterministic
+    and costs about a cent.</p>
+  <div class="links">
+    <a href="https://github.com/hoeberigs/nl-eval">GitHub</a>
+    <a href="https://github.com/hoeberigs/nl-eval/blob/main/ATTRIBUTION.md">Attribution &amp; licences</a>
+    <span id="stamp"></span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2><span class="k">Results</span>Leaderboard</h2>
+    <p class="t">Accuracy with a 95% Wilson interval, against the chance
+      baseline for the layers included in that run. Control runs are listed and
+      labelled rather than hidden: a leaderboard that omits its own baselines is
+      asking to be taken on trust.</p>
+    <div id="board"></div>
+  </section>
+
+  <section>
+    <h2><span class="k">Composition</span>The three layers</h2>
+    <p class="t">The layers are scored separately and never blended into one
+      number. A single headline mixing native grammar with translated knowledge
+      cannot be read as either, and the chance baseline differs by layer.</p>
+    <div class="scroll"><table class="layers">
+      <thead><tr><th>Layer</th><th>Source</th><th class="n">Items</th><th>Licence</th></tr></thead>
+      <tbody>
+        <tr><td>L1 · grammar</td>
+            <td>BLiMP-NL — native Dutch minimal pairs, 22 phenomena, human acceptability ratings</td>
+            <td class="n" id="nL1">—</td><td>CC-BY-4.0</td></tr>
+        <tr><td>L2 · breadth</td>
+            <td>Global-MMLU (nl) — translated knowledge and reasoning</td>
+            <td class="n" id="nL2">—</td><td>Apache-2.0</td></tr>
+        <tr><td>L3 · applied</td>
+            <td>Hand-written: <code>de</code>/<code>het</code>, tussen-n, diminutives, word order, idioms, false friends, u/je register, notation, civics, BE/NL</td>
+            <td class="n" id="nL3">—</td><td>MIT</td></tr>
+      </tbody>
+    </table></div>
+    <p class="t">L1 and L2 are fetched at run time and never redistributed: they
+      download on first use into a local cache, so their licences stay with
+      their publishers. <code>--suite core</code> needs no network.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Category</th><th class="n">Items</th><th>Share</th></tr></thead>
+      <tbody id="cats"></tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2><span class="k">Why not translation</span>Translating an English benchmark is the weaker move</h2>
+    <p class="t"><b>It is already done.</b> Global-MMLU ships Dutch under
+      Apache-2.0. Re-translating MMLU duplicates free work.</p>
+    <p class="t"><b>Translated items largely measure translated English.</b> The
+      questions keep their source-language shape and culture-bound knowledge does
+      not survive the trip, so a model can score well on translated Dutch while
+      handling actual Dutch badly.</p>
+    <p class="t"><b>The hardest Dutch has no English source.</b> There is no
+      English sentence that becomes <i>“welk lidwoord hoort bij beleid”</i>.
+      Article assignment, the tussen-n, and the u/je register cannot be produced
+      by translating anything, which is why L3 is written by hand.</p>
+  </section>
+
+  <section>
+    <h2><span class="k">Integrity</span>The controls</h2>
+    <p class="t">Two baselines ship with the suite and cost nothing to run. If
+      <code>always-a</code> ever scores meaningfully above chance, the answer key
+      has drifted onto one letter and the suite is measuring letter preference
+      rather than Dutch. <code>--validate</code> checks this automatically,
+      including for the externally-sourced layers.</p>
+<pre><b>$ nl-eval --provider echo</b>       # answers nothing at all
+accuracy 0.000   chance 0.339   189/189 replies unparseable
+
+<b>$ nl-eval --provider always-a</b>   # always answers "A"
+accuracy 0.354   chance 0.339   lift +0.016
+
+<b>$ nl-eval --suite all --provider always-a</b>
+n 928   accuracy 0.371   chance 0.387   lift <b>-0.016</b>
+  L1 blimp    440   0.500   (exactly 2-choice chance)
+  L2 mmlu_nl  299   0.191   (key leans away from A)
+  L3 core     189   0.354</pre>
+    <p class="t">Across all three layers a fixed-letter guesser scores slightly
+      <b>below</b> chance.</p>
+  </section>
+
+  <section>
+    <h2><span class="k">Running it</span>Free and paid paths</h2>
+<pre><b>pip install -e .</b>
+
+<b>nl-eval --validate</b>                                  # no network, no spend
+<b>nl-eval --provider ollama --model qwen2.5:7b --suite all</b>   # free, local
+<b>nl-eval --provider openai --model gpt-5-mini --suite all --max-spend 0.50</b></pre>
+    <p class="t"><code>--max-spend</code> is a euro ceiling checked <b>before the
+      first API call</b>. The run refuses to start if the estimate exceeds it and
+      says what to cut. The price table deliberately over-estimates.</p>
+  </section>
+
+  <section>
+    <h2><span class="k">Limits</span>What this does not measure</h2>
+    <p class="t"><b>BLiMP-NL is scored as a forced choice here</b>, not by
+      comparing the log-probability of each sentence as the corpus intends. A
+      forced choice can be right for the wrong reason.</p>
+    <p class="t"><b>The human acceptability ratings are not used yet.</b> They
+      are the most valuable part of BLiMP-NL, because they allow scoring
+      model–human correlation rather than bare accuracy. That is the next thing
+      worth building.</p>
+    <p class="t"><b>Multiple choice is recognition, not production.</b> A model
+      can pick <code>pannenkoek</code> from two options and still misspell it
+      when writing freely.</p>
+    <p class="t"><b>L3 is written by one author</b> and has not been reviewed by
+      a second native speaker. A native review is advisable before publishing L3
+      results. L2 inherits Global-MMLU's translation quality, including its
+      errors.</p>
+  </section>
+</main>
+
+<footer><p id="foot"></p></footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+function el(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function pct(x,d){return (100*Number(x)).toFixed(d==null?1:d)+"%";}
+
+fetch("results.json",{cache:"no-store"})
+  .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();})
+  .then(function(D){
+    var items=D.items||{},cats=items.categories||{};
+    el("stamp").textContent="updated "+String(D.generated_at||"").slice(0,10);
+
+    el("nL1").textContent=(cats.blimp||0)||"not in this build";
+    el("nL2").textContent=(cats.mmlu_nl||0)||"not in this build";
+    var core=Object.keys(cats).filter(function(k){return k!=="blimp"&&k!=="mmlu_nl";})
+      .reduce(function(a,k){return a+cats[k];},0);
+    el("nL3").textContent=core||"—";
+
+    var total=items.total||1;
+    el("cats").innerHTML=Object.keys(cats).sort(function(a,b){return cats[b]-cats[a];})
+      .map(function(k){
+        var w=(cats[k]/total)*100;
+        return "<tr><td>"+esc(k)+"</td><td class='n'>"+cats[k]+"</td>"+
+          "<td><div class='bar'><i class='low' style='width:"+w.toFixed(1)+"%'></i></div></td></tr>";
+      }).join("");
+
+    var runs=(D.runs||[]);
+    var real=runs.filter(function(r){return !r.is_control;});
+    var head="<thead><tr><th>Model</th><th class='n'>Items</th><th class='n'>Accuracy</th>"+
+      "<th>95% interval</th><th class='n'>Chance</th><th class='n'>Lift</th></tr></thead>";
+    var body=runs.map(function(r){
+      var ci=r.ci95?pct(r.ci95[0])+" – "+pct(r.ci95[1]):"—";
+      var w=Math.max(2,Number(r.accuracy)*100);
+      return "<tr class='"+(r.is_control?"control":"")+"'>"+
+        "<td>"+esc(r.model)+(r.is_control?"<span class='pill ctl'>control</span>":"")+"</td>"+
+        "<td class='n'>"+r.n+"</td>"+
+        "<td class='n'>"+pct(r.accuracy)+"<div class='bar' style='margin-top:6px'><i class='"+
+          (r.is_control?"low":"")+"' style='width:"+w.toFixed(1)+"%'></i></div></td>"+
+        "<td>"+ci+"</td><td class='n'>"+pct(r.chance)+"</td>"+
+        "<td class='n'>"+(r.lift>=0?"+":"−")+pct(Math.abs(r.lift))+"</td></tr>";
+    }).join("");
+    el("board").innerHTML="<div class='scroll'><table>"+head+"<tbody>"+body+"</tbody></table></div>"+
+      (real.length?"":"<div class='empty'><b>No model has been scored yet.</b> "+
+        "Only the two built-in controls have run, which is why every row below is labelled control. "+
+        "Publish a real result with <code>nl-eval --provider openai --model &lt;model&gt; "+
+        "--out results/&lt;model&gt;.json</code> then <code>nl-eval --publish results</code>.</div>");
+
+    el("foot").innerHTML="Generated "+esc(D.generated_at)+" · "+(items.total||0)+" items · "+
+      '<a href="https://github.com/hoeberigs/nl-eval">source</a> · '+
+      '<a href="https://github.com/hoeberigs/nl-eval/blob/main/ATTRIBUTION.md">attribution</a>';
+  })
+  .catch(function(e){
+    el("board").innerHTML="<div class='empty'><b>results.json could not be loaded.</b> "+
+      esc(e.message)+" Run <code>nl-eval --publish results</code> to generate it.</div>";
+  });
+})();
+</script>
+</body>
+</html>

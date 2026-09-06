@@ -59,6 +59,47 @@ def always(model: str) -> Callable[[str], str]:
     return call
 
 
+def ollama(model: str) -> Callable[[str], str]:
+    """A locally-hosted model over Ollama's HTTP API.
+
+    Present so the suite can be run for nothing at all. A Dutch benchmark whose
+    only paths are paid APIs cannot be re-run by the people most likely to
+    check it, and the whole no-judge design exists to keep a run cheap.
+    """
+    import json as _json
+    import urllib.error
+    import urllib.request
+
+    host = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
+
+    def call(prompt: str) -> str:
+        body = _json.dumps(
+            {
+                "model": model,
+                "stream": False,
+                "options": {"temperature": 0, "num_predict": 24},
+                "messages": [
+                    {"role": "system", "content": SYSTEM},
+                    {"role": "user", "content": prompt},
+                ],
+            }
+        ).encode()
+        req = urllib.request.Request(
+            f"{host}/api/chat", data=body, headers={"Content-Type": "application/json"}
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                payload = _json.loads(r.read())
+        except urllib.error.URLError as e:
+            raise ProviderError(
+                f"cannot reach Ollama at {host} ({e}). Start it with `ollama serve` "
+                f"and pull the model with `ollama pull {model}`."
+            ) from e
+        return (payload.get("message", {}).get("content") or "").strip()
+
+    return call
+
+
 def openai(model: str) -> Callable[[str], str]:
     key = _need("OPENAI_API_KEY")
     try:
@@ -104,6 +145,7 @@ def anthropic(model: str) -> Callable[[str], str]:
 REGISTRY = {
     "echo": echo,
     "always-a": always,
+    "ollama": ollama,
     "openai": openai,
     "anthropic": anthropic,
 }
