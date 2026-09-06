@@ -11,3 +11,15 @@ results/
 # The held-out split must never be committed. Removing files later does not
 # help: git history keeps them and they stop being held out forever.
 heldout/
+
+# API keys. Never commit these. Broad patterns on purpose: a key file with an
+# unexpected name is the one that gets pushed.
+*apikey*
+*api_key*
+*.key
+*key.txt
+*secret*
+*token*
+.env
+.env.*
+credentials*
