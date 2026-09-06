@@ -52,6 +52,18 @@ split that is never published cannot be trained on, and comparing public and
 held-out scores on the same model is the only direct contamination test
 available without access to the training data.
 
-That split does not exist yet. It is the most valuable next addition to this
-repository, and until it exists, every score here should be read as an upper
-bound.
+That split exists. `heldout/` is gitignored from the first commit and
+`nl-eval --holdout-status` refuses to call it clean if git has ever tracked any
+of it. A public commitment to the set (item ids and salted answer hashes, never
+the items) lives in `docs/heldout-manifest.json`.
+
+```bash
+nl-eval --suite holdout --provider anthropic --model claude-haiku-4-5-20251001 --out results/heldout__haiku.json
+nl-eval --contamination-check results/anthropic__claude-haiku-4-5.json results/heldout__haiku.json
+```
+
+The check compares public and held-out accuracy against the minimum detectable
+difference for the smaller split. On 73 held-out items that floor is about 14
+points, so the test can only catch gross memorisation today; it gets sharper
+as the held-out set grows. A model that scores far better on the public items
+than on the held-out ones has learned this benchmark rather than Dutch.

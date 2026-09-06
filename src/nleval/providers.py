@@ -158,6 +158,35 @@ def hf(model: str) -> Callable[[str], str]:
     return call
 
 
+def google(model: str) -> Callable[[str], str]:
+    """Gemini over the REST API. No SDK: one endpoint, one JSON body."""
+    import json as _json
+    import urllib.error
+    import urllib.request
+
+    key = _need("GEMINI_API_KEY")
+    url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
+           f"{model}:generateContent?key={key}")
+
+    def call(prompt: str) -> str:
+        body = _json.dumps({
+            "systemInstruction": {"parts": [{"text": SYSTEM}]},
+            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": 0, "maxOutputTokens": 64},
+        }).encode()
+        req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                payload = _json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            raise ProviderError(f"Gemini HTTP {e.code}: {e.read()[:200]!r}") from e
+        cands = payload.get("candidates") or []
+        parts = (cands[0].get("content", {}).get("parts", []) if cands else [])
+        return "".join(p.get("text", "") for p in parts).strip()
+
+    return call
+
+
 def openai(model: str) -> Callable[[str], str]:
     key = _need("OPENAI_API_KEY")
     try:
@@ -173,7 +202,12 @@ def openai(model: str) -> Callable[[str], str]:
                 {"role": "system", "content": SYSTEM},
                 {"role": "user", "content": prompt},
             ],
-            max_completion_tokens=64,
+            # Reasoning models spend the output budget on thinking before
+            # the visible answer. Sixty-four tokens produced an empty reply
+            # on every item; the letter needs room after the reasoning, and
+            # the reasoning itself should be minimal for a forced choice.
+            max_completion_tokens=1024,
+            **({"reasoning_effort": "minimal"} if model.startswith(("gpt-5", "o")) else {}),
         )
         return (r.choices[0].message.content or "").strip()
 
@@ -204,6 +238,7 @@ REGISTRY = {
     "echo": echo,
     "always-a": always,
     "hf": hf,
+    "google": google,
     "ollama": ollama,
     "openai": openai,
     "anthropic": anthropic,

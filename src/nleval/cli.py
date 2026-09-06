@@ -82,6 +82,10 @@ def main(argv=None) -> int:
     ap.add_argument("--max-spend", type=float, default=1.0,
                     help="hard ceiling in EUR; the run refuses to start above it")
     ap.add_argument("--sleep", type=float, default=0.0)
+    ap.add_argument("--workers", type=int, default=8,
+                    help="parallel calls for hosted providers (local likelihood scoring is always 1)")
+    ap.add_argument("--no-resume", action="store_true",
+                    help="ignore an existing .partial checkpoint and start over")
     ap.add_argument("--validate", action="store_true", help="check the item set and exit")
     ap.add_argument("--compare", nargs=2, metavar=("A.json","B.json"),
                     help="compare two run reports: McNemar plus a paired bootstrap")
@@ -94,6 +98,8 @@ def main(argv=None) -> int:
                     help="publish ids and salted answer hashes, never the items")
     ap.add_argument("--contamination-check", nargs=2, metavar=("PUBLIC.json","HELDOUT.json"),
                     help="compare a model's public score against its held-out score")
+    ap.add_argument("--consistency", action="store_true",
+                    help="re-ask each MCQ with options reversed and with an informal instruction; report flip rates")
     ap.add_argument("--canary", action="store_true",
                     help="ask the model for this suite's canary GUID; a clean model cannot produce it")
     ap.add_argument("--human-ratings", metavar="FILE",
@@ -157,6 +163,22 @@ def main(argv=None) -> int:
         print(json.dumps(contamination_check(docs[0], docs[1]), indent=2, ensure_ascii=False))
         return 0
 
+    if args.consistency:
+        from .consistency import consistency
+        items = _load(args)
+        try:
+            call = providers.get(args.provider, args.model)
+        except providers.ProviderError as e:
+            print(str(e), file=sys.stderr)
+            return 2
+        rep = consistency(items, call, limit=args.limit)
+        out = Path(args.out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps({"model": args.model, "consistency": rep}, indent=1, ensure_ascii=False))
+        slim = {k: v for k, v in rep.items() if k != "detail"}
+        print(json.dumps(slim, indent=2, ensure_ascii=False))
+        return 0
+
     if args.canary:
         from .canary import run_canary
         try:
@@ -192,7 +214,7 @@ def main(argv=None) -> int:
         return 1
 
     if args.estimate:
-        print(json.dumps(estimate_cost(items, args.model), indent=2))
+        print(json.dumps(estimate_cost(items, args.model, provider=args.provider), indent=2))
         return 0
 
     try:
@@ -204,7 +226,9 @@ def main(argv=None) -> int:
     print(f"{len(items)} items · {args.provider}/{args.model} · ceiling EUR {args.max_spend:.2f}",
           file=sys.stderr)
     try:
-        report = run(items, call, args.model, max_spend_eur=args.max_spend, sleep=args.sleep)
+        report = run(items, call, args.model, max_spend_eur=args.max_spend, sleep=args.sleep,
+                     workers=args.workers, out=Path(args.out), resume=not args.no_resume,
+                     provider=args.provider)
     except BudgetExceeded as e:
         print(f"refused to run: {e}", file=sys.stderr)
         return 3

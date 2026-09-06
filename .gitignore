@@ -23,3 +23,9 @@ heldout/
 .env
 .env.*
 credentials*
+
+# impeccable working state (comps, diffs, captures, phase state)
+.impeccable/
+
+# design tooling, not the benchmark
+.claude/

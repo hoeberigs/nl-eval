@@ -1,24 +1,635 @@
 {
- "generated_at": "2026-09-06T14:22:55Z",
+ "generated_at": "2026-09-06T18:48:06Z",
+ "pass_line": 0.8,
+ "sections": [
+  {
+   "id": "taalvorm",
+   "label": "Taalvorm",
+   "verdict": true,
+   "categories": [
+    "de_het",
+    "diminutives",
+    "spelling",
+    "word_order",
+    "variants",
+    "formatting",
+    "blimp"
+   ],
+   "what": "lidwoorden, verkleinwoorden, spelling, woordvolgorde, varianten, notatie en de BLiMP-NL minimale paren"
+  },
+  {
+   "id": "schrijven",
+   "label": "Schrijven",
+   "verdict": true,
+   "categories": [
+    "schrijven"
+   ],
+   "what": "foutieve zin herschrijven; exact vergeleken met de verbeterde zin, zonder beoordelaarsmodel"
+  },
+  {
+   "id": "lezen",
+   "label": "Lezen",
+   "verdict": true,
+   "categories": [
+    "lezen"
+   ],
+   "what": "korte Nederlandse passages met een begripsvraag"
+  },
+  {
+   "id": "woordenschat",
+   "label": "Woordenschat",
+   "verdict": true,
+   "categories": [
+    "idioms",
+    "false_friends"
+   ],
+   "what": "uitdrukkingen en valse vrienden met het Engels en Duits"
+  },
+  {
+   "id": "knm",
+   "label": "KNM",
+   "verdict": true,
+   "categories": [
+    "civics"
+   ],
+   "what": "kennis van de Nederlandse maatschappij: instituties, gewoonten, geografie"
+  },
+  {
+   "id": "ona",
+   "label": "ONA en register",
+   "verdict": true,
+   "categories": [
+    "register"
+   ],
+   "what": "oriëntatie op de arbeidsmarkt en formeel versus informeel taalgebruik"
+  },
+  {
+   "id": "kennis",
+   "label": "Algemene kennis",
+   "verdict": false,
+   "categories": [
+    "mmlu_nl"
+   ],
+   "what": "Global-MMLU in het Nederlands; indicator, geen oordeel, want MMLU is zwaar besmet"
+  }
+ ],
  "items": {
-  "total": 1046,
+  "total": 393,
   "categories": {
-   "blimp": 440,
-   "civics": 24,
+   "civics": 54,
    "de_het": 80,
    "diminutives": 18,
    "false_friends": 26,
    "formatting": 20,
    "idioms": 32,
-   "mmlu_nl": 299,
-   "register": 20,
+   "lezen": 15,
+   "register": 26,
+   "schrijven": 35,
    "spelling": 45,
    "variants": 20,
    "word_order": 22
   },
-  "chance_baseline": 0.385
+  "chance_baseline": 0.3073
  },
  "runs": [
+  {
+   "provider": "anthropic",
+   "model": "claude-haiku-4-5-20251001",
+   "is_control": false,
+   "n": 1132,
+   "accuracy": 0.8975,
+   "ci95": [
+    0.8785,
+    0.9139
+   ],
+   "chance": 0.367,
+   "lift": 0.5305,
+   "unparsed": 2,
+   "by_category": {
+    "blimp": {
+     "n": 440,
+     "correct": 421,
+     "accuracy": 0.9568,
+     "ci": [
+      0.9335,
+      0.9722
+     ]
+    },
+    "civics": {
+     "n": 54,
+     "correct": 48,
+     "accuracy": 0.8889,
+     "ci": [
+      0.7781,
+      0.9481
+     ]
+    },
+    "de_het": {
+     "n": 80,
+     "correct": 75,
+     "accuracy": 0.9375,
+     "ci": [
+      0.8619,
+      0.973
+     ]
+    },
+    "diminutives": {
+     "n": 18,
+     "correct": 13,
+     "accuracy": 0.7222,
+     "ci": [
+      0.4913,
+      0.875
+     ]
+    },
+    "false_friends": {
+     "n": 26,
+     "correct": 22,
+     "accuracy": 0.8462,
+     "ci": [
+      0.6647,
+      0.9385
+     ]
+    },
+    "formatting": {
+     "n": 20,
+     "correct": 19,
+     "accuracy": 0.95,
+     "ci": [
+      0.7639,
+      0.9911
+     ]
+    },
+    "idioms": {
+     "n": 32,
+     "correct": 32,
+     "accuracy": 1.0,
+     "ci": [
+      0.8928,
+      1.0
+     ]
+    },
+    "lezen": {
+     "n": 15,
+     "correct": 14,
+     "accuracy": 0.9333,
+     "ci": [
+      0.7018,
+      0.9881
+     ]
+    },
+    "mmlu_nl": {
+     "n": 299,
+     "correct": 232,
+     "accuracy": 0.7759,
+     "ci": [
+      0.7253,
+      0.8195
+     ]
+    },
+    "register": {
+     "n": 26,
+     "correct": 25,
+     "accuracy": 0.9615,
+     "ci": [
+      0.8111,
+      0.9932
+     ]
+    },
+    "schrijven": {
+     "n": 35,
+     "correct": 34,
+     "accuracy": 0.9714,
+     "ci": [
+      0.8547,
+      0.9949
+     ]
+    },
+    "spelling": {
+     "n": 45,
+     "correct": 43,
+     "accuracy": 0.9556,
+     "ci": [
+      0.8517,
+      0.9877
+     ]
+    },
+    "variants": {
+     "n": 20,
+     "correct": 19,
+     "accuracy": 0.95,
+     "ci": [
+      0.7639,
+      0.9911
+     ]
+    },
+    "word_order": {
+     "n": 22,
+     "correct": 19,
+     "accuracy": 0.8636,
+     "ci": [
+      0.6666,
+      0.9525
+     ]
+    }
+   },
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 645,
+     "correct": 609,
+     "accuracy": 0.9442,
+     "ci95": [
+      0.9237,
+      0.9594
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 35,
+     "correct": 34,
+     "accuracy": 0.9714,
+     "ci95": [
+      0.8547,
+      0.9949
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 15,
+     "correct": 14,
+     "accuracy": 0.9333,
+     "ci95": [
+      0.7018,
+      0.9881
+     ],
+     "verdict": "onbeslist"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 58,
+     "correct": 54,
+     "accuracy": 0.931,
+     "ci95": [
+      0.8357,
+      0.9729
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 54,
+     "correct": 48,
+     "accuracy": 0.8889,
+     "ci95": [
+      0.7781,
+      0.9481
+     ],
+     "verdict": "onbeslist"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 26,
+     "correct": 25,
+     "accuracy": 0.9615,
+     "ci95": [
+      0.8111,
+      0.9932
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 299,
+     "correct": 232,
+     "accuracy": 0.7759,
+     "ci95": [
+      0.7253,
+      0.8195
+     ],
+     "verdict": "indicatie"
+    }
+   ],
+   "verdict": "onbeslist",
+   "failed": false,
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": {
+    "items_probed": 120,
+    "order_reversed": {
+     "n": 120,
+     "flips": 25,
+     "flip_rate": 0.2083,
+     "reading": "share of answers that changed content when the options were listed back to front"
+    },
+    "register_swapped": {
+     "n": 120,
+     "flips": 2,
+     "flip_rate": 0.0167,
+     "reading": "share of answers that changed when the instruction was phrased informally"
+    }
+   },
+   "heldout": {
+    "n": 73,
+    "accuracy": 0.9452,
+    "ci95": [
+     0.8674,
+     0.9785
+    ],
+    "public_accuracy": 0.8975,
+    "heldout_accuracy": 0.9452,
+    "gap": -0.0477,
+    "n_smaller_split": 73,
+    "noise_floor": 0.1406,
+    "verdict": "no evidence of contamination: the gap is within sampling noise"
+   },
+   "generated_at": "2026-09-06T18:33:40Z"
+  },
+  {
+   "provider": "openai",
+   "model": "gpt-5-mini",
+   "is_control": false,
+   "n": 1132,
+   "accuracy": 0.879,
+   "ci95": [
+    0.8587,
+    0.8967
+   ],
+   "chance": 0.367,
+   "lift": 0.5119,
+   "unparsed": 0,
+   "by_category": {
+    "blimp": {
+     "n": 440,
+     "correct": 420,
+     "accuracy": 0.9545,
+     "ci": [
+      0.9308,
+      0.9704
+     ]
+    },
+    "civics": {
+     "n": 54,
+     "correct": 49,
+     "accuracy": 0.9074,
+     "ci": [
+      0.8009,
+      0.9598
+     ]
+    },
+    "de_het": {
+     "n": 80,
+     "correct": 62,
+     "accuracy": 0.775,
+     "ci": [
+      0.6721,
+      0.8527
+     ]
+    },
+    "diminutives": {
+     "n": 18,
+     "correct": 10,
+     "accuracy": 0.5556,
+     "ci": [
+      0.3372,
+      0.7544
+     ]
+    },
+    "false_friends": {
+     "n": 26,
+     "correct": 25,
+     "accuracy": 0.9615,
+     "ci": [
+      0.8111,
+      0.9932
+     ]
+    },
+    "formatting": {
+     "n": 20,
+     "correct": 19,
+     "accuracy": 0.95,
+     "ci": [
+      0.7639,
+      0.9911
+     ]
+    },
+    "idioms": {
+     "n": 32,
+     "correct": 32,
+     "accuracy": 1.0,
+     "ci": [
+      0.8928,
+      1.0
+     ]
+    },
+    "lezen": {
+     "n": 15,
+     "correct": 13,
+     "accuracy": 0.8667,
+     "ci": [
+      0.6212,
+      0.9626
+     ]
+    },
+    "mmlu_nl": {
+     "n": 299,
+     "correct": 221,
+     "accuracy": 0.7391,
+     "ci": [
+      0.6865,
+      0.7856
+     ]
+    },
+    "register": {
+     "n": 26,
+     "correct": 26,
+     "accuracy": 1.0,
+     "ci": [
+      0.8713,
+      1.0
+     ]
+    },
+    "schrijven": {
+     "n": 35,
+     "correct": 33,
+     "accuracy": 0.9429,
+     "ci": [
+      0.8139,
+      0.9842
+     ]
+    },
+    "spelling": {
+     "n": 45,
+     "correct": 44,
+     "accuracy": 0.9778,
+     "ci": [
+      0.8843,
+      0.9961
+     ]
+    },
+    "variants": {
+     "n": 20,
+     "correct": 20,
+     "accuracy": 1.0,
+     "ci": [
+      0.8389,
+      1.0
+     ]
+    },
+    "word_order": {
+     "n": 22,
+     "correct": 21,
+     "accuracy": 0.9545,
+     "ci": [
+      0.782,
+      0.9919
+     ]
+    }
+   },
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 645,
+     "correct": 596,
+     "accuracy": 0.924,
+     "ci95": [
+      0.901,
+      0.9421
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 35,
+     "correct": 33,
+     "accuracy": 0.9429,
+     "ci95": [
+      0.8139,
+      0.9842
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 15,
+     "correct": 13,
+     "accuracy": 0.8667,
+     "ci95": [
+      0.6212,
+      0.9626
+     ],
+     "verdict": "onbeslist"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 58,
+     "correct": 57,
+     "accuracy": 0.9828,
+     "ci95": [
+      0.9086,
+      0.997
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 54,
+     "correct": 49,
+     "accuracy": 0.9074,
+     "ci95": [
+      0.8009,
+      0.9598
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 26,
+     "correct": 26,
+     "accuracy": 1.0,
+     "ci95": [
+      0.8713,
+      1.0
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 299,
+     "correct": 221,
+     "accuracy": 0.7391,
+     "ci95": [
+      0.6865,
+      0.7856
+     ],
+     "verdict": "indicatie"
+    }
+   ],
+   "verdict": "onbeslist",
+   "failed": false,
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": {
+    "items_probed": 120,
+    "order_reversed": {
+     "n": 120,
+     "flips": 26,
+     "flip_rate": 0.2167,
+     "reading": "share of answers that changed content when the options were listed back to front"
+    },
+    "register_swapped": {
+     "n": 120,
+     "flips": 13,
+     "flip_rate": 0.1083,
+     "reading": "share of answers that changed when the instruction was phrased informally"
+    }
+   },
+   "heldout": {
+    "n": 73,
+    "accuracy": 0.9315,
+    "ci95": [
+     0.8495,
+     0.9704
+    ],
+    "public_accuracy": 0.879,
+    "heldout_accuracy": 0.9315,
+    "gap": -0.0525,
+    "n_smaller_split": 73,
+    "noise_floor": 0.1511,
+    "verdict": "no evidence of contamination: the gap is within sampling noise"
+   },
+   "generated_at": "2026-09-06T18:34:58Z"
+  },
   {
    "provider": "hf-dutch-gpt2-logprob",
    "model": "GroNLP/gpt2-small-dutch",
@@ -43,136 +654,375 @@
      ]
     }
    },
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 440,
+     "correct": 384,
+     "accuracy": 0.8727,
+     "ci95": [
+      0.8383,
+      0.9007
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    }
+   ],
+   "verdict": "onvolledig",
+   "failed": false,
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": null,
+   "heldout": null,
    "generated_at": "2026-09-06T14:17:15Z"
   },
   {
-   "provider": "always-a",
-   "model": "always-a",
-   "is_control": true,
-   "n": 307,
-   "accuracy": 0.3583,
+   "provider": "ollama",
+   "model": "qwen2.5:7b",
+   "is_control": false,
+   "n": 1132,
+   "accuracy": 0.742,
    "ci95": [
-    0.3067,
-    0.4134
+    0.7158,
+    0.7667
    ],
-   "chance": 0.3518,
-   "lift": 0.0065,
+   "chance": 0.367,
+   "lift": 0.375,
    "unparsed": 0,
    "by_category": {
-    "civics": {
-     "n": 24,
-     "correct": 6,
-     "accuracy": 0.25,
+    "blimp": {
+     "n": 440,
+     "correct": 384,
+     "accuracy": 0.8727,
      "ci": [
-      0.12,
-      0.449
+      0.8383,
+      0.9007
+     ]
+    },
+    "civics": {
+     "n": 54,
+     "correct": 34,
+     "accuracy": 0.6296,
+     "ci": [
+      0.4963,
+      0.7458
      ]
     },
     "de_het": {
      "n": 80,
-     "correct": 40,
-     "accuracy": 0.5,
+     "correct": 55,
+     "accuracy": 0.6875,
      "ci": [
-      0.393,
-      0.607
+      0.5793,
+      0.7785
      ]
     },
     "diminutives": {
      "n": 18,
-     "correct": 5,
-     "accuracy": 0.2778,
+     "correct": 13,
+     "accuracy": 0.7222,
      "ci": [
-      0.125,
-      0.5087
+      0.4913,
+      0.875
      ]
     },
     "false_friends": {
      "n": 26,
-     "correct": 7,
-     "accuracy": 0.2692,
+     "correct": 21,
+     "accuracy": 0.8077,
      "ci": [
-      0.137,
-      0.4608
+      0.6212,
+      0.9149
      ]
     },
     "formatting": {
      "n": 20,
-     "correct": 5,
-     "accuracy": 0.25,
+     "correct": 18,
+     "accuracy": 0.9,
      "ci": [
-      0.1119,
-      0.4687
+      0.699,
+      0.9721
      ]
     },
     "idioms": {
      "n": 32,
-     "correct": 8,
-     "accuracy": 0.25,
+     "correct": 21,
+     "accuracy": 0.6562,
      "ci": [
-      0.1325,
-      0.4211
+      0.4831,
+      0.7959
+     ]
+    },
+    "lezen": {
+     "n": 15,
+     "correct": 10,
+     "accuracy": 0.6667,
+     "ci": [
+      0.4171,
+      0.8482
+     ]
+    },
+    "mmlu_nl": {
+     "n": 299,
+     "correct": 165,
+     "accuracy": 0.5518,
+     "ci": [
+      0.4952,
+      0.6072
      ]
     },
     "register": {
-     "n": 20,
-     "correct": 5,
-     "accuracy": 0.25,
+     "n": 26,
+     "correct": 23,
+     "accuracy": 0.8846,
      "ci": [
-      0.1119,
-      0.4687
+      0.7102,
+      0.96
+     ]
+    },
+    "schrijven": {
+     "n": 35,
+     "correct": 26,
+     "accuracy": 0.7429,
+     "ci": [
+      0.5793,
+      0.8584
      ]
     },
     "spelling": {
      "n": 45,
-     "correct": 23,
-     "accuracy": 0.5111,
+     "correct": 43,
+     "accuracy": 0.9556,
      "ci": [
-      0.37,
-      0.6504
+      0.8517,
+      0.9877
      ]
     },
     "variants": {
      "n": 20,
-     "correct": 5,
-     "accuracy": 0.25,
+     "correct": 9,
+     "accuracy": 0.45,
      "ci": [
-      0.1119,
-      0.4687
+      0.2582,
+      0.6579
      ]
     },
     "word_order": {
      "n": 22,
-     "correct": 6,
-     "accuracy": 0.2727,
+     "correct": 18,
+     "accuracy": 0.8182,
      "ci": [
-      0.1315,
-      0.4815
+      0.6148,
+      0.9269
      ]
     }
    },
-   "generated_at": "2026-09-06T14:22:28Z"
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 645,
+     "correct": 540,
+     "accuracy": 0.8372,
+     "ci95": [
+      0.8067,
+      0.8637
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 35,
+     "correct": 26,
+     "accuracy": 0.7429,
+     "ci95": [
+      0.5793,
+      0.8584
+     ],
+     "verdict": "onbeslist"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 15,
+     "correct": 10,
+     "accuracy": 0.6667,
+     "ci95": [
+      0.4171,
+      0.8482
+     ],
+     "verdict": "onbeslist"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 58,
+     "correct": 42,
+     "accuracy": 0.7241,
+     "ci95": [
+      0.598,
+      0.8225
+     ],
+     "verdict": "onbeslist"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 54,
+     "correct": 34,
+     "accuracy": 0.6296,
+     "ci95": [
+      0.4963,
+      0.7458
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 26,
+     "correct": 23,
+     "accuracy": 0.8846,
+     "ci95": [
+      0.7102,
+      0.96
+     ],
+     "verdict": "onbeslist"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 299,
+     "correct": 165,
+     "accuracy": 0.5518,
+     "ci95": [
+      0.4952,
+      0.6072
+     ],
+     "verdict": "indicatie"
+    }
+   ],
+   "verdict": "niet geslaagd",
+   "failed": false,
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": {
+    "items_probed": 120,
+    "order_reversed": {
+     "n": 120,
+     "flips": 37,
+     "flip_rate": 0.3083,
+     "reading": "share of answers that changed content when the options were listed back to front"
+    },
+    "register_swapped": {
+     "n": 120,
+     "flips": 2,
+     "flip_rate": 0.0167,
+     "reading": "share of answers that changed when the instruction was phrased informally"
+    }
+   },
+   "heldout": null,
+   "generated_at": "2026-09-06T18:41:29Z"
   },
   {
-   "provider": "echo",
-   "model": "echo",
-   "is_control": true,
-   "n": 307,
-   "accuracy": 0.0,
+   "provider": "google",
+   "model": "gemini-3.6-flash",
+   "is_control": false,
+   "n": 1132,
+   "accuracy": 0.0027,
    "ci95": [
-    0.0,
-    0.0124
+    0.0009,
+    0.0078
    ],
-   "chance": 0.3518,
-   "lift": -0.3518,
-   "unparsed": 307,
+   "chance": 0.367,
+   "lift": -0.3644,
+   "unparsed": 1129,
    "by_category": {
-    "civics": {
-     "n": 24,
+    "blimp": {
+     "n": 440,
      "correct": 0,
      "accuracy": 0.0,
      "ci": [
       0.0,
-      0.138
+      0.0087
+     ]
+    },
+    "civics": {
+     "n": 54,
+     "correct": 3,
+     "accuracy": 0.0556,
+     "ci": [
+      0.0191,
+      0.1511
      ]
     },
     "de_het": {
@@ -220,13 +1070,40 @@
       0.1072
      ]
     },
-    "register": {
-     "n": 20,
+    "lezen": {
+     "n": 15,
      "correct": 0,
      "accuracy": 0.0,
      "ci": [
       0.0,
-      0.1611
+      0.2039
+     ]
+    },
+    "mmlu_nl": {
+     "n": 299,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0127
+     ]
+    },
+    "register": {
+     "n": 26,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1287
+     ]
+    },
+    "schrijven": {
+     "n": 35,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0989
      ]
     },
     "spelling": {
@@ -257,7 +1134,590 @@
      ]
     }
    },
-   "generated_at": "2026-09-06T14:22:28Z"
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 645,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0059
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 35,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0989
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 15,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.2039
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 58,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0621
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 54,
+     "correct": 3,
+     "accuracy": 0.0556,
+     "ci95": [
+      0.0191,
+      0.1511
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 26,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.1287
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 299,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0127
+     ],
+     "verdict": "indicatie"
+    }
+   ],
+   "verdict": "rijdt niet",
+   "failed": true,
+   "error_share": 0.993,
+   "failure_reason": "Gemini HTTP 429: b'{\\n \"error\": {\\n \"code\": 429,\\n \"message\": \"You exceeded your current quota, please check your plan and billing details. ",
+   "consistency": null,
+   "heldout": null,
+   "generated_at": "2026-09-06T18:31:54Z"
+  },
+  {
+   "provider": "always-a",
+   "model": "always-a",
+   "is_control": true,
+   "n": 1132,
+   "accuracy": 0.3542,
+   "ci95": [
+    0.3269,
+    0.3826
+   ],
+   "chance": 0.367,
+   "lift": -0.0128,
+   "unparsed": 0,
+   "by_category": {
+    "blimp": {
+     "n": 440,
+     "correct": 220,
+     "accuracy": 0.5,
+     "ci": [
+      0.4535,
+      0.5465
+     ]
+    },
+    "civics": {
+     "n": 54,
+     "correct": 14,
+     "accuracy": 0.2593,
+     "ci": [
+      0.1612,
+      0.3893
+     ]
+    },
+    "de_het": {
+     "n": 80,
+     "correct": 40,
+     "accuracy": 0.5,
+     "ci": [
+      0.393,
+      0.607
+     ]
+    },
+    "diminutives": {
+     "n": 18,
+     "correct": 5,
+     "accuracy": 0.2778,
+     "ci": [
+      0.125,
+      0.5087
+     ]
+    },
+    "false_friends": {
+     "n": 26,
+     "correct": 7,
+     "accuracy": 0.2692,
+     "ci": [
+      0.137,
+      0.4608
+     ]
+    },
+    "formatting": {
+     "n": 20,
+     "correct": 5,
+     "accuracy": 0.25,
+     "ci": [
+      0.1119,
+      0.4687
+     ]
+    },
+    "idioms": {
+     "n": 32,
+     "correct": 8,
+     "accuracy": 0.25,
+     "ci": [
+      0.1325,
+      0.4211
+     ]
+    },
+    "lezen": {
+     "n": 15,
+     "correct": 4,
+     "accuracy": 0.2667,
+     "ci": [
+      0.109,
+      0.5195
+     ]
+    },
+    "mmlu_nl": {
+     "n": 299,
+     "correct": 57,
+     "accuracy": 0.1906,
+     "ci": [
+      0.1501,
+      0.239
+     ]
+    },
+    "register": {
+     "n": 26,
+     "correct": 7,
+     "accuracy": 0.2692,
+     "ci": [
+      0.137,
+      0.4608
+     ]
+    },
+    "schrijven": {
+     "n": 35,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0989
+     ]
+    },
+    "spelling": {
+     "n": 45,
+     "correct": 23,
+     "accuracy": 0.5111,
+     "ci": [
+      0.37,
+      0.6504
+     ]
+    },
+    "variants": {
+     "n": 20,
+     "correct": 5,
+     "accuracy": 0.25,
+     "ci": [
+      0.1119,
+      0.4687
+     ]
+    },
+    "word_order": {
+     "n": 22,
+     "correct": 6,
+     "accuracy": 0.2727,
+     "ci": [
+      0.1315,
+      0.4815
+     ]
+    }
+   },
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 645,
+     "correct": 304,
+     "accuracy": 0.4713,
+     "ci95": [
+      0.4331,
+      0.5099
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 35,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0989
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 15,
+     "correct": 4,
+     "accuracy": 0.2667,
+     "ci95": [
+      0.109,
+      0.5195
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 58,
+     "correct": 15,
+     "accuracy": 0.2586,
+     "ci95": [
+      0.1635,
+      0.3838
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 54,
+     "correct": 14,
+     "accuracy": 0.2593,
+     "ci95": [
+      0.1612,
+      0.3893
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 26,
+     "correct": 7,
+     "accuracy": 0.2692,
+     "ci95": [
+      0.137,
+      0.4608
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 299,
+     "correct": 57,
+     "accuracy": 0.1906,
+     "ci95": [
+      0.1501,
+      0.239
+     ],
+     "verdict": "indicatie"
+    }
+   ],
+   "verdict": "niet geslaagd",
+   "failed": false,
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": null,
+   "heldout": null,
+   "generated_at": "2026-09-06T18:44:21Z"
+  },
+  {
+   "provider": "echo",
+   "model": "echo",
+   "is_control": true,
+   "n": 1132,
+   "accuracy": 0.0,
+   "ci95": [
+    0.0,
+    0.0034
+   ],
+   "chance": 0.367,
+   "lift": -0.367,
+   "unparsed": 1132,
+   "by_category": {
+    "blimp": {
+     "n": 440,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0087
+     ]
+    },
+    "civics": {
+     "n": 54,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0664
+     ]
+    },
+    "de_het": {
+     "n": 80,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0458
+     ]
+    },
+    "diminutives": {
+     "n": 18,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1759
+     ]
+    },
+    "false_friends": {
+     "n": 26,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1287
+     ]
+    },
+    "formatting": {
+     "n": 20,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1611
+     ]
+    },
+    "idioms": {
+     "n": 32,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1072
+     ]
+    },
+    "lezen": {
+     "n": 15,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.2039
+     ]
+    },
+    "mmlu_nl": {
+     "n": 299,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0127
+     ]
+    },
+    "register": {
+     "n": 26,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1287
+     ]
+    },
+    "schrijven": {
+     "n": 35,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0989
+     ]
+    },
+    "spelling": {
+     "n": 45,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0787
+     ]
+    },
+    "variants": {
+     "n": 20,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1611
+     ]
+    },
+    "word_order": {
+     "n": 22,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1487
+     ]
+    }
+   },
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 645,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0059
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 35,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0989
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 15,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.2039
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 58,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0621
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 54,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0664
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 26,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.1287
+     ],
+     "verdict": "gezakt"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 299,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci95": [
+      0.0,
+      0.0127
+     ],
+     "verdict": "indicatie"
+    }
+   ],
+   "verdict": "niet geslaagd",
+   "failed": false,
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": null,
+   "heldout": null,
+   "generated_at": "2026-09-06T18:44:21Z"
   }
  ]
 }

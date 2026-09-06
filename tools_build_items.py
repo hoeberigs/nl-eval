@@ -576,3 +576,139 @@ IDI2 = [
  ("iemand een oor aannaaien","iemand bedriegen",["iemand streng toespreken","iemand overtuigen","iemand napraten"]),
 ]
 extend("idioms",[mcq("idioms",200+i,f"Wat betekent de uitdrukking “{u}”?",c,d) for i,(u,c,d) in enumerate(IDI2,1)])
+
+# ============ Schrijven: error correction, exact match ========================
+# Writing scored without a judge. Each sentence carries exactly one error and
+# exactly one correction, so the corrected sentence is a deterministic target.
+
+def exact(cat, n, prompt, answer, note=""):
+    return {"id": f"{cat}-{n:03d}", "category": cat, "type": "exact",
+            "prompt": prompt, "answer": answer, "note": note, "difficulty": "core"}
+
+def write_exact(cat, rows):
+    p = OUT / f"{cat}.jsonl"
+    p.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in rows) + "\n", encoding="utf-8")
+    print(f"{cat}: {len(rows)} items -> {p}")
+
+CORR = [
+ ("Hij word morgen dertig.","Hij wordt morgen dertig.","d/t"),
+ ("Ik wordt er gek van.","Ik word er gek van.","d/t"),
+ ("Hij vind het niet leuk.","Hij vindt het niet leuk.","d/t"),
+ ("Wat gebeurd er?","Wat gebeurt er?","d/t"),
+ ("Het is gebeurt.","Het is gebeurd.","voltooid deelwoord"),
+ ("Ik heb de brief gisteren verstuurt.","Ik heb de brief gisteren verstuurd.","voltooid deelwoord"),
+ ("Ze hebben de vergadering afgezegt.","Ze hebben de vergadering afgezegd.","voltooid deelwoord"),
+ ("Hij heeft gezegt dat hij komt.","Hij heeft gezegd dat hij komt.","voltooid deelwoord"),
+ ("Antwoordt jij op mijn mail?","Antwoord jij op mijn mail?","inversie"),
+ ("Hij wilt niet.","Hij wil niet.","werkwoordsvorm"),
+ ("Jij loop te snel.","Jij loopt te snel.","werkwoordsvorm"),
+ ("Wij hebt genoeg tijd.","Wij hebben genoeg tijd.","werkwoordsvorm"),
+ ("Ik heeft honger.","Ik heb honger.","werkwoordsvorm"),
+ ("De kinderen speelde buiten.","De kinderen speelden buiten.","meervoud verleden tijd"),
+ ("Er zijn veel mensen die dat gelooft.","Er zijn veel mensen die dat geloven.","congruentie"),
+ ("Hun hebben gelijk.","Zij hebben gelijk.","hun/zij"),
+ ("Hun zeggen dat het regent.","Zij zeggen dat het regent.","hun/zij"),
+ ("Hij is groter als ik.","Hij is groter dan ik.","als/dan"),
+ ("Hij loopt sneller als zijn broer.","Hij loopt sneller dan zijn broer.","als/dan"),
+ ("Ik heb liever koffie als thee.","Ik heb liever koffie dan thee.","als/dan"),
+ ("Dit is jou boek.","Dit is jouw boek.","jou/jouw"),
+ ("We gaan naar de museum.","We gaan naar het museum.","de/het"),
+ ("We gaan naar de strand.","We gaan naar het strand.","de/het"),
+ ("Het bedrijf heeft hun winst verhoogd.","Het bedrijf heeft zijn winst verhoogd.","verwijzing"),
+ ("Ik eet graag pannekoeken.","Ik eet graag pannenkoeken.","tussen-n"),
+ ("Ik ben naar huis gegaan omdat ik was moe.","Ik ben naar huis gegaan omdat ik moe was.","woordvolgorde"),
+ ("Zij vertelde dat hij zou komen morgen.","Zij vertelde dat hij morgen zou komen.","woordvolgorde"),
+ ("Omdat het regent, ik blijf thuis.","Omdat het regent, blijf ik thuis.","inversie"),
+ ("Hij zei dat hij komt niet.","Hij zei dat hij niet komt.","woordvolgorde"),
+ ("Ik heb mijn sleutels vergeten thuis.","Ik heb mijn sleutels thuis vergeten.","woordvolgorde"),
+ ("Ze vroeg of dat ik kwam.","Ze vroeg of ik kwam.","of dat"),
+ ("Ik weet niet wat dat hij bedoelt.","Ik weet niet wat hij bedoelt.","wat dat"),
+ ("Het kost vijf euro's.","Het kost vijf euro.","meervoud munteenheid"),
+ ("Ze heeft twee kinders.","Ze heeft twee kinderen.","meervoud"),
+ ("Ik heb twee broer.","Ik heb twee broers.","meervoud"),
+]
+rows=[exact("schrijven",i,
+  f"De volgende zin bevat precies één fout. Schrijf de volledige zin correct over, verander verder niets.\n\n{bad}",
+  good, note) for i,(bad,good,note) in enumerate(CORR,1)]
+write_exact("schrijven", rows)
+
+# ============ Lezen: functional Dutch, native-written ========================
+LEZEN = [
+ ("Brief van de gemeente:\n“Vanaf 1 januari wordt het restafval om de twee weken opgehaald in plaats van wekelijks. Het gft-afval blijft wekelijks opgehaald worden.”\n\nHoe vaak wordt het restafval vanaf januari opgehaald?",
+  "om de twee weken",["wekelijks","maandelijks","dat staat er niet"]),
+ ("Bijsluiter:\n“Neem dit middel maximaal driemaal per dag in, met een tussenpoos van minstens vier uur. Niet gebruiken bij kinderen onder de zes jaar.”\n\nWat is de kortste toegestane tijd tussen twee doses?",
+  "vier uur",["drie uur","zes uur","acht uur"]),
+ ("Huurcontract:\n“De huur wordt jaarlijks per 1 juli verhoogd. De huurder ontvangt uiterlijk twee maanden van tevoren schriftelijk bericht.”\n\nVoor welke datum moet de verhoging uiterlijk zijn aangekondigd?",
+  "1 mei",["1 juni","1 juli","1 september"]),
+ ("Belastingdienst:\n“U moet uw aangifte inkomstenbelasting vóór 1 mei indienen. Vraagt u uitstel aan, dan krijgt u tot 1 september.”\n\nTot wanneer heeft iemand met uitstel de tijd?",
+  "1 september",["1 mei","1 juli","31 december"]),
+ ("NS:\n“Bij vertraging van meer dan 30 minuten heeft u recht op vergoeding: 50% van de ritprijs bij 30 tot 59 minuten, 100% bij 60 minuten of meer.”\n\nUw trein had 45 minuten vertraging. Op hoeveel vergoeding heeft u recht?",
+  "50% van de ritprijs",["100% van de ritprijs","25% van de ritprijs","geen vergoeding"]),
+ ("Werkgever:\n“Vakantiedagen die u dit jaar niet opneemt, vervallen op 1 juli van het volgende jaar.”\n\nWanneer vervallen de vakantiedagen van 2026?",
+  "1 juli 2027",["31 december 2026","1 januari 2027","1 juli 2026"]),
+ ("Zorgverzekeraar:\n“Het verplicht eigen risico bedraagt € 385 per jaar. Huisartsenzorg valt niet onder het eigen risico.”\n\nBetaalt u een bezoek aan de huisarts uit uw eigen risico?",
+  "nee",["ja, volledig","ja, de helft","alleen boven € 385"]),
+ ("Dienst Toeslagen:\n“U krijgt kinderopvangtoeslag alleen als beide ouders werken of een opleiding volgen.”\n\nEén ouder werkt, de andere ouder werkt niet en volgt geen opleiding. Krijgt dit gezin kinderopvangtoeslag?",
+  "nee",["ja","alleen voor het eerste kind","alleen de helft"]),
+ ("Gemeente:\n“Een bewonersparkeervergunning kost € 120 per jaar en geldt alleen in de eigen wijk. Een tweede vergunning op hetzelfde adres kost € 240.”\n\nWat betaalt een huishouden met twee vergunningen per jaar?",
+  "€ 360",["€ 240","€ 120","€ 480"]),
+ ("School:\n“De lessen beginnen om 8.30 uur. Leerlingen die na 8.45 uur binnenkomen, worden als te laat geregistreerd.”\n\nEen leerling komt om 8.40 uur binnen. Wordt zij als te laat geregistreerd?",
+  "nee",["ja","alleen op maandag","dat hangt van de docent af"]),
+ ("Apotheek:\n“Herhaalrecepten kunt u online bestellen; ze liggen na twee werkdagen voor u klaar.”\n\nU bestelt op vrijdag. Op welke dag ligt het recept op zijn vroegst klaar?",
+  "dinsdag",["zaterdag","maandag","woensdag"]),
+ ("Abonnement:\n“Het abonnement is maandelijks opzegbaar met een opzegtermijn van één maand.”\n\nU zegt op 10 maart op. Wanneer eindigt het abonnement?",
+  "10 april",["10 maart","31 maart","1 mei"]),
+ ("DigiD:\n“Uw activeringscode wordt per post verstuurd en is 20 dagen geldig na de verzenddatum.”\n\nDe code is op 1 april verzonden. Tot wanneer is hij geldig?",
+  "21 april",["1 mei","20 april","30 april"]),
+ ("Verkeersregels:\n“Binnen de bebouwde kom geldt een maximumsnelheid van 50 km/u, tenzij anders aangegeven. In een woonerf geldt stapvoets.”\n\nHoe hard mag u in een woonerf rijden?",
+  "stapvoets",["50 km/u","30 km/u","70 km/u"]),
+ ("Verhuizing:\n“U moet uw verhuizing binnen vijf dagen na de verhuisdatum doorgeven aan de gemeente waar u gaat wonen.”\n\nU verhuist op 3 juni. Wat is de uiterste dag om dit door te geven?",
+  "8 juni",["3 juni","10 juni","1 juli"]),
+]
+rows=[mcq("lezen",i,p,c,d) for i,(p,c,d) in enumerate(LEZEN,1)]
+write("lezen", rows)
+
+# ============ KNM expansion + ONA ============================================
+KNM2 = [
+ ("Hoe heet het Nederlandse parlement als geheel?","de Staten-Generaal",["de Rijksraad","het Binnenhof","de Volksvertegenwoordiging"]),
+ ("Wie is het staatshoofd van Nederland?","de koning",["de minister-president","de voorzitter van de Tweede Kamer","de commissaris van de Koning"]),
+ ("Hoe vaak zijn er normaal gesproken Tweede Kamerverkiezingen?","om de vier jaar",["om de twee jaar","om de vijf jaar","elk jaar"]),
+ ("Vanaf welke leeftijd mag je in Nederland stemmen?","18 jaar",["16 jaar","21 jaar","17 jaar"]),
+ ("Wie kiest de leden van de Eerste Kamer?","de Provinciale Staten",["de kiezers rechtstreeks","de Tweede Kamer","de koning"]),
+ ("Wie zit een gemeenteraadsvergadering voor?","de burgemeester",["de wethouder","de gemeentesecretaris","de commissaris van de Koning"]),
+ ("Welk nummer bel je bij een levensbedreigende noodsituatie?","112",["0900-8844","911","144"]),
+ ("Welk nummer bel je voor de politie als het geen spoed is?","0900-8844",["112","0800-1351","113"]),
+ ("Vanaf welke leeftijd geldt de leerplicht?","5 jaar",["4 jaar","6 jaar","7 jaar"]),
+ ("Waar staat de afkorting vmbo voor?","voorbereidend middelbaar beroepsonderwijs",["voortgezet middelbaar beroepsonderwijs","vrij middelbaar beroepsonderwijs","voorbereidend maatschappelijk beroepsonderwijs"]),
+ ("Waar staat de afkorting cao voor?","collectieve arbeidsovereenkomst",["centrale arbeidsorganisatie","contractuele arbeidsovereenkomst","collectieve arbeidsorganisatie"]),
+ ("Welke instantie betaalt de WW-uitkering uit?","het UWV",["de gemeente","de Belastingdienst","de SVB"]),
+ ("Welke instantie betaalt de bijstandsuitkering uit?","de gemeente",["het UWV","de Belastingdienst","de SVB"]),
+ ("Bij welke instantie vraag je huurtoeslag aan?","Dienst Toeslagen",["de gemeente","het UWV","de woningcorporatie"]),
+ ("Binnen hoeveel dagen moet je een verhuizing doorgeven aan de gemeente?","vijf dagen",["één dag","tien dagen","dertig dagen"]),
+ ("Waar staat de afkorting VvE voor?","Vereniging van Eigenaren",["Verbond van Verhuurders","Vereniging voor Eigendom","Verhuurdersvereniging"]),
+ ("Waar schrijf je een nieuw bedrijf in?","bij de Kamer van Koophandel",["bij de Belastingdienst","bij de gemeente","bij het UWV"]),
+ ("Wat is het standaardtarief van de btw in Nederland?","21%",["19%","9%","25%"]),
+ ("Op welke dag wordt Prinsjesdag gehouden?","de derde dinsdag van september",["de eerste maandag van september","de derde donderdag van oktober","de laatste dinsdag van augustus"]),
+ ("Hoe heet het Nederlandse volkslied?","het Wilhelmus",["de Watergeuzen","Wien Neêrlands Bloed","het Oranjelied"]),
+ ("Welke vier steden vormen de kern van de Randstad?","Amsterdam, Rotterdam, Den Haag en Utrecht",["Amsterdam, Rotterdam, Eindhoven en Groningen","Amsterdam, Den Haag, Utrecht en Haarlem","Rotterdam, Den Haag, Leiden en Delft"]),
+ ("Wat regelt artikel 1 van de Nederlandse Grondwet?","gelijke behandeling en het verbod op discriminatie",["de vrijheid van meningsuiting","het kiesrecht","de scheiding van kerk en staat"]),
+ ("Welk orgaan is de hoogste bestuursrechter en adviseert de regering over wetgeving?","de Raad van State",["de Hoge Raad","de Eerste Kamer","de Nationale ombudsman"]),
+ ("Wat regelt een waterschap?","het waterbeheer, zoals dijken en waterpeil",["de drinkwaterlevering aan huishoudens","de scheepvaart op rivieren","de visvergunningen"]),
+ ("Wat is de rol van de huisarts in het Nederlandse zorgstelsel?","poortwachter: eerste aanspreekpunt en verwijzer naar specialisten",["spoedarts voor noodgevallen","tandarts voor het hele gezin","alleen arts voor kinderen"]),
+ ("Wat betekent 'gedogen' in het Nederlandse bestuur?","iets officieel verboden toch toestaan zonder te vervolgen",["iets verplicht stellen","iets subsidiëren","iets uitstellen"]),
+ ("Wat is de maximale proeftijd bij een arbeidscontract van meer dan twee jaar?","twee maanden",["één maand","drie maanden","zes maanden"]),
+ ("Wat is de wettelijke opzegtermijn voor een werknemer?","één maand",["twee weken","twee maanden","drie maanden"]),
+ ("Wat zijn de Deltawerken?","waterkeringen die Zuidwest-Nederland tegen de zee beschermen",["een reeks bruggen over de Rijn","de polders in Flevoland","de sluizen bij IJmuiden"]),
+ ("Welke belastingdienstregeling verlaagt de belasting voor werkenden?","de arbeidskorting",["de zorgtoeslag","de kinderbijslag","de huurtoeslag"]),
+]
+extend("civics",[mcq("civics",200+i,p,c,d) for i,(p,c,d) in enumerate(KNM2,1)])
+
+ONA = [
+ ("Wat stuur je in Nederland gewoonlijk mee met een sollicitatie?","een cv en een motivatiebrief",["alleen een cv","een kopie van je paspoort","een verklaring omtrent het gedrag"]),
+ ("Hoe spreek je een onbekende contactpersoon aan in een sollicitatiemail?","Geachte heer/mevrouw [achternaam]",["Hoi [voornaam]","Beste allemaal","Aan wie het aangaat, hallo"]),
+ ("Wat doe je in Nederland op de eerste dag dat je ziek bent?","je meldt je bij je werkgever ziek",["je gaat naar de bedrijfsarts","je stuurt een doktersverklaring","je meldt het bij het UWV"]),
+ ("Wat is een 'proeftijd'?","een periode aan het begin van een contract waarin beide partijen direct kunnen opzeggen",["een verplichte stage","de eerste maand zonder salaris","een periode met verlaagd loon"]),
+ ("Wat betekent 'flexwerk'?","werk zonder vast contract of vaste uren",["thuiswerken","werken in ploegendienst","werk via een cao"]),
+ ("Wat is een 'functioneringsgesprek'?","een gesprek over hoe het werk gaat en wat beter kan",["een sollicitatiegesprek","een ontslaggesprek","een salarisonderhandeling"]),
+]
+extend("register",[mcq("register",300+i,p,c,d,note="ONA") for i,(p,c,d) in enumerate(ONA,1)])

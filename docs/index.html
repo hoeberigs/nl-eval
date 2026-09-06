@@ -1,382 +1,394 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>nl-eval — a Dutch evaluation suite for language models</title>
-<meta name="description" content="Three layers: native Dutch grammar from BLiMP-NL, translated breadth from Global-MMLU, and hand-written applied Dutch. No LLM judge, controls included.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fbfaf8'/%3E%3Crect x='5' y='7' width='22' height='3' fill='%23111'/%3E%3Crect x='5' y='14' width='14' height='3' fill='%23111'/%3E%3Crect x='5' y='21' width='19' height='3' fill='%23111'/%3E%3C/svg%3E">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Het inburgeringsexamen voor taalmodellen</title>
+<meta name="description" content="nl-eval: een Nederlandse benchmark voor taalmodellen, opgezet als inburgeringsexamen. Zes onderdelen met een oordeel, zonder beoordelaarsmodel, met held-out controle en consistentieproeven.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Phudu:wght@600;700&family=Sofia+Sans+Condensed:wght@400;600;700&family=Sofia+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --paper:#fbfaf8; --paper-2:#f2f0ea;
-  --ink:#14161a;      /* 16.5:1 */
-  --ink-2:#4a4f57;    /*  8.3:1 */
-  --ink-3:#6d727a;    /*  5.1:1 */
-  --rule:#dcd8cf; --rule-2:#b9b4a8;
-  --ok:#1a7f5a; --warn:#a8480f; --info:#1d4ed8;
-  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --blue:#081858;--blue-2:#0b1f5b;--ink:#f4f6fb;--dim:#a9b8e0;--dim-2:#7f90c4;--yel:#ffc917;--seam:rgba(255,255,255,.16);
+  --tile:#e9ebee;--tile-2:#dfe2e7;--tileink:#14203f;--tilemute:#4c5a83;--rule:#b9c0cf;
+  --disp:"Phudu","Sofia Sans Condensed",system-ui,sans-serif;
+  --cond:"Sofia Sans Condensed","Sofia Sans",system-ui,sans-serif;
+  --text:"Sofia Sans",system-ui,sans-serif;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --paper:#14161a; --paper-2:#1c1f24;
-    --ink:#eeece5; --ink-2:#b6b2a8; --ink-3:#8d8981;
-    --rule:#2b2f35; --rule-2:#464b53;
-    --ok:#3ddc97; --warn:#ff8a5b; --info:#7ab8ff;
-  }
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--tile);color:var(--tileink);font-family:var(--text);font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased}
+::selection{background:var(--yel);color:var(--blue)}
+:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+h2{font-family:var(--cond);font-weight:700;font-size:clamp(28px,3vw,36px);line-height:1.05;text-transform:uppercase;letter-spacing:.02em;margin:0 0 14px}
+h3{font-family:var(--cond);font-weight:700;font-size:22px;line-height:1.1;margin:22px 0 6px}
+p{max-width:68ch}
+p+p{margin-top:10px}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em}
+pre{background:var(--blue);color:var(--ink);padding:16px 18px;overflow-x:auto;line-height:1.45;margin:10px 0}
+pre::-webkit-scrollbar{height:8px}pre::-webkit-scrollbar-thumb{background:var(--dim-2)}
+.wrap{padding:0 clamp(16px,3.3vw,48px)}
+.mk{vertical-align:-2px;margin-right:4px}
+
+/* ---------- the board ---------- */
+.board{background:var(--blue);color:var(--ink);font-family:var(--cond);line-height:1.2;display:grid;grid-template-rows:auto 1fr}
+.strip{display:flex;justify-content:space-between;align-items:baseline;gap:16px;height:74px;border-bottom:2px solid var(--yel);padding:0 clamp(16px,3.3vw,48px)}
+.strip h1{font-family:var(--disp);font-size:clamp(20px,2.2vw,31px);font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.05}
+.stamp{color:var(--yel);font-family:var(--cond);font-size:clamp(15px,1.6vw,24px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cols{display:grid;grid-template-columns:minmax(0,780px) minmax(0,1fr);padding:0 clamp(16px,3.3vw,48px) 0}
+.left{padding-right:36px;border-right:2px solid var(--yel)}
+.right{padding-left:36px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-family:var(--cond);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:left;padding:10px 6px;border-bottom:1px solid var(--seam);white-space:nowrap}
+th button{all:unset;cursor:pointer;color:inherit;letter-spacing:inherit;text-transform:inherit}
+th button:hover,th button:focus-visible{color:var(--ink)}
+th[aria-sort="descending"] button::after{content:" ↓"}th[aria-sort="ascending"] button::after{content:" ↑"}
+td{padding:9px 6px;border-bottom:1px solid var(--seam);vertical-align:top}
+.score{font-family:var(--cond);font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;width:90px;padding-top:12px;white-space:nowrap}
+.score small{display:block;font-family:var(--cond);font-size:13px;font-weight:400;color:var(--dim);margin-top:4px}
+.name{font-size:24px;font-weight:700;line-height:1.05;overflow-wrap:anywhere}
+.prov{font-size:15px;color:var(--dim);letter-spacing:.04em;margin-top:3px}
+.via{font-size:16px;font-weight:600;line-height:1.3;margin-top:4px}
+.via s{color:var(--dim)}.via .u{color:var(--yel)}
+.rem{font-size:14px;color:var(--yel);margin-top:4px;line-height:1.3;max-width:520px}
+.flapc{width:190px;padding-top:12px;white-space:nowrap}
+.flap{display:inline-block;min-width:150px;text-align:center;font-family:var(--cond);font-size:18px;font-weight:700;letter-spacing:.08em;padding:8px 12px;background:var(--ink);color:var(--blue);position:relative;text-transform:uppercase}
+.flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(8,24,88,.35)}
+.flap.no{background:none;color:var(--yel);padding-left:0;text-align:left}
+tr.dim td{opacity:.5}
+tr.run{cursor:default}
+tr.run:hover td,tr.run:focus-within td{background:rgba(255,255,255,.04)}
+.detail{display:none;font-size:14px;color:var(--dim);margin-top:6px;font-variant-numeric:tabular-nums}
+.detail span{display:inline-block;margin-right:12px;white-space:nowrap}
+tr.run:hover .detail,tr.run:focus-within .detail,tr.open .detail{display:block}
+.rowbtn{all:unset;cursor:pointer;display:block;width:100%}
+.rowbtn:focus-visible{outline:2px solid var(--yel);outline-offset:3px}
+
+/* perron */
+.perron h2{font-family:var(--cond);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:12px 0 6px;border-bottom:1px solid var(--seam);margin:0}
+.track{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:start;height:96px;border-bottom:1px solid var(--seam);padding-top:14px}
+.tl{font-size:22px;font-weight:700;line-height:1.05}
+.tl small{display:block;font-size:13px;font-weight:400;color:var(--dim);margin-top:3px}
+.rail{position:relative;height:56px;border-bottom:1px solid var(--seam)}
+.pass{position:absolute;left:60%;top:-6px;bottom:-1px;width:2px;background:var(--yel)}
+.band{position:absolute;height:10px}
+.band.ok{background:var(--ink)}.band.un{background:var(--yel)}.band.no{background:transparent;border:1.5px solid var(--dim)}
+.lab{position:absolute;font-size:13px;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums}
+.axis{display:flex;justify-content:space-between;font-size:13px;color:var(--dim);padding-top:6px;font-variant-numeric:tabular-nums}
+.axis .p{color:var(--yel)}
+.legend{margin-top:18px;background:var(--ink);color:var(--blue);padding:12px 16px;font-size:15px;line-height:1.5;font-family:var(--text);display:inline-block}
+
+/* ---------- prose ---------- */
+section.s{padding:48px 0 12px;max-width:1344px}
+section.s+section.s{border-top:1px solid var(--rule);margin-top:36px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:40px}
+.two>*{min-width:0}
+.ptbl{min-width:0;max-width:100%}
+.ptbl{overflow-x:auto;margin:14px 0}
+.ptbl table{min-width:640px}
+.ptbl th{color:var(--tilemute);border-bottom:2px solid var(--tileink);font-size:13px}
+.ptbl td{border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums;font-size:17px}
+.ptbl td.n{text-align:right;white-space:nowrap}
+.ptbl td.v{font-family:var(--cond);font-weight:700;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.note{font-size:15px;color:var(--tilemute);max-width:68ch}
+ul{padding-left:20px;max-width:68ch}li+li{margin-top:6px}
+footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilemute);border-top:2px solid var(--blue);margin-top:48px}
+
+/* ---------- motion: split-flap reveal ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .flip{animation:flip .45s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes flip{0%{transform:perspective(600px) rotateX(-90deg);opacity:0}60%{opacity:1}100%{transform:none;opacity:1}}
+  tr.run{animation:rowin .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*70ms)}
+  @keyframes rowin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 }
-html{-webkit-text-size-adjust:100%}
-body{background:var(--paper);color:var(--ink);
-  font-family:Archivo,-apple-system,BlinkMacSystemFont,sans-serif;
-  font-size:17px;line-height:1.6;font-variant-numeric:tabular-nums;
-  -webkit-font-smoothing:antialiased}
-.wrap{max-width:920px;margin:0 auto;padding:0 22px;overflow-x:clip}
-main,section{min-width:0;max-width:100%}
 
-header{padding:40px 0 26px;border-bottom:2px solid var(--ink)}
-h1{font-size:clamp(30px,4.6vw,44px);font-weight:700;letter-spacing:-.025em;line-height:1.05}
-.sub{margin-top:14px;font-size:19px;color:var(--ink-2);max-width:58ch}
-.sub b{color:var(--ink);font-weight:600}
-.links{margin-top:18px;font-size:15px;color:var(--ink-3);display:flex;gap:18px;flex-wrap:wrap}
-.links a{color:var(--ink-2)}
-
-section{padding:38px 0;border-bottom:1px solid var(--rule)}
-section:last-of-type{border-bottom:none}
-h2{font-size:22px;font-weight:700;letter-spacing:-.012em}
-h2 .k{display:block;font-size:13px;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
-p.t{margin-top:14px;max-width:64ch;color:var(--ink-2)}
-p.t + p.t{margin-top:11px}
-p.t b{color:var(--ink);font-weight:600}
-code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:2px 5px;border-radius:3px}
-pre{margin-top:16px;background:var(--paper-2);border:1px solid var(--rule);border-radius:5px;
-  padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;color:var(--ink-2)}
-pre b{color:var(--ink);font-weight:600}
-
-.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;margin-top:20px}
-table{width:100%;border-collapse:collapse;font-size:16px;min-width:560px}
-th{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600;
-  text-align:left;padding:0 16px 9px 0;border-bottom:1px solid var(--rule-2);white-space:nowrap}
-td{padding:10px 16px 10px 0;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
-td:first-child{color:var(--ink);font-weight:500}
-th.n,td.n{text-align:right;padding-right:0}
-tbody tr:last-child td{border-bottom:none}
-tr.control td{color:var(--ink-3)}
-tr.control td:first-child{color:var(--ink-2);font-weight:400}
-.pill{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-  padding:2px 7px;border-radius:3px;background:var(--paper-2);color:var(--ink-3);margin-left:8px}
-.pill.ctl{color:var(--info)}
-.bar{height:10px;background:var(--paper-2);border-radius:2px;position:relative;min-width:60px}
-.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--ok);display:block}
-.bar i.low{background:var(--ink-3)}
-.layers td:first-child{white-space:nowrap}
-.empty{margin-top:20px;border-left:3px solid var(--info);background:var(--paper-2);
-  padding:14px 18px;color:var(--ink-2);font-size:16px}
-.empty b{color:var(--ink)}
-footer{padding:26px 0 64px;font-size:14px;color:var(--ink-3)}
-footer a{color:var(--ink-2)}
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .cols{grid-template-columns:1fr}
+  .left{padding-right:0;border-right:0;border-bottom:2px solid var(--yel);padding-bottom:12px}
+  .right{padding-left:0}
+}
+@media (max-width:700px){
+  body{font-size:17px}
+  .flapc{width:auto}.flap{min-width:0;font-size:14px;padding:6px 8px}
+  .score{font-size:28px;width:72px}
+  .name{font-size:20px}
+  .track{grid-template-columns:1fr}
+  .rail{margin-top:8px}
+  th:first-child,td:first-child{padding-left:0}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<header>
-  <h1>nl-eval</h1>
-  <p class="sub">A Dutch evaluation suite for language models, in three layers:
-    <b>native grammar</b>, <b>translated breadth</b>, and <b>applied Dutch</b>
-    that no existing benchmark covers. No LLM judge, so a run is deterministic
-    and costs about a cent.</p>
-  <div class="links">
-    <a href="https://github.com/hoeberigs/nl-eval">GitHub</a>
-    <a href="https://github.com/hoeberigs/nl-eval/blob/main/ATTRIBUTION.md">Attribution &amp; licences</a>
-    <span id="stamp"></span>
+<header class="board" id="bord">
+  <div class="strip">
+    <h1>Het inburgeringsexamen voor taalmodellen</h1>
+    <div class="stamp" id="stamp">bijgewerkt …</div>
+  </div>
+  <div class="cols">
+    <div class="left">
+      <div class="tbl">
+      <table id="board">
+        <thead><tr>
+          <th aria-sort="descending"><button type="button" data-sort="accuracy">Score</button></th>
+          <th><button type="button" data-sort="model">Model · via</button></th>
+          <th><button type="button" data-sort="verdict">Uitslag</button></th>
+        </tr></thead>
+        <tbody id="rows"><tr><td colspan="3" style="color:var(--dim)">Uitslagen laden…</td></tr></tbody>
+      </table>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="right perron" id="perron">
+      <h2 id="perron-head">Perron · per onderdeel tegen de slaaglijn van 80%</h2>
+      <div id="tracks"></div>
+      <div class="axis"><span>50%</span><span>60</span><span>70</span><span class="p">80 slaaglijn</span><span>90</span><span>100%</span></div>
+    </div>
   </div>
 </header>
 
-<main>
-  <section>
-    <h2><span class="k">Results</span>Leaderboard</h2>
-    <p class="t">Accuracy with a 95% Wilson interval, against the chance
-      baseline for the layers included in that run. Control runs are listed and
-      labelled rather than hidden: a leaderboard that omits its own baselines is
-      asking to be taken on trust.</p>
-    <div id="board"></div>
-  </section>
+<main class="wrap">
 
-  <section>
-    <h2><span class="k">Composition</span>The three layers</h2>
-    <p class="t">The layers are scored separately and never blended into one
-      number. A single headline mixing native grammar with translated knowledge
-      cannot be read as either, and the chance baseline differs by layer.</p>
-    <div class="scroll"><table class="layers">
-      <thead><tr><th>Layer</th><th>Source</th><th class="n">Items</th><th>Licence</th></tr></thead>
-      <tbody>
-        <tr><td>L1 · grammar</td>
-            <td>BLiMP-NL — native Dutch minimal pairs, 22 phenomena, human acceptability ratings</td>
-            <td class="n" id="nL1">—</td><td>CC-BY-4.0</td></tr>
-        <tr><td>L2 · breadth</td>
-            <td>Global-MMLU (nl) — translated knowledge and reasoning</td>
-            <td class="n" id="nL2">—</td><td>Apache-2.0</td></tr>
-        <tr><td>L3 · applied</td>
-            <td>Hand-written: <code>de</code>/<code>het</code>, tussen-n, diminutives, word order, idioms, false friends, u/je register, notation, civics, BE/NL</td>
-            <td class="n" id="nL3">—</td><td>MIT</td></tr>
-      </tbody>
+<section class="s" id="examen">
+  <h2>Hoe het examen werkt</h2>
+  <div class="two">
+    <div>
+      <p>Wie in Nederland komt wonen legt een inburgeringsexamen af: lezen, schrijven, spreken, luisteren, kennis van de Nederlandse maatschappij en oriëntatie op de arbeidsmarkt. Dit examen legt taalmodellen langs dezelfde lat, met de onderdelen die zonder spraak te toetsen zijn. Spreken en Luisteren vallen buiten dit examen.</p>
+      <p>Elk onderdeel bestaat uit opgaven met één juist antwoord: meerkeuze, minimale paren die op waarschijnlijkheid worden gescoord, of een zin die exact moet worden herschreven. Er is geen beoordelaarsmodel. Een score is daardoor reproduceerbaar en vrij van de smaak van een tweede model.</p>
+    </div>
+    <div>
+      <p>De uitslag per onderdeel is een oordeel tegen een slaaglijn van <span id="passline">80%</span>: <b>geslaagd</b> als de ondergrens van het 95%-interval boven de lijn ligt, <b>gezakt</b> als de bovengrens eronder blijft, anders <b>onbeslist</b>. Een klein onderdeel kan dus niet slagen op een gelukkige greep. De lijn is een analogie met “voldoende”, door ons gekozen, niet door DUO.</p>
+      <p>Een model is geslaagd als het voor alle zes onderdelen met oordeel slaagt, niet geslaagd zodra het voor één onderdeel zakt, en anders onbeslist. Algemene kennis (Global-MMLU) telt als indicatie, zonder oordeel: MMLU zit in vrijwel elke trainingsset.</p>
+    </div>
+  </div>
+  <div class="ptbl"><table id="sections-table">
+    <thead><tr><th>Onderdeel</th><th>Wat wordt getoetst</th><th>Opgaven</th><th>Oordeel</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+</section>
+
+<section class="s" id="consistentie">
+  <h2>Consistentie: hoeveel van de score is gewoonte</h2>
+  <div class="two">
+    <div>
+      <p>Een juist antwoord zegt niets over of het model het opnieuw geeft als de vraag net anders staat. Twee verstoringen veranderen niets aan het juiste antwoord: de antwoordopties in omgekeerde volgorde, en de instructie in informele in plaats van formele bewoording. Elke verandering van keuze is instabiliteit van het model, en niets anders.</p>
+      <p>De tabel toont per model het aandeel antwoorden dat van inhoud veranderde. Een model dat op de letter let in plaats van op de zin, draait om zodra de volgorde omkeert.</p>
+    </div>
+    <div class="ptbl"><table id="consistency-table">
+      <thead><tr><th>Model</th><th>Opgaven</th><th>Omgekeerde volgorde</th><th>Informele instructie</th></tr></thead>
+      <tbody></tbody>
     </table></div>
-    <p class="t">L1 and L2 are fetched at run time and never redistributed: they
-      download on first use into a local cache, so their licences stay with
-      their publishers. <code>--suite core</code> needs no network.</p>
-    <div class="scroll"><table>
-      <thead><tr><th>Category</th><th class="n">Items</th><th>Share</th></tr></thead>
-      <tbody id="cats"></tbody>
+  </div>
+</section>
+
+<section class="s" id="besmetting">
+  <h2>Besmetting: is de score van buiten geleerd</h2>
+  <div class="two">
+    <div>
+      <p>Elke openbare benchmark verslijt. Een model dat na publicatie is getraind kan de opgaven hebben gezien en scoort dan hoog zonder Nederlands te kennen. Daarom is er een held-out deel dat nooit is gecommit: alleen de id’s en gezouten hashes van de antwoorden staan online, in <code>docs/heldout-manifest.json</code>.</p>
+      <p>De toets vergelijkt de openbare score met de held-out score tegen het kleinste verschil dat het held-out deel kan zien. Met de huidige omvang is dat een ruwe zeef: alleen grove memorisatie valt erdoor. Daarnaast staat er een canary-GUID in de repository; een model dat die reproduceert is op deze repository getraind.</p>
+    </div>
+    <div class="ptbl"><table id="heldout-table">
+      <thead><tr><th>Model</th><th>Openbaar</th><th>Held-out</th><th>Verschil</th><th>Ruisgrens</th><th>Oordeel</th></tr></thead>
+      <tbody></tbody>
     </table></div>
-  </section>
+  </div>
+</section>
 
-  <section>
-    <h2><span class="k">Prior art</span>Dutch is not an unserved language</h2>
-    <p class="t">This is <b>not the first Dutch benchmark</b> and does not
-      replace one. Anyone evaluating a model on Dutch should start with
-      <a href="https://euroeval.com">EuroEval</a> (formerly ScandEval), the
-      maintained Dutch leaderboard covering sentiment, NER, linguistic
-      acceptability and reading comprehension, with confidence intervals and a
-      runnable library. <a href="https://arxiv.org/abs/2305.13026">DUMB</a>
-      covers Dutch NLU for encoders, and the
-      <a href="https://huggingface.co/spaces/BramVanroy/open_dutch_llm_leaderboard">Open
-      Dutch LLM Leaderboard</a> preceded EuroEval.</p>
-    <p class="t">Three narrow things those leave open, which is what this suite
-      is for: most Dutch leaderboard tasks are <b>machine-translated</b>, so
-      provenance is labelled here and layers are never blended;
-      <b>orthography, register and notation</b> are untested anywhere I could
-      find, which is what L3 covers; and BLiMP-NL's <b>human acceptability
-      ratings</b> are underused, which is the next thing worth building.</p>
-    <p class="t">Treat this as a supplement to EuroEval, not a replacement.</p>
-  </section>
+<section class="s" id="controles">
+  <h2>De controles zijn de vloer</h2>
+  <p>Twee rijen op het bord zijn geen deelnemers. <b>always-a</b> kiest altijd de eerste optie en meet of de antwoordposities in balans zijn; <b>echo</b> herhaalt de vraag en meet of de antwoordextractie ooit iets uit niets maakt. Beide horen te zakken. Een suite waar een controle slaagt is kapot, en een bord dat zijn controles verbergt vraagt om vertrouwen in plaats van het te verdienen.</p>
+</section>
 
-  <section>
-    <h2><span class="k">Why not translation</span>Translating an English benchmark is the weaker move</h2>
-    <p class="t"><b>It is already done.</b> Global-MMLU ships Dutch under
-      Apache-2.0. Re-translating MMLU duplicates free work.</p>
-    <p class="t"><b>Translated items largely measure translated English.</b> The
-      questions keep their source-language shape and culture-bound knowledge does
-      not survive the trip, so a model can score well on translated Dutch while
-      handling actual Dutch badly.</p>
-    <p class="t"><b>The hardest Dutch has no English source.</b> There is no
-      English sentence that becomes <i>“welk lidwoord hoort bij beleid”</i>.
-      Article assignment, the tussen-n, and the u/je register cannot be produced
-      by translating anything, which is why L3 is written by hand.</p>
-  </section>
+<section class="s" id="bestaand">
+  <h2>Wat er al bestond, en wat dit toevoegt</h2>
+  <div class="two">
+    <div>
+      <p>Nederlands is geen onbediende taal. <a href="https://euroeval.com">EuroEval</a> draait een Nederlandse set met vertaalde en eigen taken, <a href="https://doi.org/10.34973/tj4p-y007">BLiMP-NL</a> levert 8.400 minimale paren met menselijke beoordelingen, en <a href="https://huggingface.co/datasets/CohereLabs/Global-MMLU">Global-MMLU</a> een Nederlandse vertaling van MMLU. Dit examen gebruikt de laatste twee als lagen en doet niet alsof ze niet bestaan.</p>
+    </div>
+    <div>
+      <ul>
+        <li><b>Examenstructuur in plaats van één getal.</b> Een oordeel per onderdeel, met interval en slaaglijn, zoals het land zelf mensen toetst.</li>
+        <li><b>Geen beoordelaarsmodel.</b> Ook schrijven wordt exact gescoord: een foutieve zin verbeteren heeft één juiste uitkomst.</li>
+        <li><b>Besmetting is toetsbaar.</b> Een held-out deel dat nooit is gecommit, plus een canary.</li>
+        <li><b>Consistentie telt mee.</b> Hoeveel van een score omdraait bij een verstoring die het antwoord niet verandert.</li>
+        <li><b>KNM en ONA.</b> Kennis van de maatschappij en de arbeidsmarkt, die geen vertaalde benchmark bevat.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-  <section>
-    <h2><span class="k">Integrity</span>The controls</h2>
-    <p class="t">Two baselines ship with the suite and cost nothing to run. If
-      <code>always-a</code> ever scores meaningfully above chance, the answer key
-      has drifted onto one letter and the suite is measuring letter preference
-      rather than Dutch. <code>--validate</code> checks this automatically,
-      including for the externally-sourced layers.</p>
-<pre><b>$ nl-eval --provider echo</b>       # answers nothing at all
-accuracy 0.000   chance 0.339   189/189 replies unparseable
+<section class="s" id="beperkingen">
+  <h2>Wat dit examen niet meet</h2>
+  <ul>
+    <li><b>Spreken en Luisteren</b> zijn niet getoetst; dit is een tekstexamen.</li>
+    <li><b>Kleine onderdelen kunnen niet slagen.</b> Lezen telt <span id="n-lezen">15</span> opgaven; zelfs een foutloos model haalt daar de ondergrens van 80% niet. Dat is een tekort van de set, niet van het model, en staat als onbeslist op het bord. Meer opgaven zijn de eerstvolgende toevoeging.</li>
+    <li><b>De slaaglijn is een keuze.</b> Tachtig procent is een analogie met “voldoende”, geen officiële norm.</li>
+    <li><b>Algemene kennis is een indicatie.</b> Global-MMLU is afgeleid van MMLU, een van de meest besmette benchmarks die er zijn.</li>
+    <li><b>Een run die niet reed</b> staat als zodanig op het bord, met de reden, in plaats van als nul. Een geblokkeerde API-sleutel is geen taalvaardigheid.</li>
+    <li><b>Het bord is klein.</b> Elke score draagt zijn interval; verschillen kleiner dan het kleinste detecteerbare verschil zijn geen rangorde.</li>
+  </ul>
+</section>
 
-<b>$ nl-eval --provider always-a</b>   # always answers "A"
-accuracy 0.354   chance 0.339   lift +0.016
+<section class="s" id="draaien">
+  <h2>Zelf draaien</h2>
+  <p>De suite is een Python-pakket met een uitgavenplafond dat wordt afgedwongen, niet geadviseerd. Lokale modellen kosten niets; een gehoste run op alle opgaven kost doorgaans onder een euro.</p>
+<pre>pip install -e .
+nl-eval --suite all --provider ollama --model qwen2.5:7b --out results/ollama__qwen2.5-7b.json
+nl-eval --suite all --provider anthropic --model claude-haiku-4-5-20251001 --max-spend 0.50 --out results/haiku.json
+nl-eval --consistency --suite core --limit 120 --provider anthropic --model claude-haiku-4-5-20251001 --out results/consistency__haiku.json
+nl-eval --suite holdout --provider anthropic --model claude-haiku-4-5-20251001 --out results/heldout__haiku.json
+nl-eval --contamination-check results/haiku.json results/heldout__haiku.json
+nl-eval --publish results</pre>
+  <p class="note">Broncode, opgaven en de volledige methode: <a href="https://github.com/hoeberigs/nl-eval">github.com/hoeberigs/nl-eval</a>.</p>
+</section>
 
-<b>$ nl-eval --suite all --provider always-a</b>
-n 928   accuracy 0.371   chance 0.387   lift <b>-0.016</b>
-  L1 blimp    440   0.500   (exactly 2-choice chance)
-  L2 mmlu_nl  299   0.191   (key leans away from A)
-  L3 core     189   0.354</pre>
-    <p class="t">Across all three layers a fixed-letter guesser scores slightly
-      <b>below</b> chance.</p>
-  </section>
+<section class="s" id="bronnen">
+  <h2>Bronnen en licenties</h2>
+  <ul>
+    <li><b>BLiMP-NL</b> (Suijkerbuijk e.a., Computational Linguistics 2025), CC-BY-4.0; de menselijke beoordelingen CC BY-SA 4.0.</li>
+    <li><b>Global-MMLU</b> (Cohere Labs), Apache-2.0; alleen het Nederlandse deel.</li>
+    <li><b>Handgeschreven opgaven</b> (Taalvorm, Schrijven, Lezen, Woordenschat, KNM, ONA), MIT, geschreven voor deze repository.</li>
+  </ul>
+</section>
 
-  <section>
-    <h2><span class="k">Running it</span>Free and paid paths</h2>
-<pre><b>pip install -e .</b>
-
-<b>nl-eval --validate</b>                                  # no network, no spend
-<b>nl-eval --provider ollama --model qwen2.5:7b --suite all</b>   # free, local
-<b>nl-eval --provider openai --model gpt-5-mini --suite all --max-spend 0.50</b></pre>
-    <p class="t"><code>--max-spend</code> is a euro ceiling checked <b>before the
-      first API call</b>. The run refuses to start if the estimate exceeds it and
-      says what to cut. The price table deliberately over-estimates.</p>
-  </section>
-
-  <section>
-    <h2><span class="k">Scoring</span>Minimal pairs are scored by likelihood</h2>
-    <p class="t">BLiMP-NL is designed to be scored by comparing the
-      <b>log-likelihood</b> a model assigns to the grammatical and the
-      ungrammatical sentence, not by asking it to pick one. A forced choice can
-      be right for the wrong reason, and it measures instruction-following as
-      much as grammar. Chat APIs will not return the likelihood of text they did
-      not generate, so this needs local weights.</p>
-    <p class="t">What that is worth, on <b>one model and the same 440 items</b>:</p>
-    <div class="scroll"><table>
-      <thead><tr><th>Scoring method</th><th class="n">Accuracy</th><th>Note</th></tr></thead>
-      <tbody>
-        <tr><td>Log-probability</td><td class="n">87.3%</td><td>95% CI 83.8–90.1%</td></tr>
-        <tr><td>Forced choice</td><td class="n">0.0%</td><td>440/440 replies unparseable</td></tr>
-      </tbody>
-    </table></div>
-    <p class="t">Identical model, identical items.
-      <code>GroNLP/gpt2-small-dutch</code> knows Dutch grammar perfectly well; it
-      cannot follow a multiple-choice instruction, because it is a base model.
-      Scored by forced choice it looks like it knows nothing, which would have
-      been a completely false reading.</p>
-  </section>
-
-  <section>
-    <h2><span class="k">Contamination</span>These items are public</h2>
-    <p class="t">A model trained after publication may have seen them, and a
-      contaminated model scores high without knowing any Dutch. Every benchmark
-      has this problem; most do not say so. This one publishes a canary GUID that
-      exists nowhere else — if a model reproduces it, it trained on this
-      repository and its score is void.</p>
-    <p class="t">The layers carry different risk and should not be read as if
-      they shared one. BLiMP-NL and Global-MMLU predate most training cutoffs and
-      are very likely in large corpora already; the hand-written layer was
-      published here first. The honest fix is a <b>held-out split that is never
-      published</b>, and this suite now has one.</p>
-    <p class="t">Run a model on the published items and on items it cannot have
-      seen, then compare. The gap is always read against the noise floor for the
-      smaller split, so a few points of difference is reported as noise rather
-      than as an accusation.</p>
-<pre><b>$ nl-eval --contamination-check results/m.json results/m-held.json</b>
-public 0.97   held-out 0.55   gap 0.42   noise floor 0.08
-<b>CONTAMINATION LIKELY: the model scores far better on published items</b></pre>
-    <p class="t"><b>Moving an item out of a repository does not un-publish it.</b>
-      Git keeps history, so anything ever committed is compromised for this
-      purpose permanently. The held-out directory is gitignored from the outset
-      and the status command refuses to call a set clean if git is tracking it or
-      ever did: held-out items must be written privately, not moved there.</p>
-    <p class="t">The repository publishes a
-      <a href="heldout-manifest.json">commitment manifest</a> — ids and salted
-      answer hashes only. It proves the set existed at this date without
-      revealing a single question or answer, and the salt stays with the private
-      items so the hashes cannot be brute-forced.</p>
-  </section>
-
-  <section>
-    <h2><span class="k">Statistics</span>Can one model actually beat another</h2>
-    <p class="t">Most leaderboards print two accuracies and order the rows, which
-      invites the reader to treat a two-point gap as real. On a suite this size
-      it usually is not. <code>--compare</code> settles two runs with
-      <b>McNemar</b> on the discordant items plus a <b>paired bootstrap</b> for
-      the size of the difference.</p>
-<pre><b>$ nl-eval --compare results/a.json results/b.json</b>
-accuracy  0.730 vs 0.746      difference -0.016
-95% CI    [-0.106, +0.074]    p 0.820
-verdict   <b>not distinguishable on this suite</b></pre>
-    <p class="t">Every run also reports the smallest gap the suite could
-      reliably detect, so a reader can see when it is simply too small to settle
-      a question:</p>
-    <div class="scroll"><table>
-      <thead><tr><th>Suite</th><th class="n">Items</th><th class="n">Smallest detectable gap</th></tr></thead>
-      <tbody>
-        <tr><td>core only</td><td class="n">307</td><td class="n">11.3 pp</td></tr>
-        <tr><td>all three layers</td><td class="n">928</td><td class="n">6.0 pp</td></tr>
-        <tr><td>larger BLiMP sample</td><td class="n">~2,000</td><td class="n">4.1 pp</td></tr>
-        <tr><td>full BLiMP-NL</td><td class="n">9,000</td><td class="n">1.9 pp</td></tr>
-      </tbody>
-    </table></div>
-  </section>
-
-  <section>
-    <h2><span class="k">Human alignment</span>Does it find the same things hard that people do</h2>
-    <p class="t">Accuracy says how often a model was right. It cannot say whether
-      a model failing at 85% fails where Dutch speakers hesitate, or on
-      violations every native speaker catches instantly.</p>
-    <p class="t">BLiMP-NL makes that answerable: nine of the ten hand-written
-      sentences per paradigm carry 7-point acceptability ratings from at least 30
-      native speakers. Correlating the human difficulty of each paradigm against
-      the model's accuracy on it gives a <b>human-alignment score</b>, and it
-      works on ordinary forced-choice answers with no log-probabilities needed.
-      Positive means the model finds the same violations easy that people do;
-      near zero means it is often right for different reasons.</p>
-    <p class="t">The ratings are <b>not bundled and never downloaded
-      automatically</b>. They sit in the Radboud repository under
-      <b>CC BY-SA 4.0</b>, which is share-alike and stricter than the CC-BY on
-      the sentence pairs, and the portal asks for an account.</p>
-  </section>
-
-  <section>
-    <h2><span class="k">Limits</span>What this does not measure</h2>
-    <p class="t"><b>BLiMP-NL is scored as a forced choice here</b>, not by
-      comparing the log-probability of each sentence as the corpus intends. A
-      forced choice can be right for the wrong reason.</p>
-    <p class="t"><b>Human alignment is paradigm-level, not item-level.</b> It
-      correlates per-paradigm accuracy against per-paradigm human deltas, which
-      is what forced-choice answers support. Item-level correlation would need
-      per-sentence log-probabilities.</p>
-    <p class="t"><b>Multiple choice is recognition, not production.</b> A model
-      can pick <code>pannenkoek</code> from two options and still misspell it
-      when writing freely.</p>
-    <p class="t"><b>L3 is written by one author</b> and has not been reviewed by
-      a second native speaker. A native review is advisable before publishing L3
-      results. L2 inherits Global-MMLU's translation quality, including its
-      errors.</p>
-  </section>
 </main>
 
-<footer><p id="foot"></p></footer>
-</div>
+<footer><span id="foot"></span> · <a href="https://github.com/hoeberigs/nl-eval">nl-eval op GitHub</a> · gemaakt door Linda Hoeberigs</footer>
 
 <script>
-(function(){
-"use strict";
-function el(id){return document.getElementById(id);}
-function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-function pct(x,d){return (100*Number(x)).toFixed(d==null?1:d)+"%";}
+(async function(){
+  const PROV = {"anthropic":"Anthropic","openai":"OpenAI","ollama":"Alibaba · lokaal via Ollama","hf-dutch-gpt2-logprob":"GroNLP · lokaal, waarschijnlijkheid","google":"Google","always-a":"controle","echo":"controle"};
+  const ABBR = {"claude-haiku-4-5-20251001":"Haiku","gpt-5-mini":"GPT-5 mini","qwen2.5:7b":"Qwen 7B"};
+  const FLAP = {"geslaagd":"Geslaagd","onbeslist":"Onbeslist","niet geslaagd":"Niet geslaagd","onvolledig":"Onvolledig","rijdt niet":"Rijdt niet"};
+  const VORDER = {"geslaagd":0,"onbeslist":1,"onvolledig":2,"niet geslaagd":3,"rijdt niet":4};
+  const pct = x => (x*100).toFixed(1).replace(".",",");
+  const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const mark = (k,c="currentColor") => {
+    const p = k==="geslaagd" ? '<path d="M3 9l4 4 8-8"/>' : k==="onbeslist" ? '<path d="M3 10c2-3 4-3 6 0s4 3 6 0"/>' : k==="gezakt" ? '<path d="M4 4l10 10M14 4L4 14"/>' : '<path d="M3 9h12"/>';
+    return `<svg class="mk" viewBox="0 0 18 18" width="15" height="15" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  };
+  const label = r => r.model.replace("-20251001","");
+  const short = r => ABBR[r.model] || label(r);
 
-fetch("results.json",{cache:"no-store"})
-  .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();})
-  .then(function(D){
-    var items=D.items||{},cats=items.categories||{};
-    el("stamp").textContent="updated "+String(D.generated_at||"").slice(0,10);
+  let d;
+  try { d = await (await fetch("results.json",{cache:"no-store"})).json(); }
+  catch(e){ document.getElementById("rows").innerHTML = '<tr><td colspan="3" style="color:var(--yel)">results.json kon niet worden geladen. Draai <code>nl-eval --publish results</code>.</td></tr>'; return; }
 
-    el("nL1").textContent=(cats.blimp||0)||"not in this build";
-    el("nL2").textContent=(cats.mmlu_nl||0)||"not in this build";
-    var core=Object.keys(cats).filter(function(k){return k!=="blimp"&&k!=="mmlu_nl";})
-      .reduce(function(a,k){return a+cats[k];},0);
-    el("nL3").textContent=core||"—";
+  const secs = d.sections.filter(s=>s.verdict);
+  const stampDate = new Date(d.generated_at);
+  const stamp = stampDate.toLocaleString("nl-NL",{day:"numeric",month:"numeric",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  document.getElementById("stamp").textContent = "bijgewerkt " + stamp;
+  document.getElementById("passline").textContent = pct(d.pass_line).replace(",0","") + "%";
+  document.getElementById("perron-head").textContent = "Perron · per onderdeel tegen de slaaglijn van " + pct(d.pass_line).replace(",0","") + "%";
+  document.getElementById("foot").textContent = `${d.runs.length} runs · bijgewerkt ${stamp}`;
 
-    var total=items.total||1;
-    el("cats").innerHTML=Object.keys(cats).sort(function(a,b){return cats[b]-cats[a];})
-      .map(function(k){
-        var w=(cats[k]/total)*100;
-        return "<tr><td>"+esc(k)+"</td><td class='n'>"+cats[k]+"</td>"+
-          "<td><div class='bar'><i class='low' style='width:"+w.toFixed(1)+"%'></i></div></td></tr>";
-      }).join("");
+  function via(r){
+    const parts = [];
+    for (const s of r.sections){
+      if (!s.verdict_bearing || s.verdict==="niet afgelegd") continue;
+      if (s.verdict==="geslaagd") parts.push(`<span>${esc(s.label)}</span>`);
+      else if (s.verdict==="onbeslist") parts.push(`<span class="u">${esc(s.label)}</span>`);
+      else parts.push(`<s>${esc(s.label)}</s>`);
+    }
+    return parts.length ? parts.join(" · ") : '<span class="u">alleen Taalvorm</span>';
+  }
+  function remarks(r){
+    if (r.failed) return "run niet gereden: " + (r.failure_reason && /429/.test(r.failure_reason) ? "quota van de API-sleutel overschreden (HTTP 429)" : (r.failure_reason||"providerfout").slice(0,90));
+    if (r.is_control) return /always/.test(r.model) ? "controle: kiest altijd de eerste optie" : "controle: herhaalt de vraag";
+    const out = [];
+    const c = r.consistency;
+    if (c && c.order_reversed.flip_rate!=null){
+      out.push(`${pct(c.order_reversed.flip_rate)}% draait om bij omgekeerde antwoordvolgorde`);
+      if (c.register_swapped.flip_rate>=0.05) out.push(`${pct(c.register_swapped.flip_rate)}% bij informele instructie`);
+    }
+    const fail = r.sections.filter(s=>s.verdict==="gezakt").map(s=>`${s.label} (${pct(s.accuracy)}%)`);
+    if (fail.length) out.push("gezakt voor " + fail.join(", "));
+    const und = r.sections.filter(s=>s.verdict==="onbeslist").map(s=>s.label);
+    if (und.length) out.push(und.join(", ") + ": te weinig opgaven voor een oordeel");
+    if (r.sections.filter(s=>s.verdict_bearing && s.verdict!=="niet afgelegd").length<=1) out.push("alleen BLiMP-NL, gescoord op waarschijnlijkheid");
+    if (r.heldout) out.push(`held-out ${pct(r.heldout.accuracy)}%, ${/no evidence/.test(r.heldout.verdict)?"geen teken van besmetting":r.heldout.verdict}`);
+    return out.slice(0,3).join(" · ");
+  }
+  function detail(r){
+    return r.sections.filter(s=>s.n>0).map(s=>`<span>${esc(s.label)} ${pct(s.accuracy)}% <span style="opacity:.7">[${pct(s.ci95[0])}–${pct(s.ci95[1])}] n=${s.n}</span></span>`).join("");
+  }
 
-    var runs=(D.runs||[]);
-    var real=runs.filter(function(r){return !r.is_control;});
-    var head="<thead><tr><th>Model</th><th class='n'>Items</th><th class='n'>Accuracy</th>"+
-      "<th>95% interval</th><th class='n'>Chance</th><th class='n'>Lift</th></tr></thead>";
-    var body=runs.map(function(r){
-      var ci=r.ci95?pct(r.ci95[0])+" – "+pct(r.ci95[1]):"—";
-      var w=Math.max(2,Number(r.accuracy)*100);
-      return "<tr class='"+(r.is_control?"control":"")+"'>"+
-        "<td>"+esc(r.model)+(r.is_control?"<span class='pill ctl'>control</span>":"")+"</td>"+
-        "<td class='n'>"+r.n+"</td>"+
-        "<td class='n'>"+pct(r.accuracy)+"<div class='bar' style='margin-top:6px'><i class='"+
-          (r.is_control?"low":"")+"' style='width:"+w.toFixed(1)+"%'></i></div></td>"+
-        "<td>"+ci+"</td><td class='n'>"+pct(r.chance)+"</td>"+
-        "<td class='n'>"+(r.lift>=0?"+":"−")+pct(Math.abs(r.lift))+"</td></tr>";
+  let sortKey = "accuracy", sortDir = -1;
+  function renderBoard(animate){
+    const runs = d.runs.slice().sort((a,b)=>{
+      if (a.is_control!==b.is_control) return a.is_control?1:-1;
+      if (a.failed!==b.failed) return a.failed?1:-1;
+      let va, vb;
+      if (sortKey==="accuracy"){ va=a.accuracy; vb=b.accuracy; }
+      else if (sortKey==="model"){ va=label(a).toLowerCase(); vb=label(b).toLowerCase(); }
+      else { va=VORDER[a.verdict]; vb=VORDER[b.verdict]; }
+      const cmp = va<vb ? -1 : va>vb ? 1 : 0;
+      return cmp * sortDir;
+    });
+    const tb = document.getElementById("rows");
+    tb.innerHTML = runs.map((r,i)=>{
+      const dim = (r.failed||r.is_control) ? " dim" : "";
+      const flap = r.failed ? `<span class="flap no">${FLAP[r.verdict]}</span>` : `<span class="flap${animate?" flip":""}" style="animation-delay:${i*70+120}ms">${FLAP[r.verdict]}</span>`;
+      return `<tr class="run${dim}" id="model-${esc(label(r)).replace(/[^a-z0-9]+/gi,"-").toLowerCase()}" style="--i:${i}">
+        <td class="score">${pct(r.accuracy)}<small>${pct(r.ci95[0])} – ${pct(r.ci95[1])}</small></td>
+        <td class="model"><button class="rowbtn" type="button" aria-expanded="false" aria-label="Details van ${esc(label(r))}">
+          <div class="name">${esc(label(r))}</div><div class="prov">${esc(PROV[r.provider]||r.provider)}</div>
+          <div class="via">${via(r)}</div><div class="rem">${esc(remarks(r))}</div>
+          <div class="detail">${detail(r)}</div></button></td>
+        <td class="flapc">${flap}</td></tr>`;
     }).join("");
-    el("board").innerHTML="<div class='scroll'><table>"+head+"<tbody>"+body+"</tbody></table></div>"+
-      (real.length?"":"<div class='empty'><b>No model has been scored yet.</b> "+
-        "Only the two built-in controls have run, which is why every row below is labelled control. "+
-        "Publish a real result with <code>nl-eval --provider openai --model &lt;model&gt; "+
-        "--out results/&lt;model&gt;.json</code> then <code>nl-eval --publish results</code>.</div>");
+    tb.querySelectorAll(".rowbtn").forEach(b=>b.addEventListener("click",()=>{
+      const tr=b.closest("tr"); const open=tr.classList.toggle("open"); b.setAttribute("aria-expanded",open);
+    }));
+  }
+  renderBoard(true);
+  document.querySelectorAll("th button[data-sort]").forEach(btn=>btn.addEventListener("click",()=>{
+    const k = btn.dataset.sort;
+    if (sortKey===k) sortDir = -sortDir; else { sortKey=k; sortDir = k==="accuracy" ? -1 : 1; }
+    document.querySelectorAll("th[aria-sort]").forEach(th=>th.removeAttribute("aria-sort"));
+    btn.parentElement.setAttribute("aria-sort", sortDir===-1 ? "descending" : "ascending");
+    renderBoard(true);
+  }));
 
-    el("foot").innerHTML="Generated "+esc(D.generated_at)+" · "+(items.total||0)+" items · "+
-      '<a href="https://github.com/hoeberigs/nl-eval">source</a> · '+
-      '<a href="https://github.com/hoeberigs/nl-eval/blob/main/ATTRIBUTION.md">attribution</a>';
-  })
-  .catch(function(e){
-    el("board").innerHTML="<div class='empty'><b>results.json could not be loaded.</b> "+
-      esc(e.message)+" Run <code>nl-eval --publish results</code> to generate it.</div>";
-  });
+  // perron
+  const real = d.runs.filter(r=>!r.failed && !r.is_control && r.sections.filter(s=>s.n>0 && s.verdict_bearing).length>1);
+  const X = v => Math.max(0, Math.min(100, (v-0.5)/0.5*100));
+  document.getElementById("tracks").innerHTML = secs.map(sec=>{
+    const bands = real.map((r,i)=>{
+      const s = r.sections.find(x=>x.id===sec.id); if (!s || !s.n) return "";
+      const [lo,hi] = s.ci95;
+      const cls = s.verdict==="geslaagd"?"ok":s.verdict==="onbeslist"?"un":"no";
+      const pos = X(hi)>78 ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${X(hi).toFixed(1)}%;margin-left:8px`;
+      return `<div class="band ${cls}" style="left:${X(lo).toFixed(1)}%;width:${Math.max(1.2,X(hi)-X(lo)).toFixed(1)}%;top:${6+i*14}px" title="${esc(short(r))} ${pct(s.accuracy)}%"></div><div class="lab" style="${pos};top:${i*14}px">${esc(short(r))} ${pct(s.accuracy)}</div>`;
+    }).join("");
+    const n = real.length ? real[0].sections.find(x=>x.id===sec.id).n : 0;
+    return `<div class="track"><div class="tl">${esc(sec.label)}</div><div class="rail" style="--rows:${real.length}"><div class="pass" style="left:${X(d.pass_line)}%"></div>${bands}</div></div>`;
+  }).join("");
+  document.getElementById("legend").innerHTML = `${mark("geslaagd","#081858")} geslaagd &nbsp; ${mark("onbeslist","#081858")} onbeslist &nbsp; ${mark("gezakt","#081858")} gezakt &nbsp;·&nbsp; slaaglijn ${pct(d.pass_line).replace(",0","")}%, ondergrens van het 95%-interval &nbsp;·&nbsp; klik een rij voor de scores per onderdeel`;
+
+  // sections table
+  const ref = real[0] || d.runs[0];
+  document.querySelector("#sections-table tbody").innerHTML = d.sections.map(sec=>{
+    const s = ref.sections.find(x=>x.id===sec.id);
+    return `<tr><td class="v">${esc(sec.label)}</td><td>${esc(sec.what)}</td><td class="n">${s?s.n:0}</td><td>${sec.verdict?"oordeel tegen de slaaglijn":"indicatie, geen oordeel"}</td></tr>`;
+  }).join("");
+  const lz = ref.sections.find(x=>x.id==="lezen"); if (lz) document.getElementById("n-lezen").textContent = lz.n;
+
+  // consistency
+  const cons = d.runs.filter(r=>r.consistency);
+  document.querySelector("#consistency-table tbody").innerHTML = cons.length ? cons.map(r=>`<tr><td class="v">${esc(label(r))}</td><td class="n">${r.consistency.items_probed}</td><td class="n">${pct(r.consistency.order_reversed.flip_rate)}%</td><td class="n">${pct(r.consistency.register_swapped.flip_rate)}%</td></tr>`).join("") : '<tr><td colspan="4">nog geen consistentieproef gedraaid</td></tr>';
+
+  // held-out
+  const ho = d.runs.filter(r=>r.heldout);
+  document.querySelector("#heldout-table tbody").innerHTML = ho.length ? ho.map(r=>{
+    const h=r.heldout; const v = /no evidence/.test(h.verdict) ? "geen teken van besmetting" : /suggestive/.test(h.verdict) ? "verdacht" : "waarschijnlijk besmet";
+    return `<tr><td class="v">${esc(label(r))}</td><td class="n">${pct(h.public_accuracy)}%</td><td class="n">${pct(h.heldout_accuracy)}% (n=${h.n})</td><td class="n">${(h.gap*100).toFixed(1).replace(".",",")} pt</td><td class="n">${(h.noise_floor*100).toFixed(1).replace(".",",")} pt</td><td>${v}</td></tr>`;
+  }).join("") : '<tr><td colspan="6">nog geen held-out run</td></tr>';
 })();
 </script>
 </body>
