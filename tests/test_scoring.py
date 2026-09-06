@@ -12,6 +12,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from nleval.compare import compare, minimum_detectable_difference
+from nleval.human import spearman
 from nleval.items import Item, chance_baseline, load_items, validate
 from nleval.score import extract_choice, normalise, score_item, wilson
 
@@ -93,8 +95,64 @@ def test_itemset():
     check("chance baseline in range", 0.2 < c < 0.55, True)
 
 
+def _runs(pattern_a, pattern_b):
+    a=[{"id":f"i{i}","correct":bool(x)} for i,x in enumerate(pattern_a)]
+    b=[{"id":f"i{i}","correct":bool(x)} for i,x in enumerate(pattern_b)]
+    return a,b
+
+
+def test_compare():
+    # Identical runs cannot be distinguished, whatever the accuracy.
+    a,b=_runs([1]*50+[0]*50,[1]*50+[0]*50)
+    c=compare(a,b,"A","B")
+    check("identical runs p", c.p_value, 1.0)
+    check("identical runs verdict", c.verdict, "not distinguishable on this suite")
+    check("identical diff", round(c.diff,6), 0.0)
+
+    # A lopsided disagreement is detected and attributed to the right model.
+    a,b=_runs([1]*40+[0]*60,[0]*40+[0]*60)
+    c=compare(a,b,"A","B")
+    check("lopsided favours A", c.verdict, "A is better")
+    check("lopsided significant", c.p_value < 0.001, True)
+
+    # Only discordant items carry information: adding items both get right
+    # must not change the verdict.
+    a2=a+[{"id":f"x{i}","correct":True} for i in range(200)]
+    b2=b+[{"id":f"x{i}","correct":True} for i in range(200)]
+    c2=compare(a2,b2,"A","B")
+    check("concordant items do not flip verdict", c2.verdict, "A is better")
+
+    # A tiny, balanced disagreement must not read as significant.
+    a,b=_runs([1,0,1,0]+[1]*96,[0,1,0,1]+[1]*96)
+    c=compare(a,b,"A","B")
+    check("balanced small disagreement n.s.", c.verdict, "not distinguishable on this suite")
+
+    # The bootstrap interval must bracket the observed difference.
+    a,b=_runs([1]*70+[0]*30,[1]*55+[0]*45)
+    c=compare(a,b,"A","B")
+    check("ci brackets diff", c.ci95[0] <= c.diff <= c.ci95[1], True)
+
+
+def test_mdd():
+    small=minimum_detectable_difference(189)
+    big=minimum_detectable_difference(9000)
+    check("mdd shrinks with n", big < small, True)
+    check("mdd plausible at 189", 0.05 < small < 0.30, True)
+
+
+def test_spearman():
+    check("rho perfect", round(spearman([1,2,3,4],[1,2,3,4]),3), 1.0)
+    check("rho inverse", round(spearman([1,2,3,4],[4,3,2,1]),3), -1.0)
+    check("rho too few", math_isnan(spearman([1,2],[2,1])), True)
+
+
+def math_isnan(x):
+    return x != x
+
+
 if __name__ == "__main__":
-    for fn in [test_extraction, test_scoring, test_normalise, test_wilson, test_itemset]:
+    for fn in [test_extraction, test_scoring, test_normalise, test_wilson,
+               test_compare, test_mdd, test_spearman, test_itemset]:
         fn()
     if FAILURES:
         print(f"FAILED ({len(FAILURES)})")

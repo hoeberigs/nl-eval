@@ -74,10 +74,28 @@ def main(argv=None) -> int:
                     help="hard ceiling in EUR; the run refuses to start above it")
     ap.add_argument("--sleep", type=float, default=0.0)
     ap.add_argument("--validate", action="store_true", help="check the item set and exit")
+    ap.add_argument("--compare", nargs=2, metavar=("A.json","B.json"),
+                    help="compare two run reports: McNemar plus a paired bootstrap")
     ap.add_argument("--publish", metavar="DIR",
                     help="collect every report in DIR into docs/results.json and exit")
     ap.add_argument("--estimate", action="store_true", help="print the cost estimate and exit")
+    ap.add_argument("--human-ratings", metavar="FILE",
+                    help="BLiMP-NL acceptability ratings; adds a model-human alignment score")
     args = ap.parse_args(argv)
+
+    if args.compare:
+        from .compare import compare, minimum_detectable_difference
+        docs = []
+        for f in args.compare:
+            d = json.loads(Path(f).read_text(encoding="utf-8"))
+            docs.append((d["summary"].get("model", Path(f).stem), d["results"]))
+        cmp = compare(docs[0][1], docs[1][1], docs[0][0], docs[1][0])
+        out = cmp.to_dict()
+        out["minimum_detectable_difference"] = round(
+            minimum_detectable_difference(cmp.n_common), 4
+        )
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+        return 0
 
     if args.publish:
         from .publish import collect
@@ -139,6 +157,16 @@ def main(argv=None) -> int:
     except BudgetExceeded as e:
         print(f"refused to run: {e}", file=sys.stderr)
         return 3
+
+    # Optional: how well the model's difficulty profile matches human judgment.
+    if args.human_ratings or any(i.category == "blimp" for i in items):
+        from .human import RatingsUnavailable, human_alignment, load_ratings
+        try:
+            ratings = load_ratings(Path(args.human_ratings) if args.human_ratings else None)
+            report.alignment = human_alignment(report.results, items, ratings)
+        except RatingsUnavailable as e:
+            if args.human_ratings:
+                print(f"human alignment skipped: {e}", file=sys.stderr)
 
     summary = write_report(report, Path(args.out))
     print(json.dumps(summary, indent=2, ensure_ascii=False))

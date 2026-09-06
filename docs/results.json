@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-06T05:56:36Z",
+ "generated_at": "2026-09-06T14:01:03Z",
  "items": {
   "total": 928,
   "categories": {
@@ -21,7 +21,7 @@
  "runs": [
   {
    "provider": "always-a",
-   "model": "always-a (fixed letter)",
+   "model": "always-a",
    "is_control": true,
    "n": 189,
    "accuracy": 0.3545,
@@ -124,7 +124,7 @@
      ]
     }
    },
-   "generated_at": "2026-09-05T19:48:16Z"
+   "generated_at": "2026-09-06T13:58:46Z"
   },
   {
    "provider": "echo",

@@ -203,14 +203,57 @@ n 928   accuracy 0.371   chance 0.387   lift <b>-0.016</b>
   </section>
 
   <section>
+    <h2><span class="k">Statistics</span>Can one model actually beat another</h2>
+    <p class="t">Most leaderboards print two accuracies and order the rows, which
+      invites the reader to treat a two-point gap as real. On a suite this size
+      it usually is not. <code>--compare</code> settles two runs with
+      <b>McNemar</b> on the discordant items plus a <b>paired bootstrap</b> for
+      the size of the difference.</p>
+<pre><b>$ nl-eval --compare results/a.json results/b.json</b>
+accuracy  0.730 vs 0.746      difference -0.016
+95% CI    [-0.106, +0.074]    p 0.820
+verdict   <b>not distinguishable on this suite</b></pre>
+    <p class="t">Every run also reports the smallest gap the suite could
+      reliably detect, so a reader can see when it is simply too small to settle
+      a question:</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Suite</th><th class="n">Items</th><th class="n">Smallest detectable gap</th></tr></thead>
+      <tbody>
+        <tr><td>core only</td><td class="n">189</td><td class="n">13.2 pp</td></tr>
+        <tr><td>all three layers</td><td class="n">928</td><td class="n">6.0 pp</td></tr>
+        <tr><td>larger BLiMP sample</td><td class="n">~2,000</td><td class="n">4.1 pp</td></tr>
+        <tr><td>full BLiMP-NL</td><td class="n">9,000</td><td class="n">1.9 pp</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2><span class="k">Human alignment</span>Does it find the same things hard that people do</h2>
+    <p class="t">Accuracy says how often a model was right. It cannot say whether
+      a model failing at 85% fails where Dutch speakers hesitate, or on
+      violations every native speaker catches instantly.</p>
+    <p class="t">BLiMP-NL makes that answerable: nine of the ten hand-written
+      sentences per paradigm carry 7-point acceptability ratings from at least 30
+      native speakers. Correlating the human difficulty of each paradigm against
+      the model's accuracy on it gives a <b>human-alignment score</b>, and it
+      works on ordinary forced-choice answers with no log-probabilities needed.
+      Positive means the model finds the same violations easy that people do;
+      near zero means it is often right for different reasons.</p>
+    <p class="t">The ratings are <b>not bundled and never downloaded
+      automatically</b>. They sit in the Radboud repository under
+      <b>CC BY-SA 4.0</b>, which is share-alike and stricter than the CC-BY on
+      the sentence pairs, and the portal asks for an account.</p>
+  </section>
+
+  <section>
     <h2><span class="k">Limits</span>What this does not measure</h2>
     <p class="t"><b>BLiMP-NL is scored as a forced choice here</b>, not by
       comparing the log-probability of each sentence as the corpus intends. A
       forced choice can be right for the wrong reason.</p>
-    <p class="t"><b>The human acceptability ratings are not used yet.</b> They
-      are the most valuable part of BLiMP-NL, because they allow scoring
-      model–human correlation rather than bare accuracy. That is the next thing
-      worth building.</p>
+    <p class="t"><b>Human alignment is paradigm-level, not item-level.</b> It
+      correlates per-paradigm accuracy against per-paradigm human deltas, which
+      is what forced-choice answers support. Item-level correlation would need
+      per-sentence log-probabilities.</p>
     <p class="t"><b>Multiple choice is recognition, not production.</b> A model
       can pick <code>pannenkoek</code> from two options and still misspell it
       when writing freely.</p>

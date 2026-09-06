@@ -114,6 +114,7 @@ class Report:
     model: str
     results: list[dict]
     chance: float
+    alignment: dict | None = None
 
     def summary(self) -> dict:
         n = len(self.results)
@@ -136,6 +137,7 @@ class Report:
                 "ci": [round(clo, 4), round(chi, 4)],
             }
 
+        from .compare import minimum_detectable_difference
         return {
             "model": self.model,
             "n": n,
@@ -145,5 +147,13 @@ class Report:
             "chance_baseline": round(self.chance, 4),
             "lift_over_chance": round((k / n) - self.chance, 4) if n else 0.0,
             "unparsed_replies": unparsed,
+            # The smallest accuracy gap this many items could reliably detect.
+            # Published on every run so a reader can see when the suite is
+            # simply too small to settle a question, instead of inferring
+            # significance from the ordering of a leaderboard.
+            "min_detectable_difference": round(
+                minimum_detectable_difference(n, max(k / n, 0.5) if n else 0.7), 4
+            ),
             "by_category": cats,
+            **({"human_alignment": self.alignment} if self.alignment else {}),
         }

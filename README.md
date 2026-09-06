@@ -51,8 +51,11 @@ So what is this for? Three narrow things the above leave open:
    `de`/`het`, the tussen-n, d/t/dt, u/je register, Dutch number and date
    conventions. BLiMP-NL covers syntax, not spelling or politeness register.
 3. **BLiMP-NL's human ratings are underused.** Scoring model–human correlation
-   is a stronger claim than accuracy, and almost nothing does it. Not yet
-   implemented here either; see Known limits.
+   is a stronger claim than accuracy, and almost nothing does it. This suite
+   implements it: see "Does the model find the same things hard that people do".
+4. **Close models are usually reported as ranked when they are not
+   distinguishable.** Every run here publishes the smallest gap it could detect,
+   and `--compare` settles two runs with a paired test rather than an ordering.
 
 Treat this as a supplement to EuroEval, not a replacement for it.
 
@@ -155,6 +158,78 @@ Narrow a run rather than raising the ceiling:
 nl-eval --suite core --category de_het,spelling --limit 40
 ```
 
+## Can one model actually beat another
+
+Most leaderboards print two accuracies and order the rows, which invites the
+reader to believe a two-point gap is real. On a suite this size it usually is
+not.
+
+```bash
+nl-eval --compare results/model-a.json results/model-b.json
+```
+
+```json
+{
+  "accuracy_a": 0.7302, "accuracy_b": 0.7460, "difference": -0.0159,
+  "ci95": [-0.1058, 0.0741],
+  "a_right_b_wrong": 37, "b_right_a_wrong": 40,
+  "p_value": 0.81971,
+  "verdict": "not distinguishable on this suite",
+  "minimum_detectable_difference": 0.132
+}
+```
+
+Two tests, answering different questions. **McNemar** looks only at the items
+where exactly one model was right, because items they both got right or both
+got wrong carry no information about which is better; below 25 discordant pairs
+it falls back to an exact binomial test rather than trusting a chi-square
+approximation on a handful of observations. A **paired bootstrap** resamples
+items with the pairing intact and gives an interval for the difference itself.
+
+### How small a gap can this suite even see
+
+Every run reports `min_detectable_difference`: the smallest accuracy gap the
+suite could reliably detect at that size.
+
+| Suite | Items | Smallest detectable gap |
+|---|---:|---:|
+| `--suite core` | 189 | **13.2 pp** |
+| `--suite all` (default sampling) | 928 | **6.0 pp** |
+| `--suite all --per-phenomenon 90` | ~2,000 | **4.1 pp** |
+| full BLiMP-NL | 9,000 | **1.9 pp** |
+
+So the core layer alone cannot rank models that are close. Run `--suite all`
+before drawing a conclusion, and treat any ordering inside the detectable gap
+as unresolved rather than as a ranking.
+
+## Does the model find the same things hard that people do
+
+Accuracy says how often a model was right. It cannot say whether a model
+failing at 85% fails where Dutch speakers hesitate, or on violations every
+native speaker catches instantly.
+
+BLiMP-NL makes that answerable: nine of the ten hand-written sentences per
+paradigm carry 7-point acceptability ratings from at least 30 native speakers.
+Per paradigm, the mean rating of the grammatical sentence minus the
+ungrammatical one is how obvious that violation is to people. Correlating it
+against the model's per-paradigm accuracy gives a human-alignment score, and it
+works on ordinary forced-choice answers with no log-probabilities needed.
+
+```bash
+nl-eval --suite blimp --provider openai --model gpt-5-mini \
+        --human-ratings data/blimp_nl_ratings.tsv
+```
+
+Adds `human_alignment` with a Spearman rho and a per-paradigm breakdown.
+Positive means the model finds the same violations easy that people do; near
+zero means it is often right for different reasons.
+
+**The ratings are not bundled and are not downloaded automatically.** They live
+in the Radboud repository at <https://doi.org/10.34973/tj4p-y007> under
+**CC BY-SA 4.0**, which is share-alike and stricter than the CC-BY on the
+sentence pairs, and the portal asks for an account. Download them yourself and
+save as `data/blimp_nl_ratings.tsv`.
+
 ## Interpreting a result
 
 Report accuracy **with its interval and against the baseline**. Per-category
@@ -194,9 +269,10 @@ taken on trust.
   log-probability of each sentence as the corpus intends. A forced choice can be
   right for the wrong reason. Where a provider exposes log-probs, prefer that and
   state which mode a published score used.
-- **The human acceptability ratings are not yet used.** They are the most
-  valuable part of BLiMP-NL, because they allow scoring model–human correlation
-  rather than bare accuracy. That is the next thing worth building.
+- **The human alignment score is paradigm-level, not item-level.** It
+  correlates per-paradigm accuracy against per-paradigm human deltas, which is
+  what forced-choice answers support. Item-level correlation would need
+  log-probabilities per sentence.
 - **Multiple choice is recognition, not production.** A model can pick
   `pannenkoek` from two options and still misspell it when writing freely.
 - **L3 is written by one author** and has not been reviewed by a second native
