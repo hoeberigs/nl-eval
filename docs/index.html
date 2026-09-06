@@ -135,6 +135,26 @@ footer a{color:var(--ink-2)}
   </section>
 
   <section>
+    <h2><span class="k">Prior art</span>Dutch is not an unserved language</h2>
+    <p class="t">This is <b>not the first Dutch benchmark</b> and does not
+      replace one. Anyone evaluating a model on Dutch should start with
+      <a href="https://euroeval.com">EuroEval</a> (formerly ScandEval), the
+      maintained Dutch leaderboard covering sentiment, NER, linguistic
+      acceptability and reading comprehension, with confidence intervals and a
+      runnable library. <a href="https://arxiv.org/abs/2305.13026">DUMB</a>
+      covers Dutch NLU for encoders, and the
+      <a href="https://huggingface.co/spaces/BramVanroy/open_dutch_llm_leaderboard">Open
+      Dutch LLM Leaderboard</a> preceded EuroEval.</p>
+    <p class="t">Three narrow things those leave open, which is what this suite
+      is for: most Dutch leaderboard tasks are <b>machine-translated</b>, so
+      provenance is labelled here and layers are never blended;
+      <b>orthography, register and notation</b> are untested anywhere I could
+      find, which is what L3 covers; and BLiMP-NL's <b>human acceptability
+      ratings</b> are underused, which is the next thing worth building.</p>
+    <p class="t">Treat this as a supplement to EuroEval, not a replacement.</p>
+  </section>
+
+  <section>
     <h2><span class="k">Why not translation</span>Translating an English benchmark is the weaker move</h2>
     <p class="t"><b>It is already done.</b> Global-MMLU ships Dutch under
       Apache-2.0. Re-translating MMLU duplicates free work.</p>

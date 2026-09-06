@@ -29,6 +29,33 @@ That is the obvious move and it is the weaker one.
 So this suite uses translation only where breadth is the point, takes its
 grammar layer from a corpus built in Dutch, and hand-writes the rest.
 
+## Where this sits (prior art)
+
+**Dutch is not an unserved language, and this is not the first Dutch benchmark.**
+Anyone evaluating a model on Dutch should start with the work below, not here.
+
+| Project | Covers | Note |
+|---|---|---|
+| [EuroEval](https://euroeval.com) (formerly ScandEval) | Sentiment, NER, linguistic acceptability (ScaLA-nl), reading comprehension, knowledge | The main live Dutch leaderboard. Maintained, reports confidence intervals, runnable as a library. **Start here.** |
+| [Open Dutch LLM Leaderboard](https://huggingface.co/spaces/BramVanroy/open_dutch_llm_leaderboard) | Translated ARC, HellaSwag, MMLU, TruthfulQA | Discontinued in favour of EuroEval; still online |
+| [DUMB](https://arxiv.org/abs/2305.13026) (GroNLP) | 9 Dutch NLU tasks | Encoder-oriented |
+| [BLiMP-NL](https://direct.mit.edu/coli/article/51/4/1267/128735/) | 9,000 native minimal pairs, 22 phenomena, human acceptability | Used here as L1 |
+| [Fietje](https://arxiv.org/abs/2412.15450) | A Dutch LLM plus its evaluation framework | |
+
+So what is this for? Three narrow things the above leave open:
+
+1. **Most Dutch leaderboard tasks are machine-translated** (SQuAD-nl, ARC-nl,
+   MMLU-nl). Native-built Dutch evaluation is the minority, so this suite
+   labels every layer by provenance and refuses to blend them.
+2. **Orthography, register and notation are untested anywhere I could find.**
+   `de`/`het`, the tussen-n, d/t/dt, u/je register, Dutch number and date
+   conventions. BLiMP-NL covers syntax, not spelling or politeness register.
+3. **BLiMP-NL's human ratings are underused.** Scoring model–human correlation
+   is a stronger claim than accuracy, and almost nothing does it. Not yet
+   implemented here either; see Known limits.
+
+Treat this as a supplement to EuroEval, not a replacement for it.
+
 ## The three layers
 
 | Layer | Source | What it measures | Licence |
