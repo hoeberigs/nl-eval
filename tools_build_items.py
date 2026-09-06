@@ -373,3 +373,206 @@ VAR = [
 ]
 rows=[mcq("variants", i, p, c, d, note=n) for i,(p,c,d,n) in enumerate(VAR,1)]
 write("variants", rows)
+
+# ============ expansion (2026-09) ============================================
+# Thin categories first: variants, register, formatting and word_order carried
+# only 8-12 items each, too few for a per-category score to mean anything.
+
+def extend(cat, rows):
+    """Append to an existing category, continuing the answer-position rotation."""
+    path = OUT / f"{cat}.jsonl"
+    existing = [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    start = len(existing)
+    out = []
+    for i, r in enumerate(rows):
+        opts = list(r["_distractors"])
+        pos = (start + i) % (len(opts) + 1)
+        opts.insert(pos, r["_correct"])
+        out.append({"id": r["id"], "category": cat, "type": "mcq", "prompt": r["prompt"],
+                    "choices": opts, "answer": r["_correct"],
+                    "note": r["note"], "difficulty": r["difficulty"]})
+    path.write_text("\n".join(json.dumps(o, ensure_ascii=False) for o in existing + out) + "\n",
+                    encoding="utf-8")
+    print(f"{cat}: {len(existing)} + {len(out)} = {len(existing)+len(out)} items")
+
+
+DEHET2 = [
+ ("verzoek","het"),("overzicht","het"),("voorstel","het"),("contract","het"),
+ ("project","het"),("systeem","het"),("netwerk","het"),("model","het"),
+ ("doel","het"),("budget","het"),("resultaat","het"),("proces","het"),
+ ("niveau","het"),("bedrag","het"),("tarief","het"),("formulier","het"),
+ ("dossier","het"),("kenmerk","het"),("criterium","het"),("uitgangspunt","het"),
+ ("aanvraag","de"),("afspraak","de"),("opdracht","de"),("planning","de"),
+ ("begroting","de"),("uitkomst","de"),("methode","de"),("aanpak","de"),
+ ("verwachting","de"),("doelstelling","de"),("samenwerking","de"),("bijdrage","de"),
+ ("toegang","de"),("termijn","de"),("voorwaarde","de"),("bevoegdheid","de"),
+ ("verplichting","de"),("vergunning","de"),("invulling","de"),("wijziging","de"),
+]
+extend("de_het",[mcq("de_het",100+i,f"Welk lidwoord hoort bij het zelfstandig naamwoord \u201c{w}\u201d?",
+        a,["de" if a=="het" else "het"],
+        note="Woorden op -ing, -heid en -tie zijn de-woorden.") for i,(w,a) in enumerate(DEHET2,1)])
+
+SPELL2 = [
+ ("hondenhok","hondehok","Tussen-n: 'hond' heeft alleen 'honden'."),
+ ("schapenwol","schapewol","Tussen-n: 'schaap' heeft alleen 'schapen'."),
+ ("geitenkaas","geitekaas","Tussen-n: 'geit' heeft alleen 'geiten'."),
+ ("koeienmelk","koeiemelk","Tussen-n: 'koe' heeft alleen 'koeien'."),
+ ("vliegenmepper","vliegemepper","Tussen-n: 'vlieg' heeft alleen 'vliegen'."),
+ ("mierenhoop","mierehoop","Tussen-n: 'mier' heeft alleen 'mieren'."),
+ ("bijenkorf","bijekorf","Tussen-n: 'bij' heeft alleen 'bijen'."),
+ ("aardbeienjam","aardbeiejam","Tussen-n: 'aardbei' heeft alleen 'aardbeien'."),
+ ("notenkraker","nootkraker","Tussen-n: 'noot' heeft alleen 'noten'."),
+ ("tandenborstel","tandeborstel","Tussen-n: 'tand' heeft alleen 'tanden'."),
+ ("wortelsap","wortelensap","Geen tussen-n: 'wortel' heeft ook het meervoud 'wortels'."),
+]
+DT2 = [
+ ("Hij antwoordt meteen.","Hij antwoord meteen.","Stam 'antwoord' + t bij 'hij'."),
+ ("Antwoord jij even?","Antwoordt jij even?","Bij inversie met 'jij' vervalt de t."),
+ ("Zij bereidt de vergadering voor.","Zij bereid de vergadering voor.","Stam + t bij 'zij' enkelvoud."),
+ ("Het bestand is verspreid onder de deelnemers.","Het bestand is verspreidt onder de deelnemers.","Voltooid deelwoord op -d."),
+ ("We hebben de planning gecheckt.","We hebben de planning gechecked.","'t kofschip: stam op -ck, dus -t."),
+ ("De offerte is vorige week gepland.","De offerte is vorige week geplant.","'gepland' hoort bij plannen, 'geplant' bij planten."),
+ ("Zij heeft het systeem ge\u00fcpdatet.","Zij heeft het systeem geupdated.","Trema op de u, en 't kofschip geeft -t."),
+]
+extend("spelling",
+  [mcq("spelling",200+i,"Welke spelling is correct volgens de offici\u00eble spelling?",c,[w],note=n)
+   for i,(c,w,n) in enumerate(SPELL2,1)] +
+  [mcq("spelling",300+i,"Welke zin is correct gespeld?",c,[w],note=n)
+   for i,(c,w,n) in enumerate(DT2,1)])
+
+WO2 = [
+ ("Ik weet dat hij het boek heeft gelezen.",["Ik weet dat hij heeft het boek gelezen.","Ik weet dat heeft hij het boek gelezen.","Ik weet dat hij het boek gelezen heeft niet."],"Bijzin: werkwoordelijke eindgroep achteraan."),
+ ("Wanneer komt de trein aan?",["Wanneer de trein aankomt?","Wanneer aankomt de trein?","Wanneer komt aan de trein?"],"Vraagzin met inversie; scheidbaar partikel achteraan."),
+ ("Hij vroeg of ik meeging.",["Hij vroeg of ging ik mee.","Hij vroeg of ik ging mee.","Hij vroeg of meeging ik."],"Bijzin met 'of': persoonsvorm achteraan."),
+ ("Omdat het regende, bleven we thuis.",["Omdat het regende, we bleven thuis.","Omdat regende het, bleven we thuis.","Omdat het regende, thuis bleven we."],"Na een vooropgeplaatste bijzin volgt inversie."),
+ ("Ik ben van plan om volgende week te beginnen.",["Ik ben van plan om volgende week beginnen te.","Ik ben van plan volgende week om te beginnen.","Ik ben van plan om te volgende week beginnen."],"'om ... te' omsluit de infinitief."),
+ ("Nooit heb ik zoiets gezien.",["Nooit ik heb zoiets gezien.","Nooit heb zoiets ik gezien.","Nooit ik zoiets gezien heb."],"Na vooropplaatsing van 'nooit' volgt inversie."),
+ ("Zij zei dat ze het rapport morgen zou afronden.",["Zij zei dat ze zou het rapport morgen afronden.","Zij zei dat zou ze het rapport morgen afronden.","Zij zei dat ze het rapport morgen afronden zou niet."],"Bijzin: hulpwerkwoord in de eindgroep."),
+ ("Het rapport dat ik gisteren heb gelezen, was uitstekend.",["Het rapport dat ik heb gisteren gelezen, was uitstekend.","Het rapport dat heb ik gisteren gelezen, was uitstekend.","Het rapport dat ik gisteren gelezen heb was uitstekend niet."],"Betrekkelijke bijzin met eindgroep."),
+ ("Morgen ga ik de offerte versturen.",["Morgen ik ga de offerte versturen.","Morgen ga de offerte ik versturen.","Morgen ik de offerte versturen ga."],"Inversie na een vooropgeplaatste bepaling."),
+ ("Hij heeft de vergadering moeten afzeggen.",["Hij heeft de vergadering afzeggen moeten niet.","Hij heeft moeten de vergadering afzeggen.","Hij heeft de vergadering afgezegd moeten."],"Vervangende infinitief in de eindgroep."),
+]
+extend("word_order",[mcq("word_order",200+i,"Welke zin heeft de correcte woordvolgorde?",c,d,note=n)
+        for i,(c,d,n) in enumerate(WO2,1)])
+
+REG2 = [
+ ("Ik verzoek u vriendelijk het formulier ondertekend te retourneren.",
+  ["Ik verzoek jou vriendelijk het formulier ondertekend te retourneren, meneer.",
+   "Ik verzoek u vriendelijk het formulier ondertekend te retourneren, joh.",
+   "Ik verzoekt u vriendelijk het formulier ondertekend te retourneren."],
+  "Formeel verzoek, consequent in de u-vorm."),
+ ("Mocht u nog vragen hebben, dan hoor ik het graag.",
+  ["Mocht je nog vragen hebben, dan hoor ik het graag, geachte heer.",
+   "Mocht u nog vragen hebben, dan hoor ik het graag van jou.",
+   "Mocht u nog vragen hebt, dan hoor ik het graag."],
+  "Binnen één zin niet wisselen tussen u en je."),
+ ("Bij voorbaat dank voor uw medewerking.",
+  ["Bij voorbaat dank voor jouw medewerking, geachte mevrouw.",
+   "Bij voorbaat bedankt voor uw medewerking, thanks.",
+   "Bij voorbaat dank voor u medewerking."],
+  "'uw' is het bezittelijk voornaamwoord bij 'u'."),
+ ("Wij zien uw reactie graag tegemoet.",
+  ["Wij zien jouw reactie graag tegemoet, geachte heer.",
+   "Wij zien uw reactie graag tegemoed.",
+   "Wij ziet uw reactie graag tegemoet."],
+  "Vaste formele afsluitzin."),
+ ("Hierbij bevestig ik onze afspraak van dinsdag 8 september.",
+  ["Hierbij bevestig ik onze afspraak van dinsdag 8 september, doei.",
+   "Hierbij ik bevestig onze afspraak van dinsdag 8 september.",
+   "Hierbij bevestigd ik onze afspraak van dinsdag 8 september."],
+  "Inversie na 'hierbij', en bevestig zonder d."),
+ ("Kun je me even laten weten of het je lukt?",
+  ["Kun je me even laten weten of het u lukt?",
+   "Kunt je me even laten weten of het je lukt?",
+   "Kun u me even laten weten of het je lukt?"],
+  "Consequent informeel: je-vorm in de hele zin."),
+ ("Zou u zo vriendelijk willen zijn het contract te ondertekenen?",
+  ["Zou u zo vriendelijk wilt zijn het contract te ondertekenen?",
+   "Zou jij zo vriendelijk willen zijn het contract te ondertekenen, geachte heer?",
+   "Zou u zo vriendelijk willen zijn het contract te tekenen, joh?"],
+  "Beleefde vraagvorm met correcte werkwoordsvorm."),
+ ("Geachte heer De Vries, naar aanleiding van ons gesprek stuur ik u de stukken toe.",
+  ["Hoi meneer De Vries, naar aanleiding van ons gesprek stuur ik u de stukken toe.",
+   "Geachte heer De Vries, naar aanleiding van ons gesprek stuur ik je de stukken toe.",
+   "Geachte heer De Vries, naar aanleiding van ons gesprek ik stuur u de stukken toe."],
+  "Aanhef en aanspreekvorm horen bij elkaar."),
+ ("Met vriendelijke groet, Linda Hoeberigs",
+  ["Met vriendelijke groetjes en hoogachtend, Linda Hoeberigs",
+   "Hoogachtend groetjes, Linda Hoeberigs",
+   "Met vriendelijke groet en de mazzel, Linda Hoeberigs"],
+  "Eén afsluiting, passend bij het register."),
+ ("Uw aanvraag is in behandeling genomen.",
+  ["Jouw aanvraag is in behandeling genomen, geachte mevrouw.",
+   "U aanvraag is in behandeling genomen.",
+   "Uw aanvraag is in behandeling genomen geworden."],
+  "Correcte lijdende vorm zonder 'geworden'."),
+]
+extend("register",[mcq("register",200+i,"Welke formulering is qua aanspreekvorm en register correct en consequent?",c,d,note=n)
+        for i,(c,d,n) in enumerate(REG2,1)])
+
+FMT2 = [
+ ("Uit hoeveel cijfers bestaat een Nederlands burgerservicenummer (BSN)?","negen",["acht","tien","zeven"],""),
+ ("Welke notatie van een Nederlands IBAN is correct?","NL91ABNA0417164300",
+  ["NL91-ABNA-0417-1643-00","91NLABNA0417164300","NL91 ABNA 0417 1643 0000 00"],"Achttien tekens, zonder streepjes."),
+ ("Hoe schrijf je een openingstijd-bereik in het Nederlands?","09.00–17.00 uur",
+  ["9:00 AM – 5:00 PM","09,00–17,00 uur","09.00 tot 17.00 o'clock"],"24-uursnotatie met punt."),
+ ("Welke schrijfwijze van een bedrag zonder centen is gangbaar?","€ 45,-",
+  ["€ 45.00,-","45 € ,-","€ 45,00,-"],"Komma-streepje voor ronde bedragen."),
+ ("Hoe verwijs je in het Nederlands naar een kalenderweek?","week 36",
+  ["wk. 36e","36e week van het jaar 2026 n.C.","weeknummer #36"],""),
+ ("Welke aanduiding van een kwartaal is in Nederlandse zakelijke tekst gangbaar?","het derde kwartaal",
+  ["de derde kwartaal","kwartaal drie-en-twintig","Q-3e kwartaal"],"'Kwartaal' is een het-woord."),
+ ("Hoe schrijf je een temperatuur correct in het Nederlands?","21,5 °C",
+  ["21.5 °C","21,5°c","°C 21,5"],"Decimaalkomma en een spatie voor de eenheid."),
+ ("Welke schrijfwijze van een telefoonnummer met netnummer is gangbaar?","020 123 45 67",
+  ["+020-1234567","(020)1234567","020.123.4567"],""),
+ ("Hoe schrijf je een datum met dag van de week correct?","dinsdag 8 september 2026",
+  ["Dinsdag, 8 September 2026","dinsdag 8-9-2026 jaar","8 september 2026, dinsdag"],"Kleine letter voor dag en maand."),
+ ("Welke afkorting hoort bij 'bijvoorbeeld'?","bijv.",["b.v.b.","bv.b","bijvb."],"'bv.' is Belgisch-Nederlands."),
+]
+extend("formatting",[mcq("formatting",200+i,p,c,d,note=n) for i,(p,c,d,n) in enumerate(FMT2,1)])
+
+VAR2 = [
+ ("Welk woord gebruikt men in België voor een vrachtwagen?","camion",["truck","laadwagen","vervoerder"],""),
+ ("Welk woord gebruikt men in België voor een fiets?","velo",["rijwiel","trapper","stalen ros"],""),
+ ("Wat betekent “kuisen” in het Belgisch-Nederlands?","schoonmaken",["kiezen","snoeien","zuiveren van fouten"],""),
+ ("Wat betekent “ambetant” in het Belgisch-Nederlands?","vervelend",["ambitieus","onhandig","ongeduldig"],""),
+ ("Welk woord gebruikt men in België voor een koelkast?","frigo",["koelbak","vrieskist","ijskast"],""),
+ ("Welk woord gebruikt men in België voor jam?","confituur",["marmelade","siroop","gelei"],""),
+ ("Welk woord gebruikt men in België voor een paraplu?","regenscherm",["regenkap","druppelscherm","regenhoed"],""),
+ ("Welk woord gebruikt men in België voor een kantoor?","bureel",["burelen","kantoorzaal","werkkamer"],""),
+ ("Hoe heet de bestuurder van een Belgische gemeente die in Nederland 'wethouder' heet?","schepen",
+  ["gedeputeerde","raadsheer","gemeentesecretaris"],""),
+ ("Welk woord gebruikt men in België voor een zitbank?","zetel",["divan","canapé","rustbank"],""),
+ ("Wat betekent “goesting hebben” in het Belgisch-Nederlands?","zin hebben",["haast hebben","gelijk hebben","honger lijden"],""),
+ ("Welk woord gebruikt men in Nederland voor het Belgische “droogkuis”?","stomerij",
+  ["wasserette","droogkamer","reinigingsdienst"],""),
+]
+extend("variants",[mcq("variants",200+i,p,c,d,note=n) for i,(p,c,d,n) in enumerate(VAR2,1)])
+
+FF2 = [
+ ("globaal","in grote lijnen, ruwweg",["wereldwijd","volledig","gedetailleerd"],"Vals vriendje van het Engelse 'global'."),
+ ("sympathiek","aardig, innemend",["meelevend","meegaand","zielig"],"Vals vriendje van het Engelse 'sympathetic'."),
+ ("braaf","gehoorzaam, netjes",["dapper","eerlijk","sterk"],"Vals vriendje van het Engelse 'brave'."),
+ ("een smoking","een avondkostuum",["het roken","een rookruimte","een rookverbod"],"Pseudo-anglicisme."),
+ ("een beamer","een projector",["een laserpen","een schijnwerper","een afstandsbediening"],"Pseudo-anglicisme."),
+ ("een oldtimer","een klassieke auto",["een oudere werknemer","een antieke klok","een veteraan"],"Pseudo-anglicisme."),
+ ("pregnant","kernachtig, treffend",["zwanger","dringend","overdreven"],"Vals vriendje van het Engelse 'pregnant'."),
+ ("de lectuur","het leesmateriaal",["de lezing","de voordracht","het college"],"Vals vriendje van het Engelse 'lecture'."),
+]
+extend("false_friends",[mcq("false_friends",200+i,f"Wat betekent “{w}” in het Nederlands?",c,d,note=n)
+        for i,(w,c,d,n) in enumerate(FF2,1)])
+
+IDI2 = [
+ ("de touwtjes in handen hebben","de leiding hebben",["ergens aan vastzitten","een keuze uitstellen","iemand aan het lijntje houden"]),
+ ("het roer omgooien","radicaal van koers veranderen",["de leiding overdragen","een besluit terugdraaien","hard ingrijpen"]),
+ ("een blok aan het been","een blijvende belemmering",["een zware straf","een sterke steun","een vaste gewoonte"]),
+ ("de kogel is door de kerk","de beslissing is genomen",["het gevaar is geweken","het geheim is uit","de ruzie is beslecht"]),
+ ("met de gebakken peren zitten","met de nadelige gevolgen achterblijven",["onverwacht geluk hebben","in verlegenheid gebracht zijn","te veel hooi op de vork nemen"]),
+ ("de hand in eigen boezem steken","de eigen rol kritisch bekijken",["een ander de schuld geven","iets toegeven onder druk","een geheim bewaren"]),
+ ("van de hak op de tak springen","van het ene onderwerp naar het andere springen",["snel van mening veranderen","ongeduldig worden","onhandig te werk gaan"]),
+ ("de dienst uitmaken","bepalen wat er gebeurt",["het werk verdelen","de gastheer zijn","de regels uitleggen"]),
+ ("iets in de wacht slepen","iets binnenhalen",["iets uitstellen","iets verbergen","iets afdwingen"]),
+ ("iemand een oor aannaaien","iemand bedriegen",["iemand streng toespreken","iemand overtuigen","iemand napraten"]),
+]
+extend("idioms",[mcq("idioms",200+i,f"Wat betekent de uitdrukking “{u}”?",c,d) for i,(u,c,d) in enumerate(IDI2,1)])

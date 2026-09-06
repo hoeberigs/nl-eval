@@ -14,6 +14,7 @@ keywords = ["evaluation", "benchmark", "dutch", "nederlands", "llm"]
 dependencies = []
 
 [project.optional-dependencies]
+local = ["torch>=2.2", "transformers>=4.44"]
 openai = ["openai>=1.40"]
 anthropic = ["anthropic>=0.34"]
 

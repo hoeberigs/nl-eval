@@ -1,36 +1,62 @@
 {
- "generated_at": "2026-09-06T14:01:03Z",
+ "generated_at": "2026-09-06T14:22:55Z",
  "items": {
-  "total": 928,
+  "total": 1046,
   "categories": {
    "blimp": 440,
    "civics": 24,
-   "de_het": 40,
+   "de_het": 80,
    "diminutives": 18,
-   "false_friends": 18,
-   "formatting": 10,
-   "idioms": 22,
+   "false_friends": 26,
+   "formatting": 20,
+   "idioms": 32,
    "mmlu_nl": 299,
-   "register": 10,
-   "spelling": 27,
-   "variants": 8,
-   "word_order": 12
+   "register": 20,
+   "spelling": 45,
+   "variants": 20,
+   "word_order": 22
   },
-  "chance_baseline": 0.3866
+  "chance_baseline": 0.385
  },
  "runs": [
+  {
+   "provider": "hf-dutch-gpt2-logprob",
+   "model": "GroNLP/gpt2-small-dutch",
+   "is_control": false,
+   "n": 440,
+   "accuracy": 0.8727,
+   "ci95": [
+    0.8383,
+    0.9007
+   ],
+   "chance": 0.5,
+   "lift": 0.3727,
+   "unparsed": 0,
+   "by_category": {
+    "blimp": {
+     "n": 440,
+     "correct": 384,
+     "accuracy": 0.8727,
+     "ci": [
+      0.8383,
+      0.9007
+     ]
+    }
+   },
+   "generated_at": "2026-09-06T14:17:15Z"
+  },
   {
    "provider": "always-a",
    "model": "always-a",
    "is_control": true,
-   "n": 189,
-   "accuracy": 0.3545,
+   "n": 307,
+   "accuracy": 0.3583,
    "ci95": [
-    0.2898,
-    0.425
+    0.3067,
+    0.4134
    ],
-   "chance": 0.3386,
-   "lift": 0.0159,
+   "chance": 0.3518,
+   "lift": 0.0065,
    "unparsed": 0,
    "by_category": {
     "civics": {
@@ -43,12 +69,12 @@
      ]
     },
     "de_het": {
-     "n": 40,
-     "correct": 20,
+     "n": 80,
+     "correct": 40,
      "accuracy": 0.5,
      "ci": [
-      0.352,
-      0.648
+      0.393,
+      0.607
      ]
     },
     "diminutives": {
@@ -61,24 +87,60 @@
      ]
     },
     "false_friends": {
-     "n": 18,
-     "correct": 5,
-     "accuracy": 0.2778,
+     "n": 26,
+     "correct": 7,
+     "accuracy": 0.2692,
      "ci": [
-      0.125,
-      0.5087
+      0.137,
+      0.4608
      ]
     },
     "formatting": {
-     "n": 10,
-     "correct": 3,
-     "accuracy": 0.3,
+     "n": 20,
+     "correct": 5,
+     "accuracy": 0.25,
      "ci": [
-      0.1078,
-      0.6032
+      0.1119,
+      0.4687
      ]
     },
     "idioms": {
+     "n": 32,
+     "correct": 8,
+     "accuracy": 0.25,
+     "ci": [
+      0.1325,
+      0.4211
+     ]
+    },
+    "register": {
+     "n": 20,
+     "correct": 5,
+     "accuracy": 0.25,
+     "ci": [
+      0.1119,
+      0.4687
+     ]
+    },
+    "spelling": {
+     "n": 45,
+     "correct": 23,
+     "accuracy": 0.5111,
+     "ci": [
+      0.37,
+      0.6504
+     ]
+    },
+    "variants": {
+     "n": 20,
+     "correct": 5,
+     "accuracy": 0.25,
+     "ci": [
+      0.1119,
+      0.4687
+     ]
+    },
+    "word_order": {
      "n": 22,
      "correct": 6,
      "accuracy": 0.2727,
@@ -86,59 +148,23 @@
       0.1315,
       0.4815
      ]
-    },
-    "register": {
-     "n": 10,
-     "correct": 3,
-     "accuracy": 0.3,
-     "ci": [
-      0.1078,
-      0.6032
-     ]
-    },
-    "spelling": {
-     "n": 27,
-     "correct": 14,
-     "accuracy": 0.5185,
-     "ci": [
-      0.3399,
-      0.6926
-     ]
-    },
-    "variants": {
-     "n": 8,
-     "correct": 2,
-     "accuracy": 0.25,
-     "ci": [
-      0.0715,
-      0.5907
-     ]
-    },
-    "word_order": {
-     "n": 12,
-     "correct": 3,
-     "accuracy": 0.25,
-     "ci": [
-      0.0889,
-      0.5323
-     ]
     }
    },
-   "generated_at": "2026-09-06T13:58:46Z"
+   "generated_at": "2026-09-06T14:22:28Z"
   },
   {
    "provider": "echo",
-   "model": "echo (answers nothing)",
+   "model": "echo",
    "is_control": true,
-   "n": 189,
+   "n": 307,
    "accuracy": 0.0,
    "ci95": [
     0.0,
-    0.0199
+    0.0124
    ],
-   "chance": 0.3386,
-   "lift": -0.3386,
-   "unparsed": 189,
+   "chance": 0.3518,
+   "lift": -0.3518,
+   "unparsed": 307,
    "by_category": {
     "civics": {
      "n": 24,
@@ -150,12 +176,12 @@
      ]
     },
     "de_het": {
-     "n": 40,
+     "n": 80,
      "correct": 0,
      "accuracy": 0.0,
      "ci": [
       0.0,
-      0.0876
+      0.0458
      ]
     },
     "diminutives": {
@@ -168,24 +194,60 @@
      ]
     },
     "false_friends": {
-     "n": 18,
+     "n": 26,
      "correct": 0,
      "accuracy": 0.0,
      "ci": [
       0.0,
-      0.1759
+      0.1287
      ]
     },
     "formatting": {
-     "n": 10,
+     "n": 20,
      "correct": 0,
      "accuracy": 0.0,
      "ci": [
       0.0,
-      0.2775
+      0.1611
      ]
     },
     "idioms": {
+     "n": 32,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1072
+     ]
+    },
+    "register": {
+     "n": 20,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1611
+     ]
+    },
+    "spelling": {
+     "n": 45,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.0787
+     ]
+    },
+    "variants": {
+     "n": 20,
+     "correct": 0,
+     "accuracy": 0.0,
+     "ci": [
+      0.0,
+      0.1611
+     ]
+    },
+    "word_order": {
      "n": 22,
      "correct": 0,
      "accuracy": 0.0,
@@ -193,45 +255,9 @@
       0.0,
       0.1487
      ]
-    },
-    "register": {
-     "n": 10,
-     "correct": 0,
-     "accuracy": 0.0,
-     "ci": [
-      0.0,
-      0.2775
-     ]
-    },
-    "spelling": {
-     "n": 27,
-     "correct": 0,
-     "accuracy": 0.0,
-     "ci": [
-      0.0,
-      0.1246
-     ]
-    },
-    "variants": {
-     "n": 8,
-     "correct": 0,
-     "accuracy": 0.0,
-     "ci": [
-      0.0,
-      0.3244
-     ]
-    },
-    "word_order": {
-     "n": 12,
-     "correct": 0,
-     "accuracy": 0.0,
-     "ci": [
-      0.0,
-      0.2425
-     ]
     }
    },
-   "generated_at": "2026-09-05T19:48:16Z"
+   "generated_at": "2026-09-06T14:22:28Z"
   }
  ]
 }

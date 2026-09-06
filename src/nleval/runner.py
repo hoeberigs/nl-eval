@@ -76,9 +76,27 @@ def run(
             "deliberately."
         )
 
+    scorer = getattr(call, "score", None)
     results = []
     for n, it in enumerate(items, 1):
         try:
+            # Minimal pairs are scored by likelihood where the provider can do
+            # it, which is what the corpus intends; everything else, and every
+            # provider without local weights, falls back to the forced choice.
+            if scorer and it.category == "blimp" and len(it.choices) == 2:
+                lp = scorer(list(it.choices))
+                pick = it.choices[0] if lp[0] >= lp[1] else it.choices[1]
+                results.append({
+                    "id": it.id, "category": it.category,
+                    "correct": pick == it.answer, "parsed": True,
+                    "got": "logprob", "expected": it.answer_letter,
+                    "scoring": "logprob",
+                    "margin": round(abs(lp[0] - lp[1]), 5),
+                    "raw": "",
+                })
+                if sleep:
+                    time.sleep(sleep)
+                continue
             reply = call(it.render())
         except Exception as e:  # a provider failure is data, not a crash
             reply = ""

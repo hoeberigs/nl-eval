@@ -203,6 +203,44 @@ n 928   accuracy 0.371   chance 0.387   lift <b>-0.016</b>
   </section>
 
   <section>
+    <h2><span class="k">Scoring</span>Minimal pairs are scored by likelihood</h2>
+    <p class="t">BLiMP-NL is designed to be scored by comparing the
+      <b>log-likelihood</b> a model assigns to the grammatical and the
+      ungrammatical sentence, not by asking it to pick one. A forced choice can
+      be right for the wrong reason, and it measures instruction-following as
+      much as grammar. Chat APIs will not return the likelihood of text they did
+      not generate, so this needs local weights.</p>
+    <p class="t">What that is worth, on <b>one model and the same 440 items</b>:</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Scoring method</th><th class="n">Accuracy</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Log-probability</td><td class="n">87.3%</td><td>95% CI 83.8–90.1%</td></tr>
+        <tr><td>Forced choice</td><td class="n">0.0%</td><td>440/440 replies unparseable</td></tr>
+      </tbody>
+    </table></div>
+    <p class="t">Identical model, identical items.
+      <code>GroNLP/gpt2-small-dutch</code> knows Dutch grammar perfectly well; it
+      cannot follow a multiple-choice instruction, because it is a base model.
+      Scored by forced choice it looks like it knows nothing, which would have
+      been a completely false reading.</p>
+  </section>
+
+  <section>
+    <h2><span class="k">Contamination</span>These items are public</h2>
+    <p class="t">A model trained after publication may have seen them, and a
+      contaminated model scores high without knowing any Dutch. Every benchmark
+      has this problem; most do not say so. This one publishes a canary GUID that
+      exists nowhere else — if a model reproduces it, it trained on this
+      repository and its score is void.</p>
+    <p class="t">The layers carry different risk and should not be read as if
+      they shared one. BLiMP-NL and Global-MMLU predate most training cutoffs and
+      are very likely in large corpora already; the hand-written layer was
+      published here first. The honest fix is a <b>held-out split that is never
+      published</b>. It does not exist yet, so every score here should be read as
+      an upper bound.</p>
+  </section>
+
+  <section>
     <h2><span class="k">Statistics</span>Can one model actually beat another</h2>
     <p class="t">Most leaderboards print two accuracies and order the rows, which
       invites the reader to treat a two-point gap as real. On a suite this size
@@ -219,7 +257,7 @@ verdict   <b>not distinguishable on this suite</b></pre>
     <div class="scroll"><table>
       <thead><tr><th>Suite</th><th class="n">Items</th><th class="n">Smallest detectable gap</th></tr></thead>
       <tbody>
-        <tr><td>core only</td><td class="n">189</td><td class="n">13.2 pp</td></tr>
+        <tr><td>core only</td><td class="n">307</td><td class="n">11.3 pp</td></tr>
         <tr><td>all three layers</td><td class="n">928</td><td class="n">6.0 pp</td></tr>
         <tr><td>larger BLiMP sample</td><td class="n">~2,000</td><td class="n">4.1 pp</td></tr>
         <tr><td>full BLiMP-NL</td><td class="n">9,000</td><td class="n">1.9 pp</td></tr>

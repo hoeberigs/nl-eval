@@ -79,6 +79,8 @@ def main(argv=None) -> int:
     ap.add_argument("--publish", metavar="DIR",
                     help="collect every report in DIR into docs/results.json and exit")
     ap.add_argument("--estimate", action="store_true", help="print the cost estimate and exit")
+    ap.add_argument("--canary", action="store_true",
+                    help="ask the model for this suite's canary GUID; a clean model cannot produce it")
     ap.add_argument("--human-ratings", metavar="FILE",
                     help="BLiMP-NL acceptability ratings; adds a model-human alignment score")
     args = ap.parse_args(argv)
@@ -114,6 +116,16 @@ def main(argv=None) -> int:
         out = Path("docs/results.json")
         payload = collect(Path(args.publish), meta, out)
         print(f"wrote {out} with {len(payload['runs'])} run(s)", file=sys.stderr)
+        return 0
+
+    if args.canary:
+        from .canary import run_canary
+        try:
+            call = providers.get(args.provider, args.model)
+        except providers.ProviderError as e:
+            print(str(e), file=sys.stderr)
+            return 2
+        print(json.dumps(run_canary(call), indent=2, ensure_ascii=False))
         return 0
 
     items = _load(args)

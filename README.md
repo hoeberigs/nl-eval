@@ -6,7 +6,7 @@ benchmark covers.
 
 ```bash
 nl-eval --suite all          # all three layers, scored separately
-nl-eval --suite core         # the 189 hand-written items, no network needed
+nl-eval --suite core         # the 307 hand-written items, no network needed
 nl-eval --validate           # check the item set, no API calls, no spend
 ```
 
@@ -65,7 +65,7 @@ Treat this as a supplement to EuroEval, not a replacement for it.
 |---|---|---|---|
 | **L1 grammar** | [BLiMP-NL](https://huggingface.co/datasets/juletxara/blimp-nl) — 9,000 minimal pairs, 22 phenomena, 84 paradigms, human acceptability from 30+ raters | Native Dutch syntax | CC-BY-4.0 |
 | **L2 breadth** | Global-MMLU (nl), ~14.3k | Knowledge and reasoning, comparable across languages | Apache-2.0 |
-| **L3 applied** | 189 hand-written items, 10 categories | Orthography, register, notation, civics, false friends, BE/NL | MIT |
+| **L3 applied** | 307 hand-written items, 10 categories | Orthography, register, notation, civics, false friends, BE/NL | MIT |
 
 L1 and L2 are **fetched at run time and never redistributed**. They download on
 first use into a gitignored cache under `.cache/sources/`, so their licences
@@ -79,7 +79,7 @@ citations in [ATTRIBUTION.md](ATTRIBUTION.md).
 A single headline mixing native grammar with translated knowledge cannot be read
 as either. The runner scores per category, and the chance baseline is published
 next to every score because it differs by layer: L1 is two-option (0.50), L2 is
-four-option (0.25), L3 is mixed (0.339).
+four-option (0.25), L3 is mixed (0.352).
 
 ## No judge, by design
 
@@ -103,8 +103,8 @@ nl-eval --provider always-a   # always answers "A"
 
 | Control | Accuracy | Chance | Reading |
 |---|---|---|---|
-| `echo` | 0.000 | 0.339 | The scorer awards no free marks; 189/189 replies logged unparseable |
-| `always-a` | 0.354 | 0.339 | +1.6pp over chance, so the answer key is position-balanced |
+| `echo` | 0.000 | 0.352 | The scorer awards no free marks; every reply logged unparseable |
+| `always-a` | 0.358 | 0.352 | +0.6pp over chance, so the answer key is position-balanced |
 
 If `always-a` ever scores well above chance, the answer key has drifted onto one
 letter and the suite is measuring letter preference. `--validate` checks this
@@ -158,6 +158,56 @@ Narrow a run rather than raising the ceiling:
 nl-eval --suite core --category de_het,spelling --limit 40
 ```
 
+## Scoring minimal pairs properly
+
+BLiMP-NL is designed to be scored by comparing the **log-likelihood** a model
+assigns to the grammatical and the ungrammatical sentence, not by asking it to
+pick one. A forced choice can be right for the wrong reason, and it measures
+instruction-following as much as grammar.
+
+Chat APIs will not return the likelihood of text they did not generate, so this
+needs local weights:
+
+```bash
+pip install 'nl-eval[local]'
+nl-eval --suite blimp --provider hf --model GroNLP/gpt2-small-dutch
+```
+
+The runner uses likelihood automatically for minimal pairs whenever the
+provider can supply it, and falls back to the forced choice otherwise. Each
+result records which mode produced it.
+
+### Why this matters, on one model and the same 440 items
+
+| Scoring | Accuracy | Note |
+|---|---:|---|
+| Log-probability | **87.3%** | 95% CI 83.8–90.1% |
+| Forced choice | **0.0%** | 440/440 replies unparseable |
+
+Identical model, identical items. `GroNLP/gpt2-small-dutch` knows Dutch grammar
+perfectly well; it simply cannot follow a multiple-choice instruction, because
+it is a base model rather than an instruction-tuned one. Scored by forced choice
+it looks like it knows nothing, which would have been a completely false
+reading. Sum versus mean matters too: the score uses **mean** per-token
+log-probability, because a sum would systematically prefer whichever sentence
+tokenises shorter and would measure tokenisation rather than grammar.
+
+## Contamination
+
+These items are public, so a model trained after publication may have seen them.
+[CANARY.md](CANARY.md) carries a GUID that exists nowhere else:
+
+```bash
+nl-eval --canary --provider openai --model gpt-5-mini
+```
+
+If a model reproduces it, it trained on this repository and its score is void. A
+negative is weak evidence rather than proof. The three layers carry different
+risk and should not be read as if they shared one: BLiMP-NL and MMLU predate
+most training cutoffs and are very likely in large corpora already, while L3 was
+published here first. The honest fix is a held-out split that is never
+published, which does not exist yet and is the most valuable next addition.
+
 ## Can one model actually beat another
 
 Most leaderboards print two accuracies and order the rows, which invites the
@@ -193,7 +243,7 @@ suite could reliably detect at that size.
 
 | Suite | Items | Smallest detectable gap |
 |---|---:|---:|
-| `--suite core` | 189 | **13.2 pp** |
+| `--suite core` | 307 | **11.3 pp** |
 | `--suite all` (default sampling) | 928 | **6.0 pp** |
 | `--suite all --per-phenomenon 90` | ~2,000 | **4.1 pp** |
 | full BLiMP-NL | 9,000 | **1.9 pp** |

@@ -100,6 +100,64 @@ def ollama(model: str) -> Callable[[str], str]:
     return call
 
 
+def hf(model: str) -> Callable[[str], str]:
+    """A local Hugging Face causal model, used for log-probability scoring.
+
+    This exists for the minimal pairs. BLiMP-NL is designed to be scored by
+    comparing the log-likelihood a model assigns to the grammatical and
+    ungrammatical sentence, not by asking it to pick one: a forced choice can
+    be right for the wrong reason, and it measures instruction-following as
+    much as grammar. Chat APIs will not return the likelihood of text they did
+    not generate, so the correct scoring needs a model whose weights are local.
+
+    Returned callable answers prompts as usual; the `.score` attribute added
+    below is what the runner uses for minimal pairs.
+    """
+    try:
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+    except ImportError as e:
+        raise ProviderError(
+            "the hf provider needs torch and transformers: pip install 'nl-eval[local]'"
+        ) from e
+
+    tok = AutoTokenizer.from_pretrained(model)
+    mdl = AutoModelForCausalLM.from_pretrained(model)
+    mdl.eval()
+
+    @torch.no_grad()
+    def score(sentences: list[str]) -> list[float]:
+        """Mean per-token log-probability of each sentence.
+
+        Mean rather than sum: the two sentences in a minimal pair can differ in
+        token count, and a sum would systematically prefer the shorter one,
+        which would score tokenisation rather than grammar.
+        """
+        out = []
+        for text in sentences:
+            ids = tok(text, return_tensors="pt")
+            input_ids = ids["input_ids"]
+            if input_ids.shape[1] < 2:
+                out.append(float("-inf"))
+                continue
+            logits = mdl(**ids).logits
+            logprobs = torch.log_softmax(logits[:, :-1], dim=-1)
+            target = input_ids[:, 1:]
+            picked = logprobs.gather(2, target.unsqueeze(-1)).squeeze(-1)
+            out.append(float(picked.mean()))
+        return out
+
+    @torch.no_grad()
+    def call(prompt: str) -> str:
+        ids = tok(prompt, return_tensors="pt")
+        gen = mdl.generate(**ids, max_new_tokens=8, do_sample=False,
+                           pad_token_id=tok.eos_token_id)
+        return tok.decode(gen[0][ids["input_ids"].shape[1]:], skip_special_tokens=True).strip()
+
+    call.score = score  # type: ignore[attr-defined]
+    return call
+
+
 def openai(model: str) -> Callable[[str], str]:
     key = _need("OPENAI_API_KEY")
     try:
@@ -145,6 +203,7 @@ def anthropic(model: str) -> Callable[[str], str]:
 REGISTRY = {
     "echo": echo,
     "always-a": always,
+    "hf": hf,
     "ollama": ollama,
     "openai": openai,
     "anthropic": anthropic,
