@@ -8,7 +8,7 @@ pct = lambda x: f"{x*100:.1f}%"
 NL = {"geslaagd": "passed", "onbeslist": "undecided", "niet geslaagd": "failed", "onvolledig": "incomplete", "rijdt niet": "did not run"}
 rows = []
 for r in d["runs"]:
-    name = r["model"].replace("-20251001", "") + (" (control)" if r["is_control"] else " (local)" if r["provider"] in ("ollama",) else "")
+    name = {"hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": "GEITje-7B-ultra"}.get(r["model"], r["model"].replace("-20251001", "")) + (" (control)" if r["is_control"] else " (local)" if r["provider"] in ("ollama",) else "")
     if r["failed"]:
         rows.append(f"| {name} | did not run | {NL[r['verdict']]} | provider quota error | | | |"); continue
     if r["n"] < 600:

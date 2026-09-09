@@ -290,8 +290,11 @@ nl-eval --publish results</pre>
 
 <script>
 (async function(){
-  const PROV = {"anthropic":"Anthropic","openai":"OpenAI","ollama":"Alibaba · lokaal via Ollama","hf-dutch-gpt2-logprob":"GroNLP · lokaal, waarschijnlijkheid","google":"Google","always-a":"controle","echo":"controle"};
-  const ABBR = {"claude-haiku-4-5-20251001":"Haiku","claude-sonnet-5":"Sonnet 5","gpt-5-mini":"GPT-5 mini","gpt-5-nano":"GPT-5 nano","gpt-5":"GPT-5","qwen2.5:7b":"Qwen 7B","gemma3:4b":"Gemma 3 4B"};
+  const PROV = {"anthropic":"Anthropic","openai":"OpenAI","hf-dutch-gpt2-logprob":"GroNLP · lokaal, waarschijnlijkheid","google":"Google","always-a":"controle","echo":"controle"};
+  const VENDOR = [["qwen","Alibaba"],["gemma","Google"],["geitje","Bram Vanroy, op Mistral 7B"],["mistral","Mistral"],["llama","Meta"],["phi","Microsoft"]];
+  const provOf = r => r.provider==="ollama" ? ((VENDOR.find(([k])=>r.model.toLowerCase().includes(k))||[null,"open model"])[1] + " · lokaal via Ollama") : (PROV[r.provider]||r.provider);
+  const NAMES = {"hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M":"GEITje-7B-ultra"};
+  const ABBR = {"claude-haiku-4-5-20251001":"Haiku","claude-sonnet-5":"Sonnet 5","gpt-5-mini":"GPT-5 mini","gpt-5-nano":"GPT-5 nano","gpt-5":"GPT-5","qwen2.5:7b":"Qwen 7B","gemma3:4b":"Gemma 3 4B","hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M":"GEITje 7B"};
   const FLAP = {"geslaagd":"Geslaagd","onbeslist":"Onbeslist","niet geslaagd":"Niet geslaagd","onvolledig":"Onvolledig","rijdt niet":"Rijdt niet"};
   const VORDER = {"geslaagd":0,"onbeslist":1,"onvolledig":2,"niet geslaagd":3,"rijdt niet":4};
   const pct = x => (x*100).toFixed(1).replace(".",",");
@@ -300,7 +303,7 @@ nl-eval --publish results</pre>
     const p = k==="geslaagd" ? '<path d="M3 9l4 4 8-8"/>' : k==="onbeslist" ? '<path d="M3 10c2-3 4-3 6 0s4 3 6 0"/>' : k==="gezakt" ? '<path d="M4 4l10 10M14 4L4 14"/>' : '<path d="M3 9h12"/>';
     return `<svg class="mk" viewBox="0 0 18 18" width="15" height="15" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
   };
-  const label = r => r.model.replace("-20251001","");
+  const label = r => NAMES[r.model] || r.model.replace("-20251001","");
   const short = r => ABBR[r.model] || label(r);
 
   let d;
@@ -368,7 +371,7 @@ nl-eval --publish results</pre>
       return `<tr class="run${dim}" id="model-${esc(label(r)).replace(/[^a-z0-9]+/gi,"-").toLowerCase()}" style="--i:${i}">
         <td class="score">${pct(r.accuracy)}<small>${pct(r.ci95[0])} – ${pct(r.ci95[1])}</small></td>
         <td class="model"><button class="rowbtn" type="button" aria-expanded="false" aria-label="Details van ${esc(label(r))}">
-          <div class="name">${esc(label(r))}</div><div class="prov">${esc(PROV[r.provider]||r.provider)}</div>
+          <div class="name">${esc(label(r))}</div><div class="prov">${esc(provOf(r))}</div>
           <span class="mflap">${flap.replace(' flip','')}</span>
           <div class="via">${via(r)}</div><div class="rem">${esc(remarks(r))}</div>
           <div class="detail">${detail(r)}</div></button></td>

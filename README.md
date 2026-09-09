@@ -49,7 +49,7 @@ verdicts and never computes them.
 | gpt-5-nano | 81.3% | failed | Spelling en grammatica gezakt (74.0%); Lezen undecided; KNM undecided | 46.2% | 8.1% | 79.1% (no sign of contamination) |
 | qwen2.5:7b (local) | 74.7% | failed | Spelling en grammatica undecided; Schrijven undecided; Lezen undecided; Woordenschat undecided; KNM gezakt (69.2%); ONA en register undecided | 26.2% | 3.1% | 71.8% (no sign of contamination) |
 | gemma3:4b (local) | 68.9% | failed | Taalvorm undecided; Spelling en grammatica gezakt (64.8%); Schrijven undecided; Lezen gezakt (66.7%); Woordenschat undecided; KNM undecided; ONA en register undecided | 38.8% | 5.6% | 70.5% (no sign of contamination) |
-| hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M (local) | 56.4% | failed | Taalvorm gezakt (60.7%); Spelling en grammatica gezakt (52.8%); Schrijven gezakt (49.3%); Lezen gezakt (53.3%); Woordenschat undecided; KNM undecided; ONA en register undecided | 47.5% | 2.5% | 58.3% (no sign of contamination) |
+| GEITje-7B-ultra (local) | 56.4% | failed | Taalvorm gezakt (60.7%); Spelling en grammatica gezakt (52.8%); Schrijven gezakt (49.3%); Lezen gezakt (53.3%); Woordenschat undecided; KNM undecided; ONA en register undecided | 47.5% | 2.5% | 58.3% (no sign of contamination) |
 | GroNLP/gpt2-small-dutch | 87.3% on BLiMP-NL only, by likelihood | incomplete | | | | |
 | gemini-3.6-flash | did not run | did not run | provider quota error | | | |
 | always-a (control) | 34.1% | failed | every section failed | not run | not run | not run |
