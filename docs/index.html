@@ -81,7 +81,8 @@ tr.open .detail{display:block}
 .pass{z-index:0}
 .axis{font-size:13px;color:var(--dim);padding-top:6px;font-variant-numeric:tabular-nums}
 .axis .p{color:var(--yel)}
-.legend{margin-top:18px;background:var(--ink);color:var(--blue);padding:12px 16px;font-size:15px;line-height:1.5;font-family:var(--text);display:inline-block}
+.lede{font-family:var(--cond);font-size:19px;line-height:1.3;color:var(--ink);margin:18px 0 0;max-width:62ch}
+.legend{margin-top:14px;background:var(--ink);color:var(--blue);padding:12px 16px;font-size:15px;line-height:1.5;font-family:var(--text);display:inline-block}
 
 /* ---------- prose ---------- */
 section.s{padding:48px 0 12px;max-width:1344px}
@@ -144,6 +145,7 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
         <tbody id="rows"><tr><td colspan="3" style="color:var(--dim)">Uitslagen laden…</td></tr></tbody>
       </table>
       </div>
+      <p class="lede" id="lede"></p>
       <div class="legend" id="legend"></div>
     </div>
     <div class="right perron" id="perron">
@@ -379,6 +381,17 @@ nl-eval --publish results</pre>
     const n = real.length ? real[0].sections.find(x=>x.id===sec.id).n : 0;
     return `<div class="track"><div class="tl">${esc(sec.label)}</div><div class="rail" style="--rows:${real.length}"><div class="pass" style="left:${X(d.pass_line)}%"></div>${bands}</div></div>`;
   }).join("");
+  { const real = d.runs.filter(r=>!r.is_control && !r.failed && r.n>600);
+    const pass = real.filter(r=>r.verdict==="geslaagd"), fail = real.filter(r=>r.verdict==="niet geslaagd"), und = real.filter(r=>r.verdict==="onbeslist");
+    const cnt = {}; real.forEach(r=>r.sections.forEach(s=>{ if (s.verdict_bearing && s.verdict!=="geslaagd") cnt[s.label]=(cnt[s.label]||0)+1; }));
+    const worst = Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
+    const naam = r => label(r);
+    let t = `${real.length} modellen legden het volledige examen af. `;
+    t += pass.length ? `Geslaagd: ${pass.map(naam).join(", ")}. ` : "Nog geen model is voor alle onderdelen geslaagd. ";
+    if (und.length) t += `Onbeslist: ${und.map(r=>naam(r)+" ("+r.sections.filter(s=>s.verdict==="onbeslist").map(s=>s.label).join(", ")+")").join("; ")}. `;
+    if (fail.length) t += `Gezakt: ${fail.map(r=>naam(r)+" ("+r.sections.filter(s=>s.verdict==="gezakt").map(s=>s.label).join(", ")+")").join("; ")}. `;
+    if (worst) t += `Het onderdeel dat het vaakst niet wordt gehaald is ${worst[0]}.`;
+    document.getElementById("lede").textContent = t; }
   document.getElementById("legend").innerHTML = `${mark("geslaagd","#081858")} geslaagd &nbsp; ${mark("onbeslist","#081858")} onbeslist &nbsp; ${mark("gezakt","#081858")} gezakt &nbsp;·&nbsp; slaaglijn ${pct(d.pass_line).replace(",0","")}%, ondergrens van het 95%-interval &nbsp;·&nbsp; klik een rij voor de scores per onderdeel`;
 
   // sections table

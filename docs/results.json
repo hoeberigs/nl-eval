@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-09T19:29:59Z",
+ "generated_at": "2026-09-09T19:43:12Z",
  "pass_line": 0.8,
  "sections": [
   {
@@ -84,9 +84,9 @@
   }
  ],
  "items": {
-  "total": 754,
+  "total": 794,
   "categories": {
-   "civics": 80,
+   "civics": 120,
    "de_het": 80,
    "diminutives": 48,
    "false_friends": 40,
@@ -101,21 +101,21 @@
    "werkwoordspelling": 50,
    "word_order": 50
   },
-  "chance_baseline": 0.3079
+  "chance_baseline": 0.305
  },
  "runs": [
   {
    "provider": "anthropic",
    "model": "claude-haiku-4-5-20251001",
    "is_control": false,
-   "n": 1493,
-   "accuracy": 0.8935,
+   "n": 1533,
+   "accuracy": 0.8976,
    "ci95": [
-    0.8768,
-    0.9082
+    0.8814,
+    0.9118
    ],
-   "chance": 0.3529,
-   "lift": 0.5406,
+   "chance": 0.3502,
+   "lift": 0.5473,
    "unparsed": 2,
    "by_category": {
     "blimp": {
@@ -128,12 +128,12 @@
      ]
     },
     "civics": {
-     "n": 80,
-     "correct": 71,
-     "accuracy": 0.8875,
+     "n": 120,
+     "correct": 109,
+     "accuracy": 0.9083,
      "ci": [
-      0.7998,
-      0.9397
+      0.8433,
+      0.948
      ]
     },
     "de_het": {
@@ -165,11 +165,11 @@
     },
     "formatting": {
      "n": 40,
-     "correct": 36,
-     "accuracy": 0.9,
+     "correct": 37,
+     "accuracy": 0.925,
      "ci": [
-      0.7695,
-      0.9604
+      0.8014,
+      0.9742
      ]
     },
     "idioms": {
@@ -210,11 +210,11 @@
     },
     "schrijven": {
      "n": 69,
-     "correct": 66,
-     "accuracy": 0.9565,
+     "correct": 67,
+     "accuracy": 0.971,
      "ci": [
-      0.8798,
-      0.9851
+      0.9003,
+      0.992
      ]
     },
     "spelling": {
@@ -237,11 +237,11 @@
     },
     "variants": {
      "n": 40,
-     "correct": 36,
-     "accuracy": 0.9,
+     "correct": 38,
+     "accuracy": 0.95,
      "ci": [
-      0.7695,
-      0.9604
+      0.835,
+      0.9862
      ]
     },
     "werkwoordspelling": {
@@ -269,11 +269,11 @@
      "label": "Taalvorm",
      "verdict_bearing": true,
      "n": 570,
-     "correct": 536,
-     "accuracy": 0.9404,
+     "correct": 539,
+     "accuracy": 0.9456,
      "ci95": [
-      0.9178,
-      0.957
+      0.9238,
+      0.9614
      ],
      "verdict": "geslaagd"
     },
@@ -295,11 +295,11 @@
      "label": "Schrijven",
      "verdict_bearing": true,
      "n": 69,
-     "correct": 66,
-     "accuracy": 0.9565,
+     "correct": 67,
+     "accuracy": 0.971,
      "ci95": [
-      0.8798,
-      0.9851
+      0.9003,
+      0.992
      ],
      "verdict": "geslaagd"
     },
@@ -333,14 +333,14 @@
      "id": "knm",
      "label": "KNM",
      "verdict_bearing": true,
-     "n": 80,
-     "correct": 71,
-     "accuracy": 0.8875,
+     "n": 120,
+     "correct": 109,
+     "accuracy": 0.9083,
      "ci95": [
-      0.7998,
-      0.9397
+      0.8433,
+      0.948
      ],
-     "verdict": "onbeslist"
+     "verdict": "geslaagd"
     },
     {
      "id": "ona",
@@ -369,9 +369,9 @@
      "verdict": "indicatie"
     }
    ],
-   "verdict": "onbeslist",
+   "verdict": "geslaagd",
    "failed": false,
-   "est_cost_eur": 0.2012,
+   "est_cost_eur": 0.2062,
    "canary": {
     "reproduced": 0,
     "probes": 3,
@@ -401,27 +401,27 @@
      0.861,
      0.9481
     ],
-    "public_accuracy": 0.8935,
+    "public_accuracy": 0.8976,
     "heldout_accuracy": 0.9141,
-    "gap": -0.0206,
+    "gap": -0.0165,
     "n_smaller_split": 163,
-    "noise_floor": 0.0957,
+    "noise_floor": 0.094,
     "verdict": "no evidence of contamination: the gap is within sampling noise"
    },
-   "generated_at": "2026-09-09T19:26:14Z"
+   "generated_at": "2026-09-09T19:42:40Z"
   },
   {
    "provider": "openai",
    "model": "gpt-5-mini",
    "is_control": false,
-   "n": 1493,
-   "accuracy": 0.8861,
+   "n": 1533,
+   "accuracy": 0.8891,
    "ci95": [
-    0.869,
-    0.9013
+    0.8724,
+    0.9039
    ],
-   "chance": 0.3529,
-   "lift": 0.5332,
+   "chance": 0.3502,
+   "lift": 0.5389,
    "unparsed": 0,
    "by_category": {
     "blimp": {
@@ -434,12 +434,12 @@
      ]
     },
     "civics": {
-     "n": 80,
-     "correct": 73,
-     "accuracy": 0.9125,
+     "n": 120,
+     "correct": 111,
+     "accuracy": 0.925,
      "ci": [
-      0.8302,
-      0.957
+      0.8636,
+      0.96
      ]
     },
     "de_het": {
@@ -471,11 +471,11 @@
     },
     "formatting": {
      "n": 40,
-     "correct": 38,
-     "accuracy": 0.95,
+     "correct": 39,
+     "accuracy": 0.975,
      "ci": [
-      0.835,
-      0.9862
+      0.8712,
+      0.9956
      ]
     },
     "idioms": {
@@ -543,11 +543,11 @@
     },
     "variants": {
      "n": 40,
-     "correct": 38,
-     "accuracy": 0.95,
+     "correct": 39,
+     "accuracy": 0.975,
      "ci": [
-      0.835,
-      0.9862
+      0.8712,
+      0.9956
      ]
     },
     "werkwoordspelling": {
@@ -575,11 +575,11 @@
      "label": "Taalvorm",
      "verdict_bearing": true,
      "n": 570,
-     "correct": 540,
-     "accuracy": 0.9474,
+     "correct": 542,
+     "accuracy": 0.9509,
      "ci95": [
-      0.9259,
-      0.9629
+      0.9299,
+      0.9658
      ],
      "verdict": "geslaagd"
     },
@@ -639,12 +639,12 @@
      "id": "knm",
      "label": "KNM",
      "verdict_bearing": true,
-     "n": 80,
-     "correct": 73,
-     "accuracy": 0.9125,
+     "n": 120,
+     "correct": 111,
+     "accuracy": 0.925,
      "ci95": [
-      0.8302,
-      0.957
+      0.8636,
+      0.96
      ],
      "verdict": "geslaagd"
     },
@@ -677,7 +677,7 @@
    ],
    "verdict": "onbeslist",
    "failed": false,
-   "est_cost_eur": null,
+   "est_cost_eur": 0.0773,
    "canary": {
     "reproduced": 0,
     "probes": 3,
@@ -707,14 +707,14 @@
      0.8537,
      0.9434
     ],
-    "public_accuracy": 0.8861,
+    "public_accuracy": 0.8891,
     "heldout_accuracy": 0.908,
-    "gap": -0.0219,
+    "gap": -0.0189,
     "n_smaller_split": 163,
-    "noise_floor": 0.0985,
+    "noise_floor": 0.0974,
     "verdict": "no evidence of contamination: the gap is within sampling noise"
    },
-   "generated_at": "2026-09-09T19:25:46Z"
+   "generated_at": "2026-09-09T19:42:49Z"
   },
   {
    "provider": "hf-dutch-gpt2-logprob",
@@ -839,14 +839,14 @@
    "provider": "openai",
    "model": "gpt-5-nano",
    "is_control": false,
-   "n": 1493,
-   "accuracy": 0.8071,
+   "n": 1533,
+   "accuracy": 0.8121,
    "ci95": [
-    0.7863,
-    0.8263
+    0.7918,
+    0.8309
    ],
-   "chance": 0.3529,
-   "lift": 0.4542,
+   "chance": 0.3502,
+   "lift": 0.4619,
    "unparsed": 0,
    "by_category": {
     "blimp": {
@@ -859,12 +859,12 @@
      ]
     },
     "civics": {
-     "n": 80,
-     "correct": 68,
-     "accuracy": 0.85,
+     "n": 120,
+     "correct": 103,
+     "accuracy": 0.8583,
      "ci": [
-      0.7559,
-      0.9121
+      0.7848,
+      0.9096
      ]
     },
     "de_het": {
@@ -878,11 +878,11 @@
     },
     "diminutives": {
      "n": 48,
-     "correct": 28,
-     "accuracy": 0.5833,
+     "correct": 29,
+     "accuracy": 0.6042,
      "ci": [
-      0.4428,
-      0.7115
+      0.4631,
+      0.7298
      ]
     },
     "false_friends": {
@@ -896,11 +896,11 @@
     },
     "formatting": {
      "n": 40,
-     "correct": 33,
-     "accuracy": 0.825,
+     "correct": 34,
+     "accuracy": 0.85,
      "ci": [
-      0.6805,
-      0.9125
+      0.7093,
+      0.9294
      ]
     },
     "idioms": {
@@ -941,11 +941,11 @@
     },
     "schrijven": {
      "n": 69,
-     "correct": 64,
-     "accuracy": 0.9275,
+     "correct": 65,
+     "accuracy": 0.942,
      "ci": [
-      0.8413,
-      0.9687
+      0.8602,
+      0.9772
      ]
     },
     "spelling": {
@@ -968,11 +968,11 @@
     },
     "variants": {
      "n": 40,
-     "correct": 36,
-     "accuracy": 0.9,
+     "correct": 38,
+     "accuracy": 0.95,
      "ci": [
-      0.7695,
-      0.9604
+      0.835,
+      0.9862
      ]
     },
     "werkwoordspelling": {
@@ -1000,11 +1000,11 @@
      "label": "Taalvorm",
      "verdict_bearing": true,
      "n": 570,
-     "correct": 517,
-     "accuracy": 0.907,
+     "correct": 520,
+     "accuracy": 0.9123,
      "ci95": [
-      0.8804,
-      0.9282
+      0.8862,
+      0.9328
      ],
      "verdict": "geslaagd"
     },
@@ -1013,11 +1013,11 @@
      "label": "Spelling en grammatica",
      "verdict_bearing": true,
      "n": 273,
-     "correct": 201,
-     "accuracy": 0.7363,
+     "correct": 202,
+     "accuracy": 0.7399,
      "ci95": [
-      0.681,
-      0.785
+      0.6848,
+      0.7884
      ],
      "verdict": "gezakt"
     },
@@ -1026,11 +1026,11 @@
      "label": "Schrijven",
      "verdict_bearing": true,
      "n": 69,
-     "correct": 64,
-     "accuracy": 0.9275,
+     "correct": 65,
+     "accuracy": 0.942,
      "ci95": [
-      0.8413,
-      0.9687
+      0.8602,
+      0.9772
      ],
      "verdict": "geslaagd"
     },
@@ -1064,12 +1064,12 @@
      "id": "knm",
      "label": "KNM",
      "verdict_bearing": true,
-     "n": 80,
-     "correct": 68,
-     "accuracy": 0.85,
+     "n": 120,
+     "correct": 103,
+     "accuracy": 0.8583,
      "ci95": [
-      0.7559,
-      0.9121
+      0.7848,
+      0.9096
      ],
      "verdict": "onbeslist"
     },
@@ -1102,7 +1102,7 @@
    ],
    "verdict": "niet geslaagd",
    "failed": false,
-   "est_cost_eur": null,
+   "est_cost_eur": 0.0258,
    "canary": {
     "reproduced": 0,
     "probes": 3,
@@ -1110,9 +1110,36 @@
    },
    "error_share": 0.0,
    "failure_reason": null,
-   "consistency": null,
-   "heldout": null,
-   "generated_at": "2026-09-09T19:28:52Z"
+   "consistency": {
+    "items_probed": 120,
+    "order_reversed": {
+     "n": 120,
+     "flips": 45,
+     "flip_rate": 0.375,
+     "reading": "share of answers that changed content when the options were listed back to front"
+    },
+    "register_swapped": {
+     "n": 120,
+     "flips": 10,
+     "flip_rate": 0.0833,
+     "reading": "share of answers that changed when the instruction was phrased informally"
+    }
+   },
+   "heldout": {
+    "n": 163,
+    "accuracy": 0.7914,
+    "ci95": [
+     0.7227,
+     0.8467
+    ],
+    "public_accuracy": 0.8121,
+    "heldout_accuracy": 0.7914,
+    "gap": 0.0207,
+    "n_smaller_split": 163,
+    "noise_floor": 0.1212,
+    "verdict": "no evidence of contamination: the gap is within sampling noise"
+   },
+   "generated_at": "2026-09-09T19:42:57Z"
   },
   {
    "provider": "ollama",

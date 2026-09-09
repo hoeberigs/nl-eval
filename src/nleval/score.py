@@ -83,7 +83,8 @@ def score_item(reply: str, item: Item) -> dict:
 
     got = normalise(reply)
     # Models often answer in a sentence; accept the gold string as a whole word.
-    exact = got == normalise(item.answer)
+    accepted = [normalise(item.answer)] + [normalise(a) for a in getattr(item, "alt", [])]
+    exact = got in accepted
     contained = bool(
         re.search(r"(?<!\w)" + re.escape(normalise(item.answer)) + r"(?!\w)", got)
     )

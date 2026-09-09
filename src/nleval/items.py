@@ -27,6 +27,7 @@ class Item:
     answer: str
     choices: list[str] = field(default_factory=list)
     note: str = ""
+    alt: list[str] = field(default_factory=list)
     difficulty: str = "core"
     source_file: str = ""
 

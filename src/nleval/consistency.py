@@ -57,8 +57,22 @@ def consistency(
 ) -> dict:
     """Run each MCQ item under both perturbations and count content flips."""
     mcq = [i for i in items if i.type == "mcq" and len(i.choices) >= 2]
-    if limit:
-        mcq = mcq[:limit]
+    if limit and len(mcq) > limit:
+        # Stratified, not head-of-list: the first N items by file order are
+        # one or two categories, and a flip rate measured on those says
+        # nothing about the exam. Round-robin over categories in a fixed
+        # order gives every section a share.
+        by_cat: dict[str, list] = {}
+        for it in mcq:
+            by_cat.setdefault(it.category, []).append(it)
+        picked, i = [], 0
+        cats = sorted(by_cat)
+        while len(picked) < limit and any(by_cat.values()):
+            c = cats[i % len(cats)]
+            if by_cat[c]:
+                picked.append(by_cat[c].pop(0))
+            i += 1
+        mcq = picked
 
     rev_flips = reg_flips = 0
     rev_n = reg_n = 0
