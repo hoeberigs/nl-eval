@@ -167,6 +167,42 @@ def _hardest(mains: list[tuple[str, dict]], runs: list[dict], top: int = 12) -> 
     return out
 
 
+def _phenomena(mains: list[tuple[str, dict]], runs: list[dict]) -> list[dict]:
+    """BLiMP-NL accuracy per linguistic phenomenon, per complete run.
+
+    Twenty items per phenomenon is too few for a verdict, so these carry no
+    verdict: they show where in the grammar a model's errors concentrate.
+    """
+    try:
+        from .sources import load_blimp
+        blimp = load_blimp()
+    except Exception:
+        return []
+    phen_of = {it.id: (it.note.split(" · ")[0].strip() if it.note else "?") for it in blimp}
+    complete = [r["model"] for r in runs if not r["is_control"] and not r["failed"] and r["n"] > 600]
+    if not complete:
+        return []
+    acc: dict[str, dict[str, list[int]]] = {}
+    for stem, doc in mains:
+        model = doc["summary"].get("model", stem)
+        if model not in complete:
+            continue
+        for r in doc.get("results", []):
+            ph = phen_of.get(r["id"])
+            if ph:
+                acc.setdefault(ph, {}).setdefault(model, []).append(1 if r.get("correct") else 0)
+    out = []
+    for ph in sorted(acc):
+        row = {"phenomenon": ph, "n": max(len(v) for v in acc[ph].values()), "by_model": {}}
+        for m in complete:
+            v = acc[ph].get(m)
+            row["by_model"][m] = round(sum(v) / len(v), 3) if v else None
+        row["mean"] = round(sum(x for x in row["by_model"].values() if x is not None) / max(1, sum(1 for x in row["by_model"].values() if x is not None)), 3)
+        out.append(row)
+    out.sort(key=lambda r: r["mean"])
+    return out
+
+
 def _load_json(f: Path) -> dict | None:
     try:
         return json.loads(f.read_text(encoding="utf-8"))
@@ -259,6 +295,7 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
     payload = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "hardest": _hardest(mains, runs),
+        "phenomena": _phenomena(mains, runs),
         "pass_line": PASS_LINE,
         "sections": [{k: v for k, v in sec.items()} for sec in SECTIONS],
         "items": items_meta,

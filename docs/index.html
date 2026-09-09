@@ -204,6 +204,12 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
   </div>
 </section>
 
+<section class="s" id="verschijnselen">
+  <h2>Taalvorm per verschijnsel</h2>
+  <p>De BLiMP-NL minimale paren, uitgesplitst naar taalkundig verschijnsel: twintig paren per verschijnsel, dus geen oordeel per rij, wel een kaart van waar de fouten van een model zich ophopen. Gesorteerd van moeilijkst naar makkelijkst over alle modellen.</p>
+  <div class="ptbl"><table id="phen-table"><thead></thead><tbody></tbody></table></div>
+</section>
+
 <section class="s" id="struikelblokken">
   <h2>Waar de modellen struikelen</h2>
   <p>De opgaven die de meeste modellen fout hebben, met het juiste antwoord. Dit zijn geen strikvragen: elke opgave staat openbaar in de repository en is door een persoon nagekeken. Het zegt waar het Nederlands van een model ophoudt, niet alleen hoe goed het is.</p>
@@ -278,7 +284,7 @@ nl-eval --publish results</pre>
 <script>
 (async function(){
   const PROV = {"anthropic":"Anthropic","openai":"OpenAI","ollama":"Alibaba · lokaal via Ollama","hf-dutch-gpt2-logprob":"GroNLP · lokaal, waarschijnlijkheid","google":"Google","always-a":"controle","echo":"controle"};
-  const ABBR = {"claude-haiku-4-5-20251001":"Haiku","gpt-5-mini":"GPT-5 mini","qwen2.5:7b":"Qwen 7B"};
+  const ABBR = {"claude-haiku-4-5-20251001":"Haiku","claude-sonnet-5":"Sonnet 5","gpt-5-mini":"GPT-5 mini","gpt-5-nano":"GPT-5 nano","gpt-5":"GPT-5","qwen2.5:7b":"Qwen 7B","gemma3:4b":"Gemma 3 4B"};
   const FLAP = {"geslaagd":"Geslaagd","onbeslist":"Onbeslist","niet geslaagd":"Niet geslaagd","onvolledig":"Onvolledig","rijdt niet":"Rijdt niet"};
   const VORDER = {"geslaagd":0,"onbeslist":1,"onvolledig":2,"niet geslaagd":3,"rijdt niet":4};
   const pct = x => (x*100).toFixed(1).replace(".",",");
@@ -412,6 +418,14 @@ nl-eval --publish results</pre>
     return `<tr><td class="v">${esc(sec.label)}</td><td>${esc(sec.what)}</td><td class="n">${s?s.n:0}</td><td>${sec.verdict?"oordeel tegen de slaaglijn":"indicatie, geen oordeel"}</td></tr>`;
   }).join("");
   const lz = ref.sections.find(x=>x.id==="lezen"); if (lz) document.getElementById("n-lezen").textContent = lz.n;
+
+  // phenomena
+  { const ph = d.phenomena || [];
+    if (ph.length) {
+      const models = Object.keys(ph[0].by_model);
+      document.querySelector("#phen-table thead").innerHTML = `<tr><th>Verschijnsel</th>${models.map(m=>`<th style="text-align:right">${esc(ABBR[m]||m.replace("-20251001",""))}</th>`).join("")}</tr>`;
+      document.querySelector("#phen-table tbody").innerHTML = ph.map(r=>`<tr><td class="v" style="text-transform:none;letter-spacing:0">${esc(r.phenomenon)}</td>${models.map(m=>{const v=r.by_model[m]; return `<td class="n"${v!=null&&v<d.pass_line?' style="color:#8a1d1d;font-weight:600"':''}>${v==null?"–":pct(v)+"%"}</td>`;}).join("")}</tr>`).join("");
+    } else document.querySelector("#phen-table tbody").innerHTML = '<tr><td>nog geen runs</td></tr>'; }
 
   // hardest items
   { const SEC = {}; d.sections.forEach(s=>s.categories.forEach(c=>SEC[c]=s.label));
