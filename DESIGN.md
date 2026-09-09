@@ -180,3 +180,8 @@ Flaps rotate in from rotateX(-90deg) over 450ms; rows fade up 6px over 500ms, st
 ## Small screens
 
 Under 700px the Uitslag column is hidden and the verdict flap is rendered directly under the provider line, above the via line, so the verdict stays in the first viewport without sideways scrolling. Under 1100px the board, then the verdict line and legend, then the perron stack vertically; the perron is sticky beside the rows only on wide screens.
+
+
+## Code
+
+Commands and file names use the system monospace stack `ui-monospace, SFMono-Regular, Menlo, monospace` at 0.9em; blocks sit on the signal blue with board ink, scrollbars themed with the dim token. It carries real commands only, never a costume for "technical".

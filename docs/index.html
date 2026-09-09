@@ -75,11 +75,11 @@ tr.open .detail,tr.run:focus-within .detail{display:block}
 .track{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:start;min-height:96px;border-bottom:1px solid var(--seam);padding:14px 0 10px}
 .tl{font-size:22px;font-weight:700;line-height:1.05}
 .tl small{display:block;font-size:13px;font-weight:400;color:var(--dim);margin-top:3px}
-.rail{position:relative;height:calc(8px + var(--rows,3) * 14px);border-bottom:1px solid var(--seam)}
+.rail{position:relative;height:calc(8px + var(--rows,3) * 16px);border-bottom:1px solid var(--seam)}
 .pass{position:absolute;left:60%;top:-6px;bottom:-1px;width:2px;background:var(--yel)}
 .band{position:absolute;height:10px}
 .band.ok{background:var(--ink)}.band.un{height:4px;margin-top:3px;background:var(--yel);outline:1px solid var(--yel);outline-offset:2px}.band.no{background:transparent;border:1.5px solid var(--dim)}
-.lab{position:absolute;font-size:13px;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums;background:var(--blue);padding:0 3px;z-index:1}
+.lab{position:absolute;font-size:13px;line-height:14px;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums;background:var(--blue);padding:0 3px;z-index:1}
 .pass{z-index:0}
 .axis{font-size:13px;color:var(--dim);padding-top:6px;font-variant-numeric:tabular-nums}
 .axis .p{color:var(--yel)}
@@ -405,7 +405,7 @@ nl-eval --publish results</pre>
       // on either side, and never detaches from its own band.
       const leftSide = X(hi) > 62 && X(lo) >= 30;
       const pos = leftSide ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${Math.min(X(hi), 62).toFixed(1)}%;margin-left:8px`;
-      return `<div class="band ${cls}" style="left:${X(lo).toFixed(1)}%;width:${Math.max(1.2,X(hi)-X(lo)).toFixed(1)}%;top:${6+i*14}px" title="${esc(short(r))} ${pct(s.accuracy)}%"></div><div class="lab" style="${pos};top:${i*14}px">${esc(short(r))} ${pct(s.accuracy)}</div>`;
+      return `<div class="band ${cls}" style="left:${X(lo).toFixed(1)}%;width:${Math.max(1.2,X(hi)-X(lo)).toFixed(1)}%;top:${7+i*16}px" title="${esc(short(r))} ${pct(s.accuracy)}%"></div><div class="lab" style="${pos};top:${i*16+1}px">${esc(short(r))} ${pct(s.accuracy)}</div>`;
     }).join("");
     const n = real.length ? real[0].sections.find(x=>x.id===sec.id).n : 0;
     return `<div class="track"><div class="tl">${esc(sec.label)}</div><div class="rail" style="--rows:${real.length}"><div class="pass" style="left:${X(d.pass_line)}%"></div>${bands}</div></div>`;
@@ -421,7 +421,7 @@ nl-eval --publish results</pre>
     if (fail.length) t += `Gezakt: ${fail.map(r=>naam(r)+" ("+r.sections.filter(s=>s.verdict==="gezakt").map(s=>s.label).join(", ")+")").join("; ")}. `;
     if (worst) t += `Het onderdeel dat het vaakst niet wordt gehaald is ${worst[0]}.`;
     document.getElementById("lede").textContent = t; }
-  document.getElementById("legend").innerHTML = `zonder teken: geslaagd &nbsp; ${mark("onbeslist","#081858")} onbeslist &nbsp; ${mark("gezakt","#081858")} gezakt &nbsp;·&nbsp; slaaglijn ${pct(d.pass_line).replace(",0","")}%, ondergrens van het 95%-interval &nbsp;·&nbsp; klik of tab naar een rij voor de scores per onderdeel`;
+  document.getElementById("legend").innerHTML = [`zonder teken: geslaagd`, `${mark("onbeslist","#081858")} onbeslist`, `${mark("gezakt","#081858")} gezakt`, `slaaglijn ${pct(d.pass_line).replace(",0","")}%, ondergrens van het 95%-interval`, `klik of tab naar een rij voor de scores per onderdeel`].map(x=>`<span style="white-space:nowrap">${x}</span>`).join(" · ");
 
   // sections table
   const ref = real[0] || d.runs[0];
