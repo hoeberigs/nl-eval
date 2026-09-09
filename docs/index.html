@@ -37,7 +37,7 @@ pre::-webkit-scrollbar{height:8px}pre::-webkit-scrollbar-thumb{background:var(--
 .stamp{color:var(--yel);font-family:var(--cond);font-size:clamp(15px,1.6vw,24px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .cols{display:grid;grid-template-columns:minmax(0,780px) minmax(0,1fr);padding:0 clamp(16px,3.3vw,48px) 0}
 .left{padding-right:36px;border-right:2px solid var(--yel)}
-.right{padding-left:36px}
+.right{padding-left:36px;overflow-x:clip}
 .tbl{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{font-family:var(--cond);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:left;padding:10px 6px;border-bottom:1px solid var(--seam);white-space:nowrap}
@@ -346,6 +346,7 @@ nl-eval --publish results</pre>
     const runs = d.runs.slice().sort((a,b)=>{
       if (a.is_control!==b.is_control) return a.is_control?1:-1;
       if (a.failed!==b.failed) return a.failed?1:-1;
+      const ia = a.n<600, ib = b.n<600; if (ia!==ib) return ia?1:-1;
       let va, vb;
       if (sortKey==="accuracy"){ va=a.accuracy; vb=b.accuracy; }
       else if (sortKey==="model"){ va=label(a).toLowerCase(); vb=label(b).toLowerCase(); }
@@ -391,8 +392,11 @@ nl-eval --publish results</pre>
       const cls = s.verdict==="geslaagd"?"ok":s.verdict==="onbeslist"?"un":"no";
       const P = X(d.pass_line);
       const nearLine = X(hi) > P-6 && X(hi) < P+6;
-      const leftSide = (X(hi)>78 || (nearLine && X(lo) < P-20)) && X(lo) >= 14;
-      const pos = leftSide ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${Math.max(X(hi), nearLine?P+6:0).toFixed(1)}%;margin-left:8px`;
+      // A label sits left of its band when the band starts far enough in
+      // for the label to fit, otherwise right of it; it never leaves the rail
+      // on either side, and never detaches from its own band.
+      const leftSide = X(hi) > 62 && X(lo) >= 30;
+      const pos = leftSide ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${Math.min(X(hi), 62).toFixed(1)}%;margin-left:8px`;
       return `<div class="band ${cls}" style="left:${X(lo).toFixed(1)}%;width:${Math.max(1.2,X(hi)-X(lo)).toFixed(1)}%;top:${6+i*14}px" title="${esc(short(r))} ${pct(s.accuracy)}%"></div><div class="lab" style="${pos};top:${i*14}px">${esc(short(r))} ${pct(s.accuracy)}</div>`;
     }).join("");
     const n = real.length ? real[0].sections.find(x=>x.id===sec.id).n : 0;
