@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-09T19:47:15Z",
+ "generated_at": "2026-09-09T19:47:45Z",
  "pass_line": 0.8,
  "sections": [
   {
@@ -686,17 +686,17 @@
    "error_share": 0.0,
    "failure_reason": null,
    "consistency": {
-    "items_probed": 120,
+    "items_probed": 160,
     "order_reversed": {
-     "n": 120,
-     "flips": 26,
-     "flip_rate": 0.2167,
+     "n": 160,
+     "flips": 40,
+     "flip_rate": 0.25,
      "reading": "share of answers that changed content when the options were listed back to front"
     },
     "register_swapped": {
-     "n": 120,
-     "flips": 13,
-     "flip_rate": 0.1083,
+     "n": 160,
+     "flips": 14,
+     "flip_rate": 0.0875,
      "reading": "share of answers that changed when the instruction was phrased informally"
     }
    },

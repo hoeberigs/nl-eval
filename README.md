@@ -42,13 +42,14 @@ verdicts and never computes them.
 
 | Model | Score (n=1533) | Verdict | Open or failed sections | Order-flip | Register-flip | Held-out |
 |---|---:|---|---|---:|---:|---:|
-| claude-haiku-4-5 | 89.8% | passed | all sections passed | 20.8% | 1.7% | 91.4% (no sign of contamination) |
-| gpt-5-mini | 88.9% | undecided | Spelling en grammatica undecided | 21.7% | 10.8% | 90.8% (no sign of contamination) |
+| claude-haiku-4-5 | 89.8% | passed | all sections passed | 18.1% | 3.1% | 91.4% (no sign of contamination) |
+| gpt-5-mini | 88.9% | undecided | Spelling en grammatica undecided | 25.0% | 8.8% | 90.8% (no sign of contamination) |
 | GroNLP/gpt2-small-dutch | 87.3% on BLiMP-NL only, by likelihood | incomplete | | | | |
-| gpt-5-nano | 81.2% | failed | Spelling en grammatica gezakt (74.0%); Lezen undecided; KNM undecided | 37.5% | 8.3% | 79.1% (no sign of contamination) |
-| qwen2.5:7b (local) | 74.5% | failed | Spelling en grammatica undecided; Schrijven undecided; Lezen undecided; Woordenschat undecided; KNM gezakt (61.3%); ONA en register undecided | 30.8% | 1.7% | not run |
+| gpt-5-nano | 81.2% | failed | Spelling en grammatica gezakt (74.0%); Lezen undecided; KNM undecided | 46.2% | 8.1% | 79.1% (no sign of contamination) |
+| qwen2.5:7b (local) | 74.4% | failed | Spelling en grammatica undecided; Schrijven undecided; Lezen undecided; Woordenschat undecided; KNM gezakt (61.3%); ONA en register undecided | 30.8% | 1.7% | not run |
+| gemma3:4b (local) | 68.2% | failed | Taalvorm undecided; Spelling en grammatica gezakt (64.8%); Schrijven undecided; Lezen gezakt (66.7%); Woordenschat undecided; KNM undecided; ONA en register undecided | not run | not run | not run |
 | gemini-3.6-flash | did not run | did not run | provider quota error | | | |
-| always-a (control) | 34.3% | failed | every section failed | not run | not run | not run |
+| always-a (control) | 34.1% | failed | every section failed | not run | not run | not run |
 | echo (control) | 0.0% | failed | every section failed | not run | not run | not run |
 
 Three readings from the board:
