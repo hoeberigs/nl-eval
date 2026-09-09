@@ -31,8 +31,13 @@ PASS_LINE = 0.80
 SECTIONS = [
     {
         "id": "taalvorm", "label": "Taalvorm", "verdict": True,
-        "categories": ["de_het", "diminutives", "spelling", "word_order", "variants", "formatting", "blimp"],
-        "what": "lidwoorden, verkleinwoorden, spelling, woordvolgorde, varianten, notatie en de BLiMP-NL minimale paren",
+        "categories": ["word_order", "variants", "formatting", "blimp"],
+        "what": "woordvolgorde, Belgische en Nederlandse varianten, notatieconventies en de BLiMP-NL minimale paren",
+    },
+    {
+        "id": "grammatica", "label": "Spelling en grammatica", "verdict": True,
+        "categories": ["de_het", "diminutives", "spelling", "werkwoordspelling", "taaladvies"],
+        "what": "lidwoorden, verkleinwoorden, tussen-n en samenstellingen, werkwoordspelling (d/t) en de twijfelgevallen van Taaladvies",
     },
     {
         "id": "schrijven", "label": "Schrijven", "verdict": True,
@@ -134,6 +139,7 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
 
     consistency: dict[str, dict] = {}
     heldout: dict[str, dict] = {}
+    canary: dict[str, dict] = {}
     mains: list[tuple[str, dict]] = []
 
     for f in sorted(results_dir.glob("*.json")):
@@ -141,6 +147,9 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
         if not doc:
             continue
         stem = f.stem
+        if stem.startswith("canary__") and "reproduced" in doc:
+            canary[doc.get("model", stem)] = {"reproduced": doc["reproduced"], "probes": doc["probes"], "verdict": doc.get("verdict")}
+            continue
         if stem.startswith("consistency__") and "consistency" in doc:
             rep = {k: v for k, v in doc["consistency"].items() if k != "detail"}
             consistency[doc.get("model", stem)] = rep
@@ -187,6 +196,8 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
                 "sections": sections,
                 "verdict": overall,
                 "failed": failed,
+                "est_cost_eur": s.get("est_cost_eur"),
+                "canary": canary.get(model),
                 "error_share": round(n_err / len(items), 3) if items else 0.0,
                 "failure_reason": reason,
                 "consistency": consistency.get(model),

@@ -1,11 +1,15 @@
 {
  "note": "Commitment to a held-out set. Ids and salted answer hashes only: neither the questions nor the answers are published, and the salt is kept with the private items so the hashes cannot be brute-forced.",
- "items": 73,
+ "items": 163,
  "categories": [
+  "heldout_civics",
   "heldout_de_het",
   "heldout_false_friends",
   "heldout_idioms",
-  "heldout_spelling"
+  "heldout_lezen",
+  "heldout_spelling",
+  "heldout_taaladvies",
+  "heldout_werkwoordspelling"
  ],
  "entries": [
   {
@@ -372,6 +376,456 @@
    "id": "h-spelling-015",
    "category": "heldout_spelling",
    "answer_hash": "7a4cf1b2f8747f0dcc9d425e7bb506d0"
+  },
+  {
+   "id": "ho-civics-001",
+   "category": "heldout_civics",
+   "answer_hash": "9cfa6aec64efc5bb651856476a10f606"
+  },
+  {
+   "id": "ho-civics-002",
+   "category": "heldout_civics",
+   "answer_hash": "b7c092f14467cce3c3360063e6e127fa"
+  },
+  {
+   "id": "ho-civics-003",
+   "category": "heldout_civics",
+   "answer_hash": "bae1c5fc199d0a010abc0b65006e38bd"
+  },
+  {
+   "id": "ho-civics-004",
+   "category": "heldout_civics",
+   "answer_hash": "16db24a4f53a4449fc9a1dff38a217d9"
+  },
+  {
+   "id": "ho-civics-005",
+   "category": "heldout_civics",
+   "answer_hash": "135e8226776434563cbfdf373ad1ce61"
+  },
+  {
+   "id": "ho-civics-006",
+   "category": "heldout_civics",
+   "answer_hash": "eb59908c456a2ec98e43d3fde487d5da"
+  },
+  {
+   "id": "ho-civics-007",
+   "category": "heldout_civics",
+   "answer_hash": "5e535c8e9e858ca5a03e170b841dd651"
+  },
+  {
+   "id": "ho-civics-008",
+   "category": "heldout_civics",
+   "answer_hash": "bfb1cba9e579a7a88e661ccd93e7f28b"
+  },
+  {
+   "id": "ho-civics-009",
+   "category": "heldout_civics",
+   "answer_hash": "4c9e9c22b274313ffecb2b392882dc64"
+  },
+  {
+   "id": "ho-civics-010",
+   "category": "heldout_civics",
+   "answer_hash": "2ab3415bff9f964117f7ad836a5766ca"
+  },
+  {
+   "id": "ho-lezen-001",
+   "category": "heldout_lezen",
+   "answer_hash": "c70e0b1022860ca4f9450d96ec45f89f"
+  },
+  {
+   "id": "ho-lezen-002",
+   "category": "heldout_lezen",
+   "answer_hash": "b1a33b4edc4ac0edb55545caf06ba663"
+  },
+  {
+   "id": "ho-lezen-003",
+   "category": "heldout_lezen",
+   "answer_hash": "a47893c1562725233e95b3667984b7d0"
+  },
+  {
+   "id": "ho-lezen-004",
+   "category": "heldout_lezen",
+   "answer_hash": "e5efea785c4a218f9f4776a864ea7aed"
+  },
+  {
+   "id": "ho-lezen-005",
+   "category": "heldout_lezen",
+   "answer_hash": "9caef23c840d100779d3df1e38e412bf"
+  },
+  {
+   "id": "ho-lezen-006",
+   "category": "heldout_lezen",
+   "answer_hash": "045306fdcc0bd21e86e480a12cc45b55"
+  },
+  {
+   "id": "ho-lezen-007",
+   "category": "heldout_lezen",
+   "answer_hash": "85614e229b87bb6282363c960b1ce908"
+  },
+  {
+   "id": "ho-lezen-008",
+   "category": "heldout_lezen",
+   "answer_hash": "16a3966ebc45859863e93a34ab7a44ec"
+  },
+  {
+   "id": "ho-lezen-009",
+   "category": "heldout_lezen",
+   "answer_hash": "5a9cf9842764e43dc7e85cc825994048"
+  },
+  {
+   "id": "ho-lezen-010",
+   "category": "heldout_lezen",
+   "answer_hash": "4f98c0d728c7c4389ad7f42bc55d7d2b"
+  },
+  {
+   "id": "ho-lezen-011",
+   "category": "heldout_lezen",
+   "answer_hash": "3018088f4e87c52744cb0bd7c6399043"
+  },
+  {
+   "id": "ho-lezen-012",
+   "category": "heldout_lezen",
+   "answer_hash": "a70dbda72fdbfc21c1bcb45545ab270d"
+  },
+  {
+   "id": "ho-lezen-013",
+   "category": "heldout_lezen",
+   "answer_hash": "c0990fac2ca49883f8488f585d573a16"
+  },
+  {
+   "id": "ho-lezen-014",
+   "category": "heldout_lezen",
+   "answer_hash": "e40f4ecc32efa25e7c6f70080889ee99"
+  },
+  {
+   "id": "ho-lezen-015",
+   "category": "heldout_lezen",
+   "answer_hash": "81ac60e65bef02231f02d79282a9ebba"
+  },
+  {
+   "id": "ho-lezen-016",
+   "category": "heldout_lezen",
+   "answer_hash": "cec7c414a05e24bfc92fa5c7b56a7d3f"
+  },
+  {
+   "id": "ho-lezen-017",
+   "category": "heldout_lezen",
+   "answer_hash": "601c889b9244939b23ab4325eb7d5f92"
+  },
+  {
+   "id": "ho-lezen-018",
+   "category": "heldout_lezen",
+   "answer_hash": "774452604cf963df4bbb98c60cc87e85"
+  },
+  {
+   "id": "ho-lezen-019",
+   "category": "heldout_lezen",
+   "answer_hash": "b9dd860dc8091df2954151a73a2ce6d4"
+  },
+  {
+   "id": "ho-lezen-020",
+   "category": "heldout_lezen",
+   "answer_hash": "073c1df861de4d40cd8d645394f6b3cc"
+  },
+  {
+   "id": "ho-taaladvies-001",
+   "category": "heldout_taaladvies",
+   "answer_hash": "751f53942e040d26a3a000e828ef8ed9"
+  },
+  {
+   "id": "ho-taaladvies-002",
+   "category": "heldout_taaladvies",
+   "answer_hash": "773e0a44ef7e21081146e1846b632708"
+  },
+  {
+   "id": "ho-taaladvies-003",
+   "category": "heldout_taaladvies",
+   "answer_hash": "6229310c37b135b24c10b0b069b84649"
+  },
+  {
+   "id": "ho-taaladvies-004",
+   "category": "heldout_taaladvies",
+   "answer_hash": "62e016b5853ed70b0a3c75b8788f4e33"
+  },
+  {
+   "id": "ho-taaladvies-005",
+   "category": "heldout_taaladvies",
+   "answer_hash": "ec0bc4e648b25fe277b72cfa41a33eab"
+  },
+  {
+   "id": "ho-taaladvies-006",
+   "category": "heldout_taaladvies",
+   "answer_hash": "57655a36a455ec82cd9f1bc4589c6b34"
+  },
+  {
+   "id": "ho-taaladvies-007",
+   "category": "heldout_taaladvies",
+   "answer_hash": "2dd86145ffce8d562df447df8eefe751"
+  },
+  {
+   "id": "ho-taaladvies-008",
+   "category": "heldout_taaladvies",
+   "answer_hash": "9f2116f07eb0b374be12a32f7c08d183"
+  },
+  {
+   "id": "ho-taaladvies-009",
+   "category": "heldout_taaladvies",
+   "answer_hash": "a5daa1b3453019ec0a4566fb69af21f3"
+  },
+  {
+   "id": "ho-taaladvies-010",
+   "category": "heldout_taaladvies",
+   "answer_hash": "62691392fdc620f52452d3327e530960"
+  },
+  {
+   "id": "ho-taaladvies-011",
+   "category": "heldout_taaladvies",
+   "answer_hash": "25c5c701746dd1ee45184146a40eeb60"
+  },
+  {
+   "id": "ho-taaladvies-012",
+   "category": "heldout_taaladvies",
+   "answer_hash": "4882e59875e2d1185126f1e73b8c4785"
+  },
+  {
+   "id": "ho-taaladvies-013",
+   "category": "heldout_taaladvies",
+   "answer_hash": "7230566162006783f192299ce92f0c16"
+  },
+  {
+   "id": "ho-taaladvies-014",
+   "category": "heldout_taaladvies",
+   "answer_hash": "aae6f5501bc67f1e132bef34cc755e12"
+  },
+  {
+   "id": "ho-taaladvies-015",
+   "category": "heldout_taaladvies",
+   "answer_hash": "cf3da2181f8c65a7b088f6d89ad46e7a"
+  },
+  {
+   "id": "ho-taaladvies-016",
+   "category": "heldout_taaladvies",
+   "answer_hash": "47733bbf3f43a612e3d01525fd0381f1"
+  },
+  {
+   "id": "ho-taaladvies-017",
+   "category": "heldout_taaladvies",
+   "answer_hash": "0c470664a26f22a058f23d5aa447e9ed"
+  },
+  {
+   "id": "ho-taaladvies-018",
+   "category": "heldout_taaladvies",
+   "answer_hash": "1f1ac9c9ea48b03c59b4a61527524914"
+  },
+  {
+   "id": "ho-taaladvies-019",
+   "category": "heldout_taaladvies",
+   "answer_hash": "00dd49dfe6a76b7f9269177e4e6faea4"
+  },
+  {
+   "id": "ho-taaladvies-020",
+   "category": "heldout_taaladvies",
+   "answer_hash": "5cd87ec3357fb242a76aad1429d05a8c"
+  },
+  {
+   "id": "ho-taaladvies-021",
+   "category": "heldout_taaladvies",
+   "answer_hash": "c590f6a387894b7a83135a863b2ebc5f"
+  },
+  {
+   "id": "ho-taaladvies-022",
+   "category": "heldout_taaladvies",
+   "answer_hash": "955945259b123d7358811cc7efa91d38"
+  },
+  {
+   "id": "ho-taaladvies-023",
+   "category": "heldout_taaladvies",
+   "answer_hash": "21d5960e1466fe3f32a8b9454800d1af"
+  },
+  {
+   "id": "ho-taaladvies-024",
+   "category": "heldout_taaladvies",
+   "answer_hash": "e556fed65454235c49877217d7a48f8b"
+  },
+  {
+   "id": "ho-taaladvies-025",
+   "category": "heldout_taaladvies",
+   "answer_hash": "592ad85528a8972141c36e34918b5d3c"
+  },
+  {
+   "id": "ho-taaladvies-026",
+   "category": "heldout_taaladvies",
+   "answer_hash": "f9f0967a9e6dd847813fc1bdc1e6bd8e"
+  },
+  {
+   "id": "ho-taaladvies-027",
+   "category": "heldout_taaladvies",
+   "answer_hash": "6addc5849e2e0003603eac2e57250670"
+  },
+  {
+   "id": "ho-taaladvies-028",
+   "category": "heldout_taaladvies",
+   "answer_hash": "01f1f8076f6e54ccc58e278f2f8d879f"
+  },
+  {
+   "id": "ho-taaladvies-029",
+   "category": "heldout_taaladvies",
+   "answer_hash": "136d42406972b72dc90aac7f2a1d3dd6"
+  },
+  {
+   "id": "ho-taaladvies-030",
+   "category": "heldout_taaladvies",
+   "answer_hash": "cd7a997ce357b128c06e8b7c68671c87"
+  },
+  {
+   "id": "ho-werkwoordspelling-001",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "f65d1300f929463dbb9193d0e2d9b2d1"
+  },
+  {
+   "id": "ho-werkwoordspelling-002",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "8f656efbbda2c9646f3b646252d1544b"
+  },
+  {
+   "id": "ho-werkwoordspelling-003",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "c1b891a6c85dd7b553c22f10dd6b3a0d"
+  },
+  {
+   "id": "ho-werkwoordspelling-004",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "37566252c805f3ebb7b272fb07330689"
+  },
+  {
+   "id": "ho-werkwoordspelling-005",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "3a79d5eb1bf097db6122d3b501735565"
+  },
+  {
+   "id": "ho-werkwoordspelling-006",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "f8d048678a29f4dd10c4b4c7e3973b38"
+  },
+  {
+   "id": "ho-werkwoordspelling-007",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "16028f47d6202a162e888f4bc156c366"
+  },
+  {
+   "id": "ho-werkwoordspelling-008",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "0ee94650cd9c64fd65846af36a736163"
+  },
+  {
+   "id": "ho-werkwoordspelling-009",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "3e819780efa7d7296c0b10784e938e1c"
+  },
+  {
+   "id": "ho-werkwoordspelling-010",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "e19931ae1ac480c649924ac0d132e1b6"
+  },
+  {
+   "id": "ho-werkwoordspelling-011",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "3df2e7c1de34190c7793870e691b49c8"
+  },
+  {
+   "id": "ho-werkwoordspelling-012",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "55d06303231e35de285807a48b048b0f"
+  },
+  {
+   "id": "ho-werkwoordspelling-013",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "eca4bc8c6f3e72474e00417fb236a5f8"
+  },
+  {
+   "id": "ho-werkwoordspelling-014",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "20f732d5773929a669d4b9367ef2da32"
+  },
+  {
+   "id": "ho-werkwoordspelling-015",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "b91d76386572537ccb1ac7bdb2dbf70d"
+  },
+  {
+   "id": "ho-werkwoordspelling-016",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "e7a949dd3cad423c83182ac01db37bf9"
+  },
+  {
+   "id": "ho-werkwoordspelling-017",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "7dd079d7ece4f976991769a4fb4717a0"
+  },
+  {
+   "id": "ho-werkwoordspelling-018",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "6cecfde5d20111ef888347b1fe6f918d"
+  },
+  {
+   "id": "ho-werkwoordspelling-019",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "050dc62c014c1a270b8627c7833ed4a4"
+  },
+  {
+   "id": "ho-werkwoordspelling-020",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "6b161ed8c77065eb92b5c49e4d452e4f"
+  },
+  {
+   "id": "ho-werkwoordspelling-021",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "fcd938d489640b5087bd85c96e5b9fea"
+  },
+  {
+   "id": "ho-werkwoordspelling-022",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "3fda9d42136e06549ba915b3b27e4fab"
+  },
+  {
+   "id": "ho-werkwoordspelling-023",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "19f6686ef48926bba45d81b185be17f2"
+  },
+  {
+   "id": "ho-werkwoordspelling-024",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "253743342629162f0f1e15f0cd0c4136"
+  },
+  {
+   "id": "ho-werkwoordspelling-025",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "db03e7ddbc316573d47ae31358ec9231"
+  },
+  {
+   "id": "ho-werkwoordspelling-026",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "947bf5bfd65b2ae35178fce126af2fcb"
+  },
+  {
+   "id": "ho-werkwoordspelling-027",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "d2a3884765d84f2c901926d57e76e3aa"
+  },
+  {
+   "id": "ho-werkwoordspelling-028",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "a8b67fa62e10924b5067534f952abaee"
+  },
+  {
+   "id": "ho-werkwoordspelling-029",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "8a7904ae802087352001d2e9b67ea3d6"
+  },
+  {
+   "id": "ho-werkwoordspelling-030",
+   "category": "heldout_werkwoordspelling",
+   "answer_hash": "dcc1428a8563e0e9f770131dba4351c1"
   }
  ]
 }

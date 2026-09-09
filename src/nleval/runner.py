@@ -82,18 +82,30 @@ def _checkpoint_path(out: Path | None) -> Path | None:
     return out.with_suffix(out.suffix + ".partial") if out else None
 
 
-def _load_checkpoint(path: Path | None) -> dict[str, dict]:
-    if not path:
-        return {}
-    # A finished run keeps its checkpoint under .done. When the item set grows
-    # later, resuming from it means paying only for the new items.
-    if not path.exists():
-        finished = path.with_suffix(path.suffix + ".done")
-        if not finished.exists():
-            return {}
-        path = finished
+def _load_checkpoint(path: Path | None, out: Path | None = None) -> dict[str, dict]:
+    """Everything already scored for this output: the finished report first,
+    then any live or finished checkpoint on top.
+
+    The report is the durable record. Resuming from the checkpoint alone
+    lost a thousand answers once, because a top-up run's checkpoint replaced
+    the previous one and the next resume only knew about the top-up.
+    """
     done: dict[str, dict] = {}
-    for line in path.read_text(encoding="utf-8").splitlines():
+    if out and out.exists():
+        try:
+            for r in json.loads(out.read_text(encoding="utf-8")).get("results", []):
+                if "id" in r and not r.get("error"):
+                    done[r["id"]] = r
+        except (json.JSONDecodeError, OSError):
+            pass
+    if not path:
+        return done
+    candidates = [path.with_suffix(path.suffix + ".done"), path]
+    lines: list[str] = []
+    for c in candidates:
+        if c.exists():
+            lines.extend(c.read_text(encoding="utf-8").splitlines())
+    for line in lines:
         line = line.strip()
         if not line:
             continue
@@ -154,7 +166,7 @@ def run(
         )
 
     ckpt = _checkpoint_path(out)
-    done = _load_checkpoint(ckpt) if resume else {}
+    done = _load_checkpoint(ckpt, out) if resume else {}
     todo = [it for it in items if it.id not in done]
     if done and progress:
         print(f"  resuming: {len(done)} already scored, {len(todo)} to go",
@@ -202,8 +214,10 @@ def run(
     return Report(model=model, results=results, chance=chance_baseline(items))
 
 
-def write_report(report: Report, out: Path) -> dict:
+def write_report(report: Report, out: Path, extra: dict | None = None) -> dict:
     summary = report.summary()
+    if extra:
+        summary.update(extra)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(
         json.dumps(

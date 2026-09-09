@@ -186,7 +186,11 @@ def main(argv=None) -> int:
         except providers.ProviderError as e:
             print(str(e), file=sys.stderr)
             return 2
-        print(json.dumps(run_canary(call), indent=2, ensure_ascii=False))
+        result = {"model": args.model, "provider": args.provider, **run_canary(call)}
+        if args.out and args.out != "results/run.json":
+            out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps(result, indent=1, ensure_ascii=False))
+        print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
 
     items = _load(args)
@@ -243,7 +247,7 @@ def main(argv=None) -> int:
             if args.human_ratings:
                 print(f"human alignment skipped: {e}", file=sys.stderr)
 
-    summary = write_report(report, Path(args.out))
+    summary = write_report(report, Path(args.out), extra={"provider": args.provider, "est_cost_eur": estimate_cost(items, args.model, provider=args.provider)["est_eur"]})
     print(json.dumps(summary, indent=2, ensure_ascii=False))
     return 0
 

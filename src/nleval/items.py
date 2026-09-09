@@ -133,10 +133,13 @@ def _position_balance(items: list[Item], tolerance: float = 0.15) -> list[str]:
     tolerance means the suite rewards a fixed guess.
     """
     out: list[str] = []
+    # Grouped by category and option count: a category that mixes two- and
+    # three-option items has a different fair share for each, and judging
+    # both against the larger count flags a balanced key as skewed.
     by_cat: dict[str, list[Item]] = {}
     for it in items:
         if it.type == "mcq":
-            by_cat.setdefault(it.category, []).append(it)
+            by_cat.setdefault(f"{it.category} ({len(it.choices)} opties)", []).append(it)
 
     for cat, its in sorted(by_cat.items()):
         n = len(its)

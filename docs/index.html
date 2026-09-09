@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Het inburgeringsexamen voor taalmodellen</title>
 <meta name="description" content="nl-eval: een Nederlandse benchmark voor taalmodellen, opgezet als inburgeringsexamen. Zes onderdelen met een oordeel, zonder beoordelaarsmodel, met held-out controle en consistentieproeven.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Phudu:wght@600;700&family=Sofia+Sans+Condensed:wght@400;600;700&family=Sofia+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts.css">
 <style>
 :root{
   --blue:#081858;--blue-2:#0b1f5b;--ink:#f4f6fb;--dim:#a9b8e0;--dim-2:#7f90c4;--yel:#ffc917;--seam:rgba(255,255,255,.16);
   --tile:#e9ebee;--tile-2:#dfe2e7;--tileink:#14203f;--tilemute:#4c5a83;--rule:#b9c0cf;
-  --disp:"Phudu","Sofia Sans Condensed",system-ui,sans-serif;
+  --disp:"Sofia Sans Condensed","Sofia Sans",system-ui,sans-serif;
   --cond:"Sofia Sans Condensed","Sofia Sans",system-ui,sans-serif;
   --text:"Sofia Sans",system-ui,sans-serif;
 }
@@ -35,7 +33,7 @@ pre::-webkit-scrollbar{height:8px}pre::-webkit-scrollbar-thumb{background:var(--
 /* ---------- the board ---------- */
 .board{background:var(--blue);color:var(--ink);font-family:var(--cond);line-height:1.2;display:grid;grid-template-rows:auto 1fr}
 .strip{display:flex;justify-content:space-between;align-items:baseline;gap:16px;height:74px;border-bottom:2px solid var(--yel);padding:0 clamp(16px,3.3vw,48px)}
-.strip h1{font-family:var(--disp);font-size:clamp(20px,2.2vw,31px);font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.05}
+.strip h1{font-family:var(--disp);font-size:clamp(20px,2.2vw,31px);font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1.05}
 .stamp{color:var(--yel);font-family:var(--cond);font-size:clamp(15px,1.6vw,24px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .cols{display:grid;grid-template-columns:minmax(0,780px) minmax(0,1fr);padding:0 clamp(16px,3.3vw,48px) 0}
 .left{padding-right:36px;border-right:2px solid var(--yel)}
@@ -45,7 +43,7 @@ table{width:100%;border-collapse:collapse}
 th{font-family:var(--cond);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:left;padding:10px 6px;border-bottom:1px solid var(--seam);white-space:nowrap}
 th button{all:unset;cursor:pointer;color:inherit;letter-spacing:inherit;text-transform:inherit}
 th button:hover,th button:focus-visible{color:var(--ink)}
-th[aria-sort="descending"] button::after{content:" ↓"}th[aria-sort="ascending"] button::after{content:" ↑"}
+th button svg{width:10px;height:10px;margin-left:4px;vertical-align:-1px;display:none}th[aria-sort="descending"] button svg.dn,th[aria-sort="ascending"] button svg.up{display:inline}
 td{padding:9px 6px;border-bottom:1px solid var(--seam);vertical-align:top}
 .score{font-family:var(--cond);font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;width:90px;padding-top:12px;white-space:nowrap}
 .score small{display:block;font-family:var(--cond);font-size:13px;font-weight:400;color:var(--dim);margin-top:4px}
@@ -58,12 +56,15 @@ td{padding:9px 6px;border-bottom:1px solid var(--seam);vertical-align:top}
 .flap{display:inline-block;min-width:150px;text-align:center;font-family:var(--cond);font-size:18px;font-weight:700;letter-spacing:.08em;padding:8px 12px;background:var(--ink);color:var(--blue);position:relative;text-transform:uppercase}
 .flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(8,24,88,.35)}
 .flap.no{background:none;color:var(--yel);padding-left:0;text-align:left}
-tr.dim td{opacity:.5}
+tr.dim .score,tr.dim .name,tr.dim .via,tr.dim .via s,tr.dim .prov,tr.dim .score small{color:var(--dim-2)}
+tr.dim .flap{background:var(--dim-2);color:var(--blue)}
+tr.dim .flap.no{background:none;color:#e0b632}
+tr.dim .rem{color:#e0b632}
 tr.run{cursor:default}
 tr.run:hover td,tr.run:focus-within td{background:rgba(255,255,255,.04)}
 .detail{display:none;font-size:14px;color:var(--dim);margin-top:6px;font-variant-numeric:tabular-nums}
 .detail span{display:inline-block;margin-right:12px;white-space:nowrap}
-tr.run:hover .detail,tr.run:focus-within .detail,tr.open .detail{display:block}
+tr.open .detail{display:block}
 .rowbtn{all:unset;cursor:pointer;display:block;width:100%}
 .rowbtn:focus-visible{outline:2px solid var(--yel);outline-offset:3px}
 
@@ -75,9 +76,10 @@ tr.run:hover .detail,tr.run:focus-within .detail,tr.open .detail{display:block}
 .rail{position:relative;height:56px;border-bottom:1px solid var(--seam)}
 .pass{position:absolute;left:60%;top:-6px;bottom:-1px;width:2px;background:var(--yel)}
 .band{position:absolute;height:10px}
-.band.ok{background:var(--ink)}.band.un{background:var(--yel)}.band.no{background:transparent;border:1.5px solid var(--dim)}
-.lab{position:absolute;font-size:13px;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums}
-.axis{display:flex;justify-content:space-between;font-size:13px;color:var(--dim);padding-top:6px;font-variant-numeric:tabular-nums}
+.band.ok{background:var(--ink)}.band.un{height:4px;margin-top:3px;background:var(--yel);outline:1px solid var(--yel);outline-offset:2px}.band.no{background:transparent;border:1.5px solid var(--dim)}
+.lab{position:absolute;font-size:13px;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums;background:var(--blue);padding:0 3px;z-index:1}
+.pass{z-index:0}
+.axis{font-size:13px;color:var(--dim);padding-top:6px;font-variant-numeric:tabular-nums}
 .axis .p{color:var(--yel)}
 .legend{margin-top:18px;background:var(--ink);color:var(--blue);padding:12px 16px;font-size:15px;line-height:1.5;font-family:var(--text);display:inline-block}
 
@@ -113,6 +115,7 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
 }
 @media (max-width:700px){
   body{font-size:17px}
+  .strip{height:auto;flex-wrap:wrap;padding:12px clamp(16px,3.3vw,48px) 10px;gap:4px 16px}.stamp{white-space:normal}
   .flapc{width:auto}.flap{min-width:0;font-size:14px;padding:6px 8px}
   .score{font-size:28px;width:72px}
   .name{font-size:20px}
@@ -134,9 +137,9 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
       <div class="tbl">
       <table id="board">
         <thead><tr>
-          <th aria-sort="descending"><button type="button" data-sort="accuracy">Score</button></th>
-          <th><button type="button" data-sort="model">Model · via</button></th>
-          <th><button type="button" data-sort="verdict">Uitslag</button></th>
+          <th aria-sort="descending"><button type="button" data-sort="accuracy">Score<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
+          <th><button type="button" data-sort="model">Model · via<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
+          <th><button type="button" data-sort="verdict">Uitslag<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
         </tr></thead>
         <tbody id="rows"><tr><td colspan="3" style="color:var(--dim)">Uitslagen laden…</td></tr></tbody>
       </table>
@@ -146,7 +149,7 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
     <div class="right perron" id="perron">
       <h2 id="perron-head">Perron · per onderdeel tegen de slaaglijn van 80%</h2>
       <div id="tracks"></div>
-      <div class="axis"><span>50%</span><span>60</span><span>70</span><span class="p">80 slaaglijn</span><span>90</span><span>100%</span></div>
+      <div class="axis" id="axis"></div>
     </div>
   </div>
 </header>
@@ -236,7 +239,7 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
 
 <section class="s" id="draaien">
   <h2>Zelf draaien</h2>
-  <p>De suite is een Python-pakket met een uitgavenplafond dat wordt afgedwongen, niet geadviseerd. Lokale modellen kosten niets; een gehoste run op alle opgaven kost doorgaans onder een euro.</p>
+  <p>De suite is een Python-pakket met een uitgavenplafond dat wordt afgedwongen, niet geadviseerd. Lokale modellen kosten niets; <span id="cost">de geschatte kosten per gehoste run staan in elk rapport</span>.</p>
 <pre>pip install -e .
 nl-eval --suite all --provider ollama --model qwen2.5:7b --out results/ollama__qwen2.5-7b.json
 nl-eval --suite all --provider anthropic --model claude-haiku-4-5-20251001 --max-spend 0.50 --out results/haiku.json
@@ -286,14 +289,16 @@ nl-eval --publish results</pre>
   document.getElementById("passline").textContent = pct(d.pass_line).replace(",0","") + "%";
   document.getElementById("perron-head").textContent = "Perron · per onderdeel tegen de slaaglijn van " + pct(d.pass_line).replace(",0","") + "%";
   document.getElementById("foot").textContent = `${d.runs.length} runs · bijgewerkt ${stamp}`;
+  { const costs = d.runs.filter(r=>r.est_cost_eur!=null && !r.is_control && r.provider!=="ollama" && r.provider.indexOf("hf")!==0).map(r=>r.est_cost_eur);
+    if (costs.length) document.getElementById("cost").textContent = `de duurste gehoste run op het bord is geschat op € ${Math.max(...costs).toFixed(2).replace(".",",")} voor alle ${d.runs[0].n} opgaven`; }
 
   function via(r){
     const parts = [];
     for (const s of r.sections){
       if (!s.verdict_bearing || s.verdict==="niet afgelegd") continue;
       if (s.verdict==="geslaagd") parts.push(`<span>${esc(s.label)}</span>`);
-      else if (s.verdict==="onbeslist") parts.push(`<span class="u">${esc(s.label)}</span>`);
-      else parts.push(`<s>${esc(s.label)}</s>`);
+      else if (s.verdict==="onbeslist") parts.push(`<span class="u">${mark("onbeslist","#ffc917")}${esc(s.label)}</span>`);
+      else parts.push(`<s>${mark("gezakt","#a9b8e0")}${esc(s.label)}</s>`);
     }
     return parts.length ? parts.join(" · ") : '<span class="u">alleen Taalvorm</span>';
   }
@@ -357,13 +362,18 @@ nl-eval --publish results</pre>
 
   // perron
   const real = d.runs.filter(r=>!r.failed && !r.is_control && r.sections.filter(s=>s.n>0 && s.verdict_bearing).length>1);
-  const X = v => Math.max(0, Math.min(100, (v-0.5)/0.5*100));
+  const lows = real.flatMap(r=>r.sections.filter(x=>x.n>0 && x.verdict_bearing).map(x=>x.ci95[0]));
+  const axisMin = Math.max(0, Math.floor(Math.min(...lows, d.pass_line-0.1)*10)/10);
+  const X = v => Math.max(0, Math.min(100, (v-axisMin)/(1-axisMin)*100));
+  { const ticks=[]; for (let t=axisMin; t<=1.0001; t+=0.1){ const v=Math.round(t*100); const isPass=Math.abs(t-d.pass_line)<1e-6; ticks.push(`<span${isPass?' class="p"':''} style="position:absolute;left:${X(t).toFixed(1)}%;transform:translateX(-50%)">${v}${isPass?" slaaglijn":(t===axisMin||v===100?"%":"")}</span>`);} document.getElementById("axis").innerHTML=`<div style="position:relative;height:18px">${ticks.join("")}</div>`; }
   document.getElementById("tracks").innerHTML = secs.map(sec=>{
     const bands = real.map((r,i)=>{
       const s = r.sections.find(x=>x.id===sec.id); if (!s || !s.n) return "";
       const [lo,hi] = s.ci95;
       const cls = s.verdict==="geslaagd"?"ok":s.verdict==="onbeslist"?"un":"no";
-      const pos = X(hi)>78 ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${X(hi).toFixed(1)}%;margin-left:8px`;
+      const P = X(d.pass_line);
+      const nearLine = X(hi) > P-6 && X(hi) < P+6;
+      const pos = (X(hi)>78 || (nearLine && X(lo) < P-20)) ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${Math.max(X(hi), nearLine?P+6:0).toFixed(1)}%;margin-left:8px`;
       return `<div class="band ${cls}" style="left:${X(lo).toFixed(1)}%;width:${Math.max(1.2,X(hi)-X(lo)).toFixed(1)}%;top:${6+i*14}px" title="${esc(short(r))} ${pct(s.accuracy)}%"></div><div class="lab" style="${pos};top:${i*14}px">${esc(short(r))} ${pct(s.accuracy)}</div>`;
     }).join("");
     const n = real.length ? real[0].sections.find(x=>x.id===sec.id).n : 0;
