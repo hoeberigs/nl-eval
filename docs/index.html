@@ -29,6 +29,7 @@ pre{background:var(--blue);color:var(--ink);padding:16px 18px;overflow-x:auto;li
 pre::-webkit-scrollbar{height:8px}pre::-webkit-scrollbar-thumb{background:var(--dim-2)}
 .wrap{padding:0 clamp(16px,3.3vw,48px)}
 .mk{vertical-align:-2px;margin-right:4px}
+.mflap{display:none}
 
 /* ---------- the board ---------- */
 .board{background:var(--blue);color:var(--ink);font-family:var(--cond);line-height:1.2;display:grid;grid-template-rows:auto 1fr}
@@ -117,7 +118,9 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
 @media (max-width:700px){
   body{font-size:17px}
   .strip{height:auto;flex-wrap:wrap;padding:12px clamp(16px,3.3vw,48px) 10px;gap:4px 16px}.stamp{white-space:normal}
-  .flapc{width:auto}.flap{min-width:0;font-size:14px;padding:6px 8px}
+  .flapc,th:last-child{display:none}
+  .mflap{display:inline-block;margin-top:8px}
+  .flap{min-width:0;font-size:14px;padding:6px 8px}
   .score{font-size:28px;width:72px}
   .name{font-size:20px}
   .track{grid-template-columns:1fr}
@@ -363,6 +366,7 @@ nl-eval --publish results</pre>
         <td class="model"><button class="rowbtn" type="button" aria-expanded="false" aria-label="Details van ${esc(label(r))}">
           <div class="name">${esc(label(r))}</div><div class="prov">${esc(PROV[r.provider]||r.provider)}</div>
           <div class="via">${via(r)}</div><div class="rem">${esc(remarks(r))}</div>
+          <span class="mflap">${flap.replace(' flip','')}</span>
           <div class="detail">${detail(r)}</div></button></td>
         <td class="flapc">${flap}</td></tr>`;
     }).join("");
