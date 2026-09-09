@@ -204,6 +204,15 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
   </div>
 </section>
 
+<section class="s" id="struikelblokken">
+  <h2>Waar de modellen struikelen</h2>
+  <p>De opgaven die de meeste modellen fout hebben, met het juiste antwoord. Dit zijn geen strikvragen: elke opgave staat openbaar in de repository en is door een persoon nagekeken. Het zegt waar het Nederlands van een model ophoudt, niet alleen hoe goed het is.</p>
+  <div class="ptbl"><table id="hardest-table">
+    <thead><tr><th>Onderdeel</th><th>Opgave</th><th>Juist</th><th>Fout bij</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+</section>
+
 <section class="s" id="controles">
   <h2>De controles zijn de vloer</h2>
   <p>Twee rijen op het bord zijn geen deelnemers. <b>always-a</b> kiest altijd de eerste optie en meet of de antwoordposities in balans zijn; <b>echo</b> herhaalt de vraag en meet of de antwoordextractie ooit iets uit niets maakt. Beide horen te zakken. Een suite waar een controle slaagt is kapot, en een bord dat zijn controles verbergt vraagt om vertrouwen in plaats van het te verdienen.</p>
@@ -402,6 +411,11 @@ nl-eval --publish results</pre>
     return `<tr><td class="v">${esc(sec.label)}</td><td>${esc(sec.what)}</td><td class="n">${s?s.n:0}</td><td>${sec.verdict?"oordeel tegen de slaaglijn":"indicatie, geen oordeel"}</td></tr>`;
   }).join("");
   const lz = ref.sections.find(x=>x.id==="lezen"); if (lz) document.getElementById("n-lezen").textContent = lz.n;
+
+  // hardest items
+  { const SEC = {}; d.sections.forEach(s=>s.categories.forEach(c=>SEC[c]=s.label));
+    const h = d.hardest || [];
+    document.querySelector("#hardest-table tbody").innerHTML = h.length ? h.map(x=>`<tr><td class="v">${esc(SEC[x.category]||x.category)}</td><td>${x.context?`<span style="color:var(--tilemute)">${esc(x.context)}</span><br>`:""}${esc(x.question)}</td><td><b>${esc(x.answer)}</b></td><td class="n">${x.missed_by.length} van ${x.of}<br><span style="font-size:13px;color:var(--tilemute)">${esc(x.missed_by.map(m=>m.replace("-20251001","")).join(", "))}</span></td></tr>`).join("") : '<tr><td colspan="4">nog geen runs</td></tr>'; }
 
   // consistency
   const cons = d.runs.filter(r=>r.consistency);

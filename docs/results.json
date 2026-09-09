@@ -1,5 +1,183 @@
 {
- "generated_at": "2026-09-09T19:47:45Z",
+ "generated_at": "2026-09-09T19:50:48Z",
+ "hardest": [
+  {
+   "id": "civics-075",
+   "category": "civics",
+   "question": "Hoe lang mag de proeftijd maximaal duren bij een vast contract?",
+   "context": "",
+   "answer": "twee maanden",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "civics-227",
+   "category": "civics",
+   "question": "Wat is de maximale proeftijd bij een arbeidscontract van meer dan twee jaar?",
+   "context": "",
+   "answer": "twee maanden",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "civics-228",
+   "category": "civics",
+   "question": "Wat is de wettelijke opzegtermijn voor een werknemer?",
+   "context": "",
+   "answer": "één maand",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "de_het-002",
+   "category": "de_het",
+   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “bestuur”?",
+   "context": "",
+   "answer": "het",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "diminutives-006",
+   "category": "diminutives",
+   "question": "Wat is het correcte verkleinwoord van “woning”?",
+   "context": "",
+   "answer": "woninkje",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "diminutives-033",
+   "category": "diminutives",
+   "question": "Wat is het verkleinwoord van “baby”?",
+   "context": "",
+   "answer": "baby'tje",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "false_friends-207",
+   "category": "false_friends",
+   "question": "Wat betekent “pregnant” in het Nederlands?",
+   "context": "",
+   "answer": "kernachtig, treffend",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "lezen-059",
+   "category": "lezen",
+   "question": "U stalt uw fiets 3 dagen. Wat betaalt u?",
+   "context": "Fietsenstalling: “De eerste 24 uur zijn gratis. Daarna € 1,35 per dag. Fietsen die langer dan 28 dagen staan, worden verwijderd.”",
+   "answer": "€ 2,70",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "civics-208",
+   "category": "civics",
+   "question": "Welk nummer bel je voor de politie als het geen spoed is?",
+   "context": "",
+   "answer": "0900-8844",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "de_het-016",
+   "category": "de_het",
+   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “gevolg”?",
+   "context": "",
+   "answer": "het",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "de_het-112",
+   "category": "de_het",
+   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “proces”?",
+   "context": "",
+   "answer": "het",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
+   "id": "de_het-118",
+   "category": "de_het",
+   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “kenmerk”?",
+   "context": "",
+   "answer": "het",
+   "missed_by": [
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  }
+ ],
  "pass_line": 0.8,
  "sections": [
   {
@@ -408,20 +586,20 @@
     "noise_floor": 0.094,
     "verdict": "no evidence of contamination: the gap is within sampling noise"
    },
-   "generated_at": "2026-09-09T19:42:40Z"
+   "generated_at": "2026-09-09T19:50:32Z"
   },
   {
    "provider": "openai",
    "model": "gpt-5-mini",
    "is_control": false,
    "n": 1533,
-   "accuracy": 0.8891,
+   "accuracy": 0.8898,
    "ci95": [
-    0.8724,
-    0.9039
+    0.8731,
+    0.9045
    ],
    "chance": 0.3502,
-   "lift": 0.5389,
+   "lift": 0.5395,
    "unparsed": 0,
    "by_category": {
     "blimp": {
@@ -561,11 +739,11 @@
     },
     "word_order": {
      "n": 50,
-     "correct": 44,
-     "accuracy": 0.88,
+     "correct": 45,
+     "accuracy": 0.9,
      "ci": [
-      0.7619,
-      0.9438
+      0.7864,
+      0.9565
      ]
     }
    },
@@ -575,11 +753,11 @@
      "label": "Taalvorm",
      "verdict_bearing": true,
      "n": 570,
-     "correct": 542,
-     "accuracy": 0.9509,
+     "correct": 543,
+     "accuracy": 0.9526,
      "ci95": [
-      0.9299,
-      0.9658
+      0.932,
+      0.9672
      ],
      "verdict": "geslaagd"
     },
@@ -707,14 +885,14 @@
      0.8537,
      0.9434
     ],
-    "public_accuracy": 0.8891,
+    "public_accuracy": 0.8898,
     "heldout_accuracy": 0.908,
-    "gap": -0.0189,
+    "gap": -0.0182,
     "n_smaller_split": 163,
-    "noise_floor": 0.0974,
+    "noise_floor": 0.0971,
     "verdict": "no evidence of contamination: the gap is within sampling noise"
    },
-   "generated_at": "2026-09-09T19:42:49Z"
+   "generated_at": "2026-09-09T19:50:34Z"
   },
   {
    "provider": "hf-dutch-gpt2-logprob",
@@ -840,13 +1018,13 @@
    "model": "gpt-5-nano",
    "is_control": false,
    "n": 1533,
-   "accuracy": 0.8121,
+   "accuracy": 0.8128,
    "ci95": [
-    0.7918,
-    0.8309
+    0.7925,
+    0.8315
    ],
    "chance": 0.3502,
-   "lift": 0.4619,
+   "lift": 0.4625,
    "unparsed": 0,
    "by_category": {
     "blimp": {
@@ -986,11 +1164,11 @@
     },
     "word_order": {
      "n": 50,
-     "correct": 45,
-     "accuracy": 0.9,
+     "correct": 46,
+     "accuracy": 0.92,
      "ci": [
-      0.7864,
-      0.9565
+      0.8116,
+      0.9685
      ]
     }
    },
@@ -1000,11 +1178,11 @@
      "label": "Taalvorm",
      "verdict_bearing": true,
      "n": 570,
-     "correct": 520,
-     "accuracy": 0.9123,
+     "correct": 521,
+     "accuracy": 0.914,
      "ci95": [
-      0.8862,
-      0.9328
+      0.8882,
+      0.9344
      ],
      "verdict": "geslaagd"
     },
@@ -1132,14 +1310,14 @@
      0.7227,
      0.8467
     ],
-    "public_accuracy": 0.8121,
+    "public_accuracy": 0.8128,
     "heldout_accuracy": 0.7914,
-    "gap": 0.0207,
+    "gap": 0.0214,
     "n_smaller_split": 163,
-    "noise_floor": 0.1212,
+    "noise_floor": 0.121,
     "verdict": "no evidence of contamination: the gap is within sampling noise"
    },
-   "generated_at": "2026-09-09T19:42:57Z"
+   "generated_at": "2026-09-09T19:50:36Z"
   },
   {
    "provider": "ollama",

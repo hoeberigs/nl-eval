@@ -127,6 +127,46 @@ def _section_rows(by_category: dict) -> tuple[list[dict], str]:
     return rows, overall
 
 
+def _hardest(mains: list[tuple[str, dict]], runs: list[dict], top: int = 12) -> list[dict]:
+    """The items most models miss, with the question and the key.
+
+    Ranked by how many full-suite, non-control, non-failed runs got them
+    wrong. Items are public, so showing them costs nothing and tells a reader
+    where Dutch is hard for models rather than only how hard.
+    """
+    eligible = {r["model"] for r in runs if not r["is_control"] and not r["failed"] and r["n"] > 600}
+    if not eligible:
+        return []
+    prompts: dict[str, dict] = {}
+    for f in Path("items").glob("*.jsonl"):
+        for line in f.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                it = json.loads(line)
+                prompts[it["id"]] = it
+    missed: dict[str, list[str]] = {}
+    label = {}
+    for stem, doc in mains:
+        model = doc["summary"].get("model", stem)
+        if model not in eligible:
+            continue
+        for r in doc.get("results", []):
+            if r.get("parsed") and not r.get("correct") and r["id"] in prompts:
+                missed.setdefault(r["id"], []).append(model)
+    ranked = sorted(missed.items(), key=lambda kv: (-len(kv[1]), kv[0]))[:top]
+    out = []
+    for iid, models in ranked:
+        it = prompts[iid]
+        q = it["prompt"].strip().split("\n")
+        question = q[-1].strip() if len(q) > 1 else q[0].strip()
+        context = " ".join(q[:-1]).strip() if len(q) > 1 else ""
+        out.append({
+            "id": iid, "category": it["category"], "question": question[:220],
+            "context": context[:260], "answer": it["answer"], "missed_by": sorted(models),
+            "of": len(eligible),
+        })
+    return out
+
+
 def _load_json(f: Path) -> dict | None:
     try:
         return json.loads(f.read_text(encoding="utf-8"))
@@ -216,6 +256,7 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
 
     payload = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "hardest": _hardest(mains, runs),
         "pass_line": PASS_LINE,
         "sections": [{k: v for k, v in sec.items()} for sec in SECTIONS],
         "items": items_meta,
