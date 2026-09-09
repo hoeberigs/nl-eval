@@ -221,7 +221,8 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
         <li><b>Geen beoordelaarsmodel.</b> Ook schrijven wordt exact gescoord: een foutieve zin verbeteren heeft één juiste uitkomst.</li>
         <li><b>Besmetting is toetsbaar.</b> Een held-out deel dat nooit is gecommit, plus een canary.</li>
         <li><b>Consistentie telt mee.</b> Hoeveel van een score omdraait bij een verstoring die het antwoord niet verandert.</li>
-        <li><b>KNM en ONA.</b> Kennis van de maatschappij en de arbeidsmarkt, die geen vertaalde benchmark bevat.</li>
+        <li><b>Onderdelen die geen vertaalde benchmark heeft.</b> Werkwoordspelling, de twijfelgevallen van Taaladvies, kennis van de maatschappij en de arbeidsmarkt, Nederlandse notatie en de Belgisch-Nederlandse varianten.</li>
+        <li><b>Menselijke moeilijkheid als maatstaf.</b> Waar een model per token kan scoren, wordt zijn moeilijkheidsprofiel op de BLiMP-NL-paradigma's vergeleken met de menselijke beoordelingen; de beoordelingen zelf vragen een account bij de uitgever en staan niet in deze repository.</li>
       </ul>
     </div>
   </div>
@@ -231,7 +232,7 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
   <h2>Wat dit examen niet meet</h2>
   <ul>
     <li><b>Spreken en Luisteren</b> zijn niet getoetst; dit is een tekstexamen.</li>
-    <li><b>Kleine onderdelen kunnen niet slagen.</b> Lezen telt <span id="n-lezen">15</span> opgaven; zelfs een foutloos model haalt daar de ondergrens van 80% niet. Dat is een tekort van de set, niet van het model, en staat als onbeslist op het bord. Meer opgaven zijn de eerstvolgende toevoeging.</li>
+    <li><b>Kleine onderdelen beslissen traag.</b> Het oordeel volgt de ondergrens van het interval, dus een onderdeel met <span id="n-lezen">60</span> opgaven (Lezen) slaagt pas bij een vrijwel foutloze score. Een onbeslist onderdeel is daardoor vaak een tekort van de set, niet van het model; meer opgaven scherpen elk oordeel.</li>
     <li><b>De slaaglijn is een keuze.</b> Tachtig procent is een analogie met “voldoende”, geen officiële norm.</li>
     <li><b>Algemene kennis is een indicatie.</b> Global-MMLU is afgeleid van MMLU, een van de meest besmette benchmarks die er zijn.</li>
     <li><b>Een run die niet reed</b> staat als zodanig op het bord, met de reden, in plaats van als nul. Een geblokkeerde API-sleutel is geen taalvaardigheid.</li>

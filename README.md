@@ -17,11 +17,11 @@ Live board: <https://hoeberigs.github.io/nl-eval/>
 | Schrijven | rewrite a sentence with exactly one error | 69 | exact match against the corrected sentence; alternative corrections accepted where more than one is right |
 | Lezen | practical passages: letters, leaflets, notices, contracts, rosters, with a question on a condition, exception, date or action; some answers are "dat staat er niet" | 60 | MCQ |
 | Woordenschat | idioms, false friends with English and German | 92 | MCQ |
-| KNM | kennis van de Nederlandse maatschappij: institutions, customs, geography, rights and duties | 80 | MCQ |
+| KNM | kennis van de Nederlandse maatschappij: institutions, customs, geography, rights and duties | 120 | MCQ |
 | ONA en register | orientation on the labour market; formal versus informal register | 50 | MCQ |
 | Algemene kennis | Global-MMLU, Dutch split; an indicator, never a verdict | 299 | MCQ |
 
-1,493 items in total, 754 of them written for this repository. Spreken and
+1,533 items in total, 794 of them written for this repository. Spreken and
 Luisteren are out of scope: this is a text exam.
 
 ### The verdict rule
@@ -40,17 +40,21 @@ verdicts and never computes them.
 
 ## Results, 9 September 2026
 
-| Model | Score (n=1493) | Verdict | Open or failed sections | Order-flip | Register-flip | Held-out |
+| Model | Score (n=1533) | Verdict | Open or failed sections | Order-flip | Register-flip | Held-out |
 |---|---:|---|---|---:|---:|---:|
-| claude-haiku-4-5 | 89.3% | undecided | KNM undecided | 20.8% | 1.7% | 91.4% |
-| gpt-5-mini | 88.6% | undecided | Spelling en grammatica undecided | 21.7% | 10.8% | 90.8% |
-| gpt-5-nano | 80.7% | failed | Spelling en grammatica failed (73.6%); Lezen, KNM undecided | see board | see board | see board |
-| qwen2.5:7b, local | 74.5% | failed | KNM failed (63%) | 30.8% | 1.7% | not run |
+| claude-haiku-4-5 | 89.8% | passed | all sections passed | 20.8% | 1.7% | 91.4% (no sign of contamination) |
+| gpt-5-mini | 88.9% | undecided | Spelling en grammatica undecided | 21.7% | 10.8% | 90.8% (no sign of contamination) |
 | GroNLP/gpt2-small-dutch | 87.3% on BLiMP-NL only, by likelihood | incomplete | | | | |
-| always-a, echo (controls) | 34.3%, 0.0% | failed | | | | |
+| gpt-5-nano | 81.2% | failed | Spelling en grammatica gezakt (74.0%); Lezen undecided; KNM undecided | 37.5% | 8.3% | 79.1% (no sign of contamination) |
+| qwen2.5:7b (local) | 74.5% | failed | Spelling en grammatica undecided; Schrijven undecided; Lezen undecided; Woordenschat undecided; KNM gezakt (61.3%); ONA en register undecided | 30.8% | 1.7% | not run |
+| gemini-3.6-flash | did not run | did not run | provider quota error | | | |
+| always-a (control) | 34.3% | failed | every section failed | not run | not run | not run |
+| echo (control) | 0.0% | failed | every section failed | not run | not run | not run |
 
 Three readings from the board:
 
+- **claude-haiku-4-5 is the first model to pass the whole exam**, every
+  verdict-bearing section above the line on its lower bound.
 - **Spelling and grammar is the section that separates the models.** Haiku
   passes it; gpt-5-mini is undecided and gpt-5-nano fails it. The d/t items
   and the Taaladvies doubt cases do the work; the two OpenAI models also show
@@ -139,8 +143,8 @@ Spearman correlation over paradigms (`--human-ratings`).
 
 ## Known limits
 
-- KNM has 80 items and the best model sits just under the pass line's
-  resolution; more items decide it.
+- Human alignment on the BLiMP-NL paradigms needs the ratings file, which the
+  publisher distributes behind an account; it is not computed on the board.
 - The held-out split has 163 items; its noise floor is about 9 points, so it
   catches gross memorisation, not subtle leakage.
 - Global-MMLU is an indicator; MMLU is among the most contaminated benchmarks.

@@ -63,7 +63,7 @@ nl-eval --contamination-check results/anthropic__claude-haiku-4-5.json results/h
 ```
 
 The check compares public and held-out accuracy against the minimum detectable
-difference for the smaller split. On 73 held-out items that floor is about 14
-points, so the test can only catch gross memorisation today; it gets sharper
-as the held-out set grows. A model that scores far better on the public items
+difference for the smaller split. On 163 held-out items that floor is about 9
+points, so the test catches gross memorisation, not subtle leakage; it gets
+sharper as the held-out set grows. A model that scores far better on the public items
 than on the held-out ones has learned this benchmark rather than Dutch.
