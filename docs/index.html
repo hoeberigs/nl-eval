@@ -70,10 +70,10 @@ tr.open .detail{display:block}
 
 /* perron */
 .perron h2{font-family:var(--cond);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:12px 0 6px;border-bottom:1px solid var(--seam);margin:0}
-.track{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:start;height:96px;border-bottom:1px solid var(--seam);padding-top:14px}
+.track{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:start;min-height:96px;border-bottom:1px solid var(--seam);padding:14px 0 10px}
 .tl{font-size:22px;font-weight:700;line-height:1.05}
 .tl small{display:block;font-size:13px;font-weight:400;color:var(--dim);margin-top:3px}
-.rail{position:relative;height:56px;border-bottom:1px solid var(--seam)}
+.rail{position:relative;height:calc(8px + var(--rows,3) * 14px);border-bottom:1px solid var(--seam)}
 .pass{position:absolute;left:60%;top:-6px;bottom:-1px;width:2px;background:var(--yel)}
 .band{position:absolute;height:10px}
 .band.ok{background:var(--ink)}.band.un{height:4px;margin-top:3px;background:var(--yel);outline:1px solid var(--yel);outline-offset:2px}.band.no{background:transparent;border:1.5px solid var(--dim)}
@@ -385,7 +385,8 @@ nl-eval --publish results</pre>
       const cls = s.verdict==="geslaagd"?"ok":s.verdict==="onbeslist"?"un":"no";
       const P = X(d.pass_line);
       const nearLine = X(hi) > P-6 && X(hi) < P+6;
-      const pos = (X(hi)>78 || (nearLine && X(lo) < P-20)) ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${Math.max(X(hi), nearLine?P+6:0).toFixed(1)}%;margin-left:8px`;
+      const leftSide = (X(hi)>78 || (nearLine && X(lo) < P-20)) && X(lo) >= 14;
+      const pos = leftSide ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${Math.max(X(hi), nearLine?P+6:0).toFixed(1)}%;margin-left:8px`;
       return `<div class="band ${cls}" style="left:${X(lo).toFixed(1)}%;width:${Math.max(1.2,X(hi)-X(lo)).toFixed(1)}%;top:${6+i*14}px" title="${esc(short(r))} ${pct(s.accuracy)}%"></div><div class="lab" style="${pos};top:${i*14}px">${esc(short(r))} ${pct(s.accuracy)}</div>`;
     }).join("");
     const n = real.length ? real[0].sections.find(x=>x.id===sec.id).n : 0;

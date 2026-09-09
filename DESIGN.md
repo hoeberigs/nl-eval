@@ -13,7 +13,7 @@ colors:
   tile-rule: "#b9c0cf"
 typography:
   display:
-    fontFamily: "Phudu, system-ui"
+    fontFamily: "Sofia Sans Condensed 800, system-ui"
     fontSize: "clamp(20px, 2.2vw, 31px)"
     fontWeight: 700
     lineHeight: 1.05
@@ -110,7 +110,7 @@ A station board, not a leaderboard: one row per model, passed sections listed as
 
 ## Typography
 
-**Display Font:** Phudu
+**Display Font:** Sofia Sans Condensed 800
 **Board Font:** Sofia Sans Condensed
 **Body Font:** Sofia Sans
 

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-09T19:50:48Z",
+ "generated_at": "2026-09-09T19:52:35Z",
  "hardest": [
   {
    "id": "civics-075",
@@ -122,6 +122,20 @@
    "of": 5
   },
   {
+   "id": "civics-104",
+   "category": "civics",
+   "question": "Vanaf welke leeftijd mag een kind naar de basisschool?",
+   "context": "",
+   "answer": "4 jaar",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 5
+  },
+  {
    "id": "civics-208",
    "category": "civics",
    "question": "Welk nummer bel je voor de politie als het geen spoed is?",
@@ -159,20 +173,6 @@
     "claude-haiku-4-5-20251001",
     "gemma3:4b",
     "gpt-5-mini",
-    "qwen2.5:7b"
-   ],
-   "of": 5
-  },
-  {
-   "id": "de_het-118",
-   "category": "de_het",
-   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “kenmerk”?",
-   "context": "",
-   "answer": "het",
-   "missed_by": [
-    "gemma3:4b",
-    "gpt-5-mini",
-    "gpt-5-nano",
     "qwen2.5:7b"
    ],
    "of": 5
@@ -895,125 +895,6 @@
    "generated_at": "2026-09-09T19:50:34Z"
   },
   {
-   "provider": "hf-dutch-gpt2-logprob",
-   "model": "GroNLP/gpt2-small-dutch",
-   "is_control": false,
-   "n": 440,
-   "accuracy": 0.8727,
-   "ci95": [
-    0.8383,
-    0.9007
-   ],
-   "chance": 0.5,
-   "lift": 0.3727,
-   "unparsed": 0,
-   "by_category": {
-    "blimp": {
-     "n": 440,
-     "correct": 384,
-     "accuracy": 0.8727,
-     "ci": [
-      0.8383,
-      0.9007
-     ]
-    }
-   },
-   "sections": [
-    {
-     "id": "taalvorm",
-     "label": "Taalvorm",
-     "verdict_bearing": true,
-     "n": 440,
-     "correct": 384,
-     "accuracy": 0.8727,
-     "ci95": [
-      0.8383,
-      0.9007
-     ],
-     "verdict": "geslaagd"
-    },
-    {
-     "id": "grammatica",
-     "label": "Spelling en grammatica",
-     "verdict_bearing": true,
-     "n": 0,
-     "correct": 0,
-     "accuracy": null,
-     "ci95": null,
-     "verdict": "niet afgelegd"
-    },
-    {
-     "id": "schrijven",
-     "label": "Schrijven",
-     "verdict_bearing": true,
-     "n": 0,
-     "correct": 0,
-     "accuracy": null,
-     "ci95": null,
-     "verdict": "niet afgelegd"
-    },
-    {
-     "id": "lezen",
-     "label": "Lezen",
-     "verdict_bearing": true,
-     "n": 0,
-     "correct": 0,
-     "accuracy": null,
-     "ci95": null,
-     "verdict": "niet afgelegd"
-    },
-    {
-     "id": "woordenschat",
-     "label": "Woordenschat",
-     "verdict_bearing": true,
-     "n": 0,
-     "correct": 0,
-     "accuracy": null,
-     "ci95": null,
-     "verdict": "niet afgelegd"
-    },
-    {
-     "id": "knm",
-     "label": "KNM",
-     "verdict_bearing": true,
-     "n": 0,
-     "correct": 0,
-     "accuracy": null,
-     "ci95": null,
-     "verdict": "niet afgelegd"
-    },
-    {
-     "id": "ona",
-     "label": "ONA en register",
-     "verdict_bearing": true,
-     "n": 0,
-     "correct": 0,
-     "accuracy": null,
-     "ci95": null,
-     "verdict": "niet afgelegd"
-    },
-    {
-     "id": "kennis",
-     "label": "Algemene kennis",
-     "verdict_bearing": false,
-     "n": 0,
-     "correct": 0,
-     "accuracy": null,
-     "ci95": null,
-     "verdict": "niet afgelegd"
-    }
-   ],
-   "verdict": "onvolledig",
-   "failed": false,
-   "est_cost_eur": null,
-   "canary": null,
-   "error_share": 0.0,
-   "failure_reason": null,
-   "consistency": null,
-   "heldout": null,
-   "generated_at": "2026-09-06T14:17:15Z"
-  },
-  {
    "provider": "openai",
    "model": "gpt-5-nano",
    "is_control": false,
@@ -1323,14 +1204,14 @@
    "provider": "ollama",
    "model": "qwen2.5:7b",
    "is_control": false,
-   "n": 1493,
-   "accuracy": 0.7441,
+   "n": 1533,
+   "accuracy": 0.7469,
    "ci95": [
-    0.7214,
-    0.7656
+    0.7245,
+    0.768
    ],
-   "chance": 0.3529,
-   "lift": 0.3912,
+   "chance": 0.3502,
+   "lift": 0.3967,
    "unparsed": 5,
    "by_category": {
     "blimp": {
@@ -1343,12 +1224,12 @@
      ]
     },
     "civics": {
-     "n": 80,
-     "correct": 49,
-     "accuracy": 0.6125,
+     "n": 120,
+     "correct": 83,
+     "accuracy": 0.6917,
      "ci": [
-      0.5029,
-      0.7118
+      0.6042,
+      0.7673
      ]
     },
     "de_het": {
@@ -1548,12 +1429,12 @@
      "id": "knm",
      "label": "KNM",
      "verdict_bearing": true,
-     "n": 80,
-     "correct": 49,
-     "accuracy": 0.6125,
+     "n": 120,
+     "correct": 83,
+     "accuracy": 0.6917,
      "ci95": [
-      0.5029,
-      0.7118
+      0.6042,
+      0.7673
      ],
      "verdict": "gezakt"
     },
@@ -1606,7 +1487,7 @@
     }
    },
    "heldout": null,
-   "generated_at": "2026-09-09T19:47:14Z"
+   "generated_at": "2026-09-09T19:51:04Z"
   },
   {
    "provider": "ollama",
@@ -1882,6 +1763,125 @@
    "consistency": null,
    "heldout": null,
    "generated_at": "2026-09-09T19:46:59Z"
+  },
+  {
+   "provider": "hf-dutch-gpt2-logprob",
+   "model": "GroNLP/gpt2-small-dutch",
+   "is_control": false,
+   "n": 440,
+   "accuracy": 0.8727,
+   "ci95": [
+    0.8383,
+    0.9007
+   ],
+   "chance": 0.5,
+   "lift": 0.3727,
+   "unparsed": 0,
+   "by_category": {
+    "blimp": {
+     "n": 440,
+     "correct": 384,
+     "accuracy": 0.8727,
+     "ci": [
+      0.8383,
+      0.9007
+     ]
+    }
+   },
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 440,
+     "correct": 384,
+     "accuracy": 0.8727,
+     "ci95": [
+      0.8383,
+      0.9007
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "grammatica",
+     "label": "Spelling en grammatica",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 0,
+     "correct": 0,
+     "accuracy": null,
+     "ci95": null,
+     "verdict": "niet afgelegd"
+    }
+   ],
+   "verdict": "onvolledig",
+   "failed": false,
+   "est_cost_eur": null,
+   "canary": null,
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": null,
+   "heldout": null,
+   "generated_at": "2026-09-06T14:17:15Z"
   },
   {
    "provider": "google",

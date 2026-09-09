@@ -252,7 +252,9 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
 
     # Real models first by accuracy, controls last: the controls are the floor,
     # not competitors.
-    runs.sort(key=lambda r: (r["is_control"], r["failed"], -r["accuracy"]))
+    # Complete runs first, then incomplete ones (a partial exam is not a
+    # rank), then failed runs, then the controls.
+    runs.sort(key=lambda r: (r["is_control"], r["failed"], r["n"] < 600, -r["accuracy"]))
 
     payload = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
