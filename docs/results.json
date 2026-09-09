@@ -1,6 +1,86 @@
 {
- "generated_at": "2026-09-09T19:54:56Z",
+ "generated_at": "2026-09-09T20:13:55Z",
  "hardest": [
+  {
+   "id": "civics-227",
+   "category": "civics",
+   "question": "Wat is de maximale proeftijd bij een arbeidscontract van meer dan twee jaar?",
+   "context": "",
+   "answer": "twee maanden",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "claude-sonnet-5",
+    "gemma3:4b",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 7
+  },
+  {
+   "id": "de_het-002",
+   "category": "de_het",
+   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “bestuur”?",
+   "context": "",
+   "answer": "het",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 7
+  },
+  {
+   "id": "diminutives-033",
+   "category": "diminutives",
+   "question": "Wat is het verkleinwoord van “baby”?",
+   "context": "",
+   "answer": "baby'tje",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 7
+  },
+  {
+   "id": "false_friends-207",
+   "category": "false_friends",
+   "question": "Wat betekent “pregnant” in het Nederlands?",
+   "context": "",
+   "answer": "kernachtig, treffend",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 7
+  },
+  {
+   "id": "lezen-059",
+   "category": "lezen",
+   "question": "U stalt uw fiets 3 dagen. Wat betaalt u?",
+   "context": "Fietsenstalling: “De eerste 24 uur zijn gratis. Daarna € 1,35 per dag. Fietsen die langer dan 28 dagen staan, worden verwijderd.”",
+   "answer": "€ 2,70",
+   "missed_by": [
+    "claude-haiku-4-5-20251001",
+    "gemma3:4b",
+    "gpt-5",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "qwen2.5:7b"
+   ],
+   "of": 7
+  },
   {
    "id": "civics-075",
    "category": "civics",
@@ -14,7 +94,7 @@
     "gpt-5-nano",
     "qwen2.5:7b"
    ],
-   "of": 5
+   "of": 7
   },
   {
    "id": "civics-104",
@@ -29,22 +109,22 @@
     "gpt-5-nano",
     "qwen2.5:7b"
    ],
-   "of": 5
+   "of": 7
   },
   {
-   "id": "civics-227",
+   "id": "civics-215",
    "category": "civics",
-   "question": "Wat is de maximale proeftijd bij een arbeidscontract van meer dan twee jaar?",
+   "question": "Binnen hoeveel dagen moet je een verhuizing doorgeven aan de gemeente?",
    "context": "",
-   "answer": "twee maanden",
+   "answer": "vijf dagen",
    "missed_by": [
-    "claude-haiku-4-5-20251001",
-    "gemma3:4b",
+    "claude-sonnet-5",
+    "gpt-5",
     "gpt-5-mini",
     "gpt-5-nano",
     "qwen2.5:7b"
    ],
-   "of": 5
+   "of": 7
   },
   {
    "id": "civics-228",
@@ -59,22 +139,37 @@
     "gpt-5-nano",
     "qwen2.5:7b"
    ],
-   "of": 5
+   "of": 7
   },
   {
-   "id": "de_het-002",
+   "id": "de_het-118",
    "category": "de_het",
-   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “bestuur”?",
+   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “kenmerk”?",
    "context": "",
    "answer": "het",
    "missed_by": [
-    "claude-haiku-4-5-20251001",
     "gemma3:4b",
+    "gpt-5",
     "gpt-5-mini",
     "gpt-5-nano",
     "qwen2.5:7b"
    ],
-   "of": 5
+   "of": 7
+  },
+  {
+   "id": "diminutives-005",
+   "category": "diminutives",
+   "question": "Wat is het correcte verkleinwoord van “koning”?",
+   "context": "",
+   "answer": "koninkje",
+   "missed_by": [
+    "claude-sonnet-5",
+    "gemma3:4b",
+    "gpt-5",
+    "gpt-5-mini",
+    "qwen2.5:7b"
+   ],
+   "of": 7
   },
   {
    "id": "diminutives-006",
@@ -89,94 +184,7 @@
     "gpt-5-nano",
     "qwen2.5:7b"
    ],
-   "of": 5
-  },
-  {
-   "id": "diminutives-033",
-   "category": "diminutives",
-   "question": "Wat is het verkleinwoord van “baby”?",
-   "context": "",
-   "answer": "baby'tje",
-   "missed_by": [
-    "claude-haiku-4-5-20251001",
-    "gemma3:4b",
-    "gpt-5-mini",
-    "gpt-5-nano",
-    "qwen2.5:7b"
-   ],
-   "of": 5
-  },
-  {
-   "id": "false_friends-207",
-   "category": "false_friends",
-   "question": "Wat betekent “pregnant” in het Nederlands?",
-   "context": "",
-   "answer": "kernachtig, treffend",
-   "missed_by": [
-    "claude-haiku-4-5-20251001",
-    "gemma3:4b",
-    "gpt-5-mini",
-    "gpt-5-nano",
-    "qwen2.5:7b"
-   ],
-   "of": 5
-  },
-  {
-   "id": "lezen-059",
-   "category": "lezen",
-   "question": "U stalt uw fiets 3 dagen. Wat betaalt u?",
-   "context": "Fietsenstalling: “De eerste 24 uur zijn gratis. Daarna € 1,35 per dag. Fietsen die langer dan 28 dagen staan, worden verwijderd.”",
-   "answer": "€ 2,70",
-   "missed_by": [
-    "claude-haiku-4-5-20251001",
-    "gemma3:4b",
-    "gpt-5-mini",
-    "gpt-5-nano",
-    "qwen2.5:7b"
-   ],
-   "of": 5
-  },
-  {
-   "id": "civics-208",
-   "category": "civics",
-   "question": "Welk nummer bel je voor de politie als het geen spoed is?",
-   "context": "",
-   "answer": "0900-8844",
-   "missed_by": [
-    "claude-haiku-4-5-20251001",
-    "gemma3:4b",
-    "gpt-5-nano",
-    "qwen2.5:7b"
-   ],
-   "of": 5
-  },
-  {
-   "id": "de_het-016",
-   "category": "de_het",
-   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “gevolg”?",
-   "context": "",
-   "answer": "het",
-   "missed_by": [
-    "claude-haiku-4-5-20251001",
-    "gemma3:4b",
-    "gpt-5-nano",
-    "qwen2.5:7b"
-   ],
-   "of": 5
-  },
-  {
-   "id": "de_het-112",
-   "category": "de_het",
-   "question": "Welk lidwoord hoort bij het zelfstandig naamwoord “proces”?",
-   "context": "",
-   "answer": "het",
-   "missed_by": [
-    "claude-haiku-4-5-20251001",
-    "gemma3:4b",
-    "gpt-5-mini",
-    "qwen2.5:7b"
-   ],
-   "of": 5
+   "of": 7
   }
  ],
  "phenomena": [
@@ -184,258 +192,302 @@
    "phenomenon": "Parasitic Gaps",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 0.6,
+    "gpt-5": 0.45,
     "claude-haiku-4-5-20251001": 0.85,
     "gpt-5-mini": 0.75,
     "gpt-5-nano": 0.65,
     "qwen2.5:7b": 0.75,
     "gemma3:4b": 0.2
    },
-   "mean": 0.64
+   "mean": 0.607
   },
   {
    "phenomenon": "Determiners",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 0.8,
+    "gpt-5": 0.8,
     "claude-haiku-4-5-20251001": 0.75,
     "gpt-5-mini": 0.7,
     "gpt-5-nano": 0.75,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 0.4
    },
-   "mean": 0.68
+   "mean": 0.714
+  },
+  {
+   "phenomenon": "Wh-Movement Restrictions",
+   "n": 20,
+   "by_model": {
+    "claude-sonnet-5": 0.85,
+    "gpt-5": 0.65,
+    "claude-haiku-4-5-20251001": 0.9,
+    "gpt-5-mini": 0.95,
+    "gpt-5-nano": 0.8,
+    "qwen2.5:7b": 0.85,
+    "gemma3:4b": 0.8
+   },
+   "mean": 0.829
   },
   {
    "phenomenon": "Crossing Dependencies",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 0.95,
+    "gpt-5": 0.85,
     "claude-haiku-4-5-20251001": 0.9,
     "gpt-5-mini": 0.8,
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 0.7
    },
-   "mean": 0.83
+   "mean": 0.85
   },
   {
    "phenomenon": "Anaphor agreement",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 0.95,
+    "gpt-5": 0.9,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 0.9,
     "qwen2.5:7b": 0.75,
     "gemma3:4b": 0.6
    },
-   "mean": 0.85
+   "mean": 0.871
   },
   {
    "phenomenon": "Complementive",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 0.95,
     "gpt-5-nano": 0.85,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 0.65
    },
-   "mean": 0.85
+   "mean": 0.893
   },
   {
    "phenomenon": "Topicalization",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 0.9,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 0.85,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 0.7
    },
-   "mean": 0.85
-  },
-  {
-   "phenomenon": "Wh-Movement Restrictions",
-   "n": 20,
-   "by_model": {
-    "claude-haiku-4-5-20251001": 0.9,
-    "gpt-5-mini": 0.95,
-    "gpt-5-nano": 0.8,
-    "qwen2.5:7b": 0.85,
-    "gemma3:4b": 0.8
-   },
-   "mean": 0.86
+   "mean": 0.893
   },
   {
    "phenomenon": "Quantifiers",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 0.95,
     "gpt-5-mini": 0.95,
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.95,
     "gemma3:4b": 0.5
    },
-   "mean": 0.87
-  },
-  {
-   "phenomenon": "R-Words",
-   "n": 20,
-   "by_model": {
-    "claude-haiku-4-5-20251001": 1.0,
-    "gpt-5-mini": 1.0,
-    "gpt-5-nano": 0.95,
-    "qwen2.5:7b": 0.7,
-    "gemma3:4b": 0.9
-   },
-   "mean": 0.91
-  },
-  {
-   "phenomenon": "Adverbial Modification",
-   "n": 20,
-   "by_model": {
-    "claude-haiku-4-5-20251001": 1.0,
-    "gpt-5-mini": 1.0,
-    "gpt-5-nano": 0.8,
-    "qwen2.5:7b": 0.9,
-    "gemma3:4b": 0.9
-   },
-   "mean": 0.92
+   "mean": 0.907
   },
   {
    "phenomenon": "Argument Structure",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 0.95,
+    "gpt-5": 0.95,
     "claude-haiku-4-5-20251001": 0.95,
     "gpt-5-mini": 0.95,
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 0.9,
     "gemma3:4b": 0.9
    },
-   "mean": 0.93
+   "mean": 0.936
   },
   {
    "phenomenon": "Binding (Principle A)",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 0.95,
+    "gpt-5": 0.95,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.85,
     "gemma3:4b": 0.8
    },
-   "mean": 0.93
+   "mean": 0.936
+  },
+  {
+   "phenomenon": "R-Words",
+   "n": 20,
+   "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
+    "claude-haiku-4-5-20251001": 1.0,
+    "gpt-5-mini": 1.0,
+    "gpt-5-nano": 0.95,
+    "qwen2.5:7b": 0.7,
+    "gemma3:4b": 0.9
+   },
+   "mean": 0.936
+  },
+  {
+   "phenomenon": "Adverbial Modification",
+   "n": 20,
+   "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
+    "claude-haiku-4-5-20251001": 1.0,
+    "gpt-5-mini": 1.0,
+    "gpt-5-nano": 0.8,
+    "qwen2.5:7b": 0.9,
+    "gemma3:4b": 0.9
+   },
+   "mean": 0.943
+  },
+  {
+   "phenomenon": "Relativization",
+   "n": 20,
+   "by_model": {
+    "claude-sonnet-5": 0.85,
+    "gpt-5": 1.0,
+    "claude-haiku-4-5-20251001": 1.0,
+    "gpt-5-mini": 1.0,
+    "gpt-5-nano": 1.0,
+    "qwen2.5:7b": 0.8,
+    "gemma3:4b": 1.0
+   },
+   "mean": 0.95
   },
   {
    "phenomenon": "Adpositional Phrases",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 0.9,
     "gemma3:4b": 0.85
    },
-   "mean": 0.94
+   "mean": 0.957
   },
   {
    "phenomenon": "Passive",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.9,
     "gemma3:4b": 0.8
    },
-   "mean": 0.94
+   "mean": 0.957
   },
   {
    "phenomenon": "Auxiliaries",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 0.85,
     "gpt-5-mini": 0.95,
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 1.0
    },
-   "mean": 0.95
+   "mean": 0.964
   },
   {
    "phenomenon": "Extraposition",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 0.9,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 0.85
    },
-   "mean": 0.95
-  },
-  {
-   "phenomenon": "Relativization",
-   "n": 20,
-   "by_model": {
-    "claude-haiku-4-5-20251001": 1.0,
-    "gpt-5-mini": 1.0,
-    "gpt-5-nano": 1.0,
-    "qwen2.5:7b": 0.8,
-    "gemma3:4b": 1.0
-   },
-   "mean": 0.96
+   "mean": 0.964
   },
   {
    "phenomenon": "Verb Second",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 1.0
    },
-   "mean": 0.96
+   "mean": 0.971
   },
   {
    "phenomenon": "Wh-Movement",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.95,
     "gemma3:4b": 0.85
    },
-   "mean": 0.96
+   "mean": 0.971
   },
   {
    "phenomenon": "Infinitival Argument Clause",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 0.9,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 1.0
    },
-   "mean": 0.98
+   "mean": 0.986
   },
   {
    "phenomenon": "Nominalization",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 0.9
    },
-   "mean": 0.98
+   "mean": 0.986
   },
   {
    "phenomenon": "Finite Argument Clause",
    "n": 20,
    "by_model": {
+    "claude-sonnet-5": 1.0,
+    "gpt-5": 1.0,
     "claude-haiku-4-5-20251001": 1.0,
     "gpt-5-mini": 1.0,
     "gpt-5-nano": 1.0,
@@ -549,6 +601,618 @@
   "chance_baseline": 0.305
  },
  "runs": [
+  {
+   "provider": "anthropic",
+   "model": "claude-sonnet-5",
+   "is_control": false,
+   "n": 1533,
+   "accuracy": 0.9393,
+   "ci95": [
+    0.9263,
+    0.9502
+   ],
+   "chance": 0.3502,
+   "lift": 0.5891,
+   "unparsed": 45,
+   "by_category": {
+    "blimp": {
+     "n": 440,
+     "correct": 418,
+     "accuracy": 0.95,
+     "ci": [
+      0.9255,
+      0.9668
+     ]
+    },
+    "civics": {
+     "n": 120,
+     "correct": 118,
+     "accuracy": 0.9833,
+     "ci": [
+      0.9413,
+      0.9954
+     ]
+    },
+    "de_het": {
+     "n": 80,
+     "correct": 80,
+     "accuracy": 1.0,
+     "ci": [
+      0.9542,
+      1.0
+     ]
+    },
+    "diminutives": {
+     "n": 48,
+     "correct": 45,
+     "accuracy": 0.9375,
+     "ci": [
+      0.8316,
+      0.9785
+     ]
+    },
+    "false_friends": {
+     "n": 40,
+     "correct": 39,
+     "accuracy": 0.975,
+     "ci": [
+      0.8712,
+      0.9956
+     ]
+    },
+    "formatting": {
+     "n": 40,
+     "correct": 40,
+     "accuracy": 1.0,
+     "ci": [
+      0.9124,
+      1.0
+     ]
+    },
+    "idioms": {
+     "n": 52,
+     "correct": 52,
+     "accuracy": 1.0,
+     "ci": [
+      0.9312,
+      1.0
+     ]
+    },
+    "lezen": {
+     "n": 60,
+     "correct": 59,
+     "accuracy": 0.9833,
+     "ci": [
+      0.9114,
+      0.9971
+     ]
+    },
+    "mmlu_nl": {
+     "n": 299,
+     "correct": 243,
+     "accuracy": 0.8127,
+     "ci": [
+      0.7646,
+      0.8529
+     ]
+    },
+    "register": {
+     "n": 50,
+     "correct": 50,
+     "accuracy": 1.0,
+     "ci": [
+      0.9286,
+      1.0
+     ]
+    },
+    "schrijven": {
+     "n": 69,
+     "correct": 67,
+     "accuracy": 0.971,
+     "ci": [
+      0.9003,
+      0.992
+     ]
+    },
+    "spelling": {
+     "n": 45,
+     "correct": 44,
+     "accuracy": 0.9778,
+     "ci": [
+      0.8843,
+      0.9961
+     ]
+    },
+    "taaladvies": {
+     "n": 50,
+     "correct": 49,
+     "accuracy": 0.98,
+     "ci": [
+      0.895,
+      0.9965
+     ]
+    },
+    "variants": {
+     "n": 40,
+     "correct": 40,
+     "accuracy": 1.0,
+     "ci": [
+      0.9124,
+      1.0
+     ]
+    },
+    "werkwoordspelling": {
+     "n": 50,
+     "correct": 48,
+     "accuracy": 0.96,
+     "ci": [
+      0.8654,
+      0.989
+     ]
+    },
+    "word_order": {
+     "n": 50,
+     "correct": 48,
+     "accuracy": 0.96,
+     "ci": [
+      0.8654,
+      0.989
+     ]
+    }
+   },
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 570,
+     "correct": 546,
+     "accuracy": 0.9579,
+     "ci95": [
+      0.9381,
+      0.9715
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "grammatica",
+     "label": "Spelling en grammatica",
+     "verdict_bearing": true,
+     "n": 273,
+     "correct": 266,
+     "accuracy": 0.9744,
+     "ci95": [
+      0.948,
+      0.9875
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 69,
+     "correct": 67,
+     "accuracy": 0.971,
+     "ci95": [
+      0.9003,
+      0.992
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 60,
+     "correct": 59,
+     "accuracy": 0.9833,
+     "ci95": [
+      0.9114,
+      0.9971
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 92,
+     "correct": 91,
+     "accuracy": 0.9891,
+     "ci95": [
+      0.941,
+      0.9981
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 120,
+     "correct": 118,
+     "accuracy": 0.9833,
+     "ci95": [
+      0.9413,
+      0.9954
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 50,
+     "correct": 50,
+     "accuracy": 1.0,
+     "ci95": [
+      0.9286,
+      1.0
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 299,
+     "correct": 243,
+     "accuracy": 0.8127,
+     "ci95": [
+      0.7646,
+      0.8529
+     ],
+     "verdict": "indicatie"
+    }
+   ],
+   "verdict": "geslaagd",
+   "failed": false,
+   "est_cost_eur": 0.7731,
+   "canary": {
+    "reproduced": 0,
+    "probes": 3,
+    "verdict": "no reproduction; weak evidence of cleanliness, not proof"
+   },
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": {
+    "items_probed": 120,
+    "order_reversed": {
+     "n": 120,
+     "flips": 1,
+     "flip_rate": 0.0083,
+     "reading": "share of answers that changed content when the options were listed back to front"
+    },
+    "register_swapped": {
+     "n": 120,
+     "flips": 1,
+     "flip_rate": 0.0083,
+     "reading": "share of answers that changed when the instruction was phrased informally"
+    }
+   },
+   "heldout": {
+    "n": 163,
+    "accuracy": 0.9755,
+    "ci95": [
+     0.9386,
+     0.9904
+    ],
+    "public_accuracy": 0.9393,
+    "heldout_accuracy": 0.9755,
+    "gap": -0.0362,
+    "n_smaller_split": 163,
+    "noise_floor": 0.0741,
+    "verdict": "no evidence of contamination: the gap is within sampling noise"
+   },
+   "generated_at": "2026-09-09T20:02:13Z"
+  },
+  {
+   "provider": "openai",
+   "model": "gpt-5",
+   "is_control": false,
+   "n": 1533,
+   "accuracy": 0.9185,
+   "ci95": [
+    0.9037,
+    0.9311
+   ],
+   "chance": 0.3502,
+   "lift": 0.5682,
+   "unparsed": 0,
+   "by_category": {
+    "blimp": {
+     "n": 440,
+     "correct": 411,
+     "accuracy": 0.9341,
+     "ci": [
+      0.9069,
+      0.9537
+     ]
+    },
+    "civics": {
+     "n": 120,
+     "correct": 119,
+     "accuracy": 0.9917,
+     "ci": [
+      0.9543,
+      0.9985
+     ]
+    },
+    "de_het": {
+     "n": 80,
+     "correct": 76,
+     "accuracy": 0.95,
+     "ci": [
+      0.8784,
+      0.9804
+     ]
+    },
+    "diminutives": {
+     "n": 48,
+     "correct": 42,
+     "accuracy": 0.875,
+     "ci": [
+      0.753,
+      0.9414
+     ]
+    },
+    "false_friends": {
+     "n": 40,
+     "correct": 37,
+     "accuracy": 0.925,
+     "ci": [
+      0.8014,
+      0.9742
+     ]
+    },
+    "formatting": {
+     "n": 40,
+     "correct": 39,
+     "accuracy": 0.975,
+     "ci": [
+      0.8712,
+      0.9956
+     ]
+    },
+    "idioms": {
+     "n": 52,
+     "correct": 52,
+     "accuracy": 1.0,
+     "ci": [
+      0.9312,
+      1.0
+     ]
+    },
+    "lezen": {
+     "n": 60,
+     "correct": 55,
+     "accuracy": 0.9167,
+     "ci": [
+      0.8193,
+      0.9639
+     ]
+    },
+    "mmlu_nl": {
+     "n": 299,
+     "correct": 243,
+     "accuracy": 0.8127,
+     "ci": [
+      0.7646,
+      0.8529
+     ]
+    },
+    "register": {
+     "n": 50,
+     "correct": 50,
+     "accuracy": 1.0,
+     "ci": [
+      0.9286,
+      1.0
+     ]
+    },
+    "schrijven": {
+     "n": 69,
+     "correct": 66,
+     "accuracy": 0.9565,
+     "ci": [
+      0.8798,
+      0.9851
+     ]
+    },
+    "spelling": {
+     "n": 45,
+     "correct": 42,
+     "accuracy": 0.9333,
+     "ci": [
+      0.8214,
+      0.9771
+     ]
+    },
+    "taaladvies": {
+     "n": 50,
+     "correct": 46,
+     "accuracy": 0.92,
+     "ci": [
+      0.8116,
+      0.9685
+     ]
+    },
+    "variants": {
+     "n": 40,
+     "correct": 39,
+     "accuracy": 0.975,
+     "ci": [
+      0.8712,
+      0.9956
+     ]
+    },
+    "werkwoordspelling": {
+     "n": 50,
+     "correct": 46,
+     "accuracy": 0.92,
+     "ci": [
+      0.8116,
+      0.9685
+     ]
+    },
+    "word_order": {
+     "n": 50,
+     "correct": 45,
+     "accuracy": 0.9,
+     "ci": [
+      0.7864,
+      0.9565
+     ]
+    }
+   },
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "verdict_bearing": true,
+     "n": 570,
+     "correct": 534,
+     "accuracy": 0.9368,
+     "ci95": [
+      0.9138,
+      0.954
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "grammatica",
+     "label": "Spelling en grammatica",
+     "verdict_bearing": true,
+     "n": 273,
+     "correct": 252,
+     "accuracy": 0.9231,
+     "ci95": [
+      0.8853,
+      0.9491
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "verdict_bearing": true,
+     "n": 69,
+     "correct": 66,
+     "accuracy": 0.9565,
+     "ci95": [
+      0.8798,
+      0.9851
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "verdict_bearing": true,
+     "n": 60,
+     "correct": 55,
+     "accuracy": 0.9167,
+     "ci95": [
+      0.8193,
+      0.9639
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "verdict_bearing": true,
+     "n": 92,
+     "correct": 89,
+     "accuracy": 0.9674,
+     "ci95": [
+      0.9085,
+      0.9888
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "knm",
+     "label": "KNM",
+     "verdict_bearing": true,
+     "n": 120,
+     "correct": 119,
+     "accuracy": 0.9917,
+     "ci95": [
+      0.9543,
+      0.9985
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "ona",
+     "label": "ONA en register",
+     "verdict_bearing": true,
+     "n": 50,
+     "correct": 50,
+     "accuracy": 1.0,
+     "ci95": [
+      0.9286,
+      1.0
+     ],
+     "verdict": "geslaagd"
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "verdict_bearing": false,
+     "n": 299,
+     "correct": 243,
+     "accuracy": 0.8127,
+     "ci95": [
+      0.7646,
+      0.8529
+     ],
+     "verdict": "indicatie"
+    }
+   ],
+   "verdict": "geslaagd",
+   "failed": false,
+   "est_cost_eur": 0.7731,
+   "canary": {
+    "reproduced": 0,
+    "probes": 3,
+    "verdict": "no reproduction; weak evidence of cleanliness, not proof"
+   },
+   "error_share": 0.0,
+   "failure_reason": null,
+   "consistency": {
+    "items_probed": 120,
+    "order_reversed": {
+     "n": 120,
+     "flips": 3,
+     "flip_rate": 0.025,
+     "reading": "share of answers that changed content when the options were listed back to front"
+    },
+    "register_swapped": {
+     "n": 120,
+     "flips": 0,
+     "flip_rate": 0.0,
+     "reading": "share of answers that changed when the instruction was phrased informally"
+    }
+   },
+   "heldout": {
+    "n": 163,
+    "accuracy": 0.9264,
+    "ci95": [
+     0.8757,
+     0.9574
+    ],
+    "public_accuracy": 0.9185,
+    "heldout_accuracy": 0.9264,
+    "gap": -0.0079,
+    "n_smaller_split": 163,
+    "noise_floor": 0.0849,
+    "verdict": "no evidence of contamination: the gap is within sampling noise"
+   },
+   "generated_at": "2026-09-09T20:03:25Z"
+  },
   {
    "provider": "anthropic",
    "model": "claude-haiku-4-5-20251001",
@@ -1739,17 +2403,17 @@
    "error_share": 0.003,
    "failure_reason": null,
    "consistency": {
-    "items_probed": 120,
+    "items_probed": 160,
     "order_reversed": {
-     "n": 120,
-     "flips": 37,
-     "flip_rate": 0.3083,
+     "n": 160,
+     "flips": 42,
+     "flip_rate": 0.2625,
      "reading": "share of answers that changed content when the options were listed back to front"
     },
     "register_swapped": {
-     "n": 120,
-     "flips": 2,
-     "flip_rate": 0.0167,
+     "n": 160,
+     "flips": 5,
+     "flip_rate": 0.0312,
      "reading": "share of answers that changed when the instruction was phrased informally"
     }
    },
@@ -2040,8 +2704,35 @@
    "canary": null,
    "error_share": 0.002,
    "failure_reason": null,
-   "consistency": null,
-   "heldout": null,
+   "consistency": {
+    "items_probed": 160,
+    "order_reversed": {
+     "n": 160,
+     "flips": 62,
+     "flip_rate": 0.3875,
+     "reading": "share of answers that changed content when the options were listed back to front"
+    },
+    "register_swapped": {
+     "n": 160,
+     "flips": 9,
+     "flip_rate": 0.0563,
+     "reading": "share of answers that changed when the instruction was phrased informally"
+    }
+   },
+   "heldout": {
+    "n": 163,
+    "accuracy": 0.7055,
+    "ci95": [
+     0.6315,
+     0.7701
+    ],
+    "public_accuracy": 0.6888,
+    "heldout_accuracy": 0.7055,
+    "gap": -0.0167,
+    "n_smaller_split": 163,
+    "noise_floor": 0.1436,
+    "verdict": "no evidence of contamination: the gap is within sampling noise"
+   },
    "generated_at": "2026-09-09T19:53:28Z"
   },
   {
@@ -2687,7 +3378,7 @@
    ],
    "verdict": "niet geslaagd",
    "failed": false,
-   "est_cost_eur": 0.7731,
+   "est_cost_eur": 0.0,
    "canary": null,
    "error_share": 0.0,
    "failure_reason": null,

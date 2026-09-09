@@ -44,7 +44,7 @@ def _price_for(model: str, provider: str = "") -> tuple[float, float]:
     # A model running on this machine costs nothing per token. Pricing it as
     # if hosted made the spend guard refuse a free run, which is the guard
     # failing in the wrong direction.
-    if provider in LOCAL_PROVIDERS:
+    if provider.startswith(LOCAL_PROVIDERS):
         return (0.0, 0.0)
     m = model.lower()
     for key, price in PRICES.items():
