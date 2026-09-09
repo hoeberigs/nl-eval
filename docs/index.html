@@ -36,7 +36,8 @@ pre::-webkit-scrollbar{height:8px}pre::-webkit-scrollbar-thumb{background:var(--
 .strip{display:flex;justify-content:space-between;align-items:baseline;gap:16px;height:74px;border-bottom:2px solid var(--yel);padding:0 clamp(16px,3.3vw,48px)}
 .strip h1{font-family:var(--disp);font-size:clamp(20px,2.2vw,31px);font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1.05}
 .stamp{color:var(--yel);font-family:var(--cond);font-size:clamp(15px,1.6vw,24px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.cols{display:grid;grid-template-columns:minmax(0,780px) minmax(0,1fr);padding:0 clamp(16px,3.3vw,48px) 0}
+.cols{display:grid;grid-template-columns:minmax(0,780px) minmax(0,1fr);grid-template-areas:"left right" "left foot";grid-template-rows:auto 1fr;padding:0 clamp(16px,3.3vw,48px) 0}
+.left{grid-area:left}.right{grid-area:right;position:sticky;top:0;align-self:start}.foot{grid-area:foot;padding-left:36px;align-self:start}
 .left{padding-right:36px;border-right:2px solid var(--yel)}
 .right{padding-left:36px;overflow-x:clip}
 .tbl{overflow-x:auto}
@@ -65,7 +66,7 @@ tr.run{cursor:default}
 tr.run:hover td,tr.run:focus-within td{background:rgba(255,255,255,.04)}
 .detail{display:none;font-size:14px;color:var(--dim);margin-top:6px;font-variant-numeric:tabular-nums}
 .detail span{display:inline-block;margin-right:12px;white-space:nowrap}
-tr.open .detail{display:block}
+tr.open .detail,tr.run:focus-within .detail{display:block}
 .rowbtn{all:unset;cursor:pointer;display:block;width:100%}
 .rowbtn:focus-visible{outline:2px solid var(--yel);outline-offset:3px}
 
@@ -111,15 +112,16 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
 
 /* ---------- responsive ---------- */
 @media (max-width:1100px){
-  .cols{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr;grid-template-areas:"left" "foot" "right";grid-template-rows:auto auto auto}
   .left{padding-right:0;border-right:0;border-bottom:2px solid var(--yel);padding-bottom:12px}
-  .right{padding-left:0}
+  .right{padding-left:0;position:static}
+  .foot{padding-left:0;padding-bottom:12px}
 }
 @media (max-width:700px){
   body{font-size:17px}
   .strip{height:auto;flex-wrap:wrap;padding:12px clamp(16px,3.3vw,48px) 10px;gap:4px 16px}.stamp{white-space:normal}
   .flapc,th:last-child{display:none}
-  .mflap{display:inline-block;margin-top:8px}
+  .mflap{display:inline-block;margin:6px 0 4px}
   .flap{min-width:0;font-size:14px;padding:6px 8px}
   .score{font-size:28px;width:72px}
   .name{font-size:20px}
@@ -148,13 +150,15 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
         <tbody id="rows"><tr><td colspan="3" style="color:var(--dim)">Uitslagen laden…</td></tr></tbody>
       </table>
       </div>
-      <p class="lede" id="lede"></p>
-      <div class="legend" id="legend"></div>
     </div>
     <div class="right perron" id="perron">
       <h2 id="perron-head">Perron · per onderdeel tegen de slaaglijn van 80%</h2>
       <div id="tracks"></div>
       <div class="axis" id="axis"></div>
+    </div>
+    <div class="foot" id="boardfoot">
+      <p class="lede" id="lede"></p>
+      <div class="legend" id="legend"></div>
     </div>
   </div>
 </header>
@@ -365,8 +369,8 @@ nl-eval --publish results</pre>
         <td class="score">${pct(r.accuracy)}<small>${pct(r.ci95[0])} – ${pct(r.ci95[1])}</small></td>
         <td class="model"><button class="rowbtn" type="button" aria-expanded="false" aria-label="Details van ${esc(label(r))}">
           <div class="name">${esc(label(r))}</div><div class="prov">${esc(PROV[r.provider]||r.provider)}</div>
-          <div class="via">${via(r)}</div><div class="rem">${esc(remarks(r))}</div>
           <span class="mflap">${flap.replace(' flip','')}</span>
+          <div class="via">${via(r)}</div><div class="rem">${esc(remarks(r))}</div>
           <div class="detail">${detail(r)}</div></button></td>
         <td class="flapc">${flap}</td></tr>`;
     }).join("");
@@ -388,7 +392,7 @@ nl-eval --publish results</pre>
   const lows = real.flatMap(r=>r.sections.filter(x=>x.n>0 && x.verdict_bearing).map(x=>x.ci95[0]));
   const axisMin = Math.max(0, Math.floor(Math.min(...lows, d.pass_line-0.1)*10)/10);
   const X = v => Math.max(0, Math.min(100, (v-axisMin)/(1-axisMin)*100));
-  { const ticks=[]; for (let t=axisMin; t<=1.0001; t+=0.1){ const v=Math.round(t*100); const isPass=Math.abs(t-d.pass_line)<1e-6; ticks.push(`<span${isPass?' class="p"':''} style="position:absolute;left:${X(t).toFixed(1)}%;transform:translateX(-50%)">${v}${isPass?" slaaglijn":(t===axisMin||v===100?"%":"")}</span>`);} document.getElementById("axis").innerHTML=`<div style="position:relative;height:18px">${ticks.join("")}</div>`; }
+  { const ticks=[]; for (let t=axisMin; t<=1.0001; t+=0.1){ const v=Math.round(t*100); const isPass=Math.abs(t-d.pass_line)<1e-6; const tx = t===axisMin ? "none" : v===100 ? "translateX(-100%)" : "translateX(-50%)"; ticks.push(`<span${isPass?' class="p"':''} style="position:absolute;left:${X(t).toFixed(1)}%;transform:${tx}">${v}${isPass?" slaaglijn":(t===axisMin||v===100?"%":"")}</span>`);} document.getElementById("axis").innerHTML=`<div style="position:relative;height:18px">${ticks.join("")}</div>`; }
   document.getElementById("tracks").innerHTML = secs.map(sec=>{
     const bands = real.map((r,i)=>{
       const s = r.sections.find(x=>x.id===sec.id); if (!s || !s.n) return "";
@@ -417,7 +421,7 @@ nl-eval --publish results</pre>
     if (fail.length) t += `Gezakt: ${fail.map(r=>naam(r)+" ("+r.sections.filter(s=>s.verdict==="gezakt").map(s=>s.label).join(", ")+")").join("; ")}. `;
     if (worst) t += `Het onderdeel dat het vaakst niet wordt gehaald is ${worst[0]}.`;
     document.getElementById("lede").textContent = t; }
-  document.getElementById("legend").innerHTML = `${mark("geslaagd","#081858")} geslaagd &nbsp; ${mark("onbeslist","#081858")} onbeslist &nbsp; ${mark("gezakt","#081858")} gezakt &nbsp;·&nbsp; slaaglijn ${pct(d.pass_line).replace(",0","")}%, ondergrens van het 95%-interval &nbsp;·&nbsp; klik een rij voor de scores per onderdeel`;
+  document.getElementById("legend").innerHTML = `zonder teken: geslaagd &nbsp; ${mark("onbeslist","#081858")} onbeslist &nbsp; ${mark("gezakt","#081858")} gezakt &nbsp;·&nbsp; slaaglijn ${pct(d.pass_line).replace(",0","")}%, ondergrens van het 95%-interval &nbsp;·&nbsp; klik of tab naar een rij voor de scores per onderdeel`;
 
   // sections table
   const ref = real[0] || d.runs[0];
@@ -432,7 +436,7 @@ nl-eval --publish results</pre>
     if (ph.length) {
       const models = Object.keys(ph[0].by_model);
       document.querySelector("#phen-table thead").innerHTML = `<tr><th>Verschijnsel</th>${models.map(m=>`<th style="text-align:right">${esc(ABBR[m]||m.replace("-20251001",""))}</th>`).join("")}</tr>`;
-      document.querySelector("#phen-table tbody").innerHTML = ph.map(r=>`<tr><td class="v" style="text-transform:none;letter-spacing:0">${esc(r.phenomenon)}</td>${models.map(m=>{const v=r.by_model[m]; return `<td class="n"${v!=null&&v<d.pass_line?' style="color:#8a1d1d;font-weight:600"':''}>${v==null?"–":pct(v)+"%"}</td>`;}).join("")}</tr>`).join("");
+      document.querySelector("#phen-table tbody").innerHTML = ph.map(r=>`<tr><td class="v" style="text-transform:none;letter-spacing:0">${esc(r.phenomenon)}</td>${models.map(m=>{const v=r.by_model[m]; return `<td class="n"${v!=null&&v<d.pass_line?' style="color:#8a1d1d;font-weight:600"':''}>${v==null?"–":(v<d.pass_line?mark("gezakt","#8a1d1d"):"")+pct(v)+"%"}</td>`;}).join("")}</tr>`).join("");
     } else document.querySelector("#phen-table tbody").innerHTML = '<tr><td>nog geen runs</td></tr>'; }
 
   // hardest items

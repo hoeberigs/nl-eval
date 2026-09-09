@@ -144,7 +144,7 @@ Radius 0. Rows on 1px seams, structure on 2px rules. The flap carries a 1px hing
 ## Components
 
 ### Board Row
-Score with interval, name over provider, via line, remark line, and per-section detail (accuracy, interval, n) on hover, focus or click via one aria-expanded button. Controls sort last.
+Score with interval, name over provider, via line, remark line, and per-section detail (accuracy, interval, n) on click or keyboard focus (hover only paints a wash, so the board never reflows under the pointer) via one aria-expanded button. Controls sort last.
 
 ### Via Line
 Passed in ink, undecided in yellow, failed struck in dim, middot-separated.
@@ -175,3 +175,8 @@ Flaps rotate in from rotateX(-90deg) over 450ms; rows fade up 6px over 500ms, st
 - **Don't** add cards, boxes, radius, shadows, gradients, a second accent or per-model colours.
 - **Don't** animate beyond the flap, or at all under reduced motion.
 - **Don't** let a table widen the page.
+
+
+## Small screens
+
+Under 700px the Uitslag column is hidden and the verdict flap is rendered directly under the provider line, above the via line, so the verdict stays in the first viewport without sideways scrolling. Under 1100px the board, then the verdict line and legend, then the perron stack vertically; the perron is sticky beside the rows only on wide screens.
