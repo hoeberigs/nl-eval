@@ -167,7 +167,11 @@ def main(argv=None) -> int:
 
     if args.robustness:
         from .robustness import robustness
+        # The limit is a stratified sample inside the battery, never a
+        # head-of-list cut before the category exclusion.
+        lim, args.limit = args.limit, None
         items = _load(args)
+        args.limit = lim
         try:
             call = providers.get(args.provider, args.model)
         except providers.ProviderError as e:
