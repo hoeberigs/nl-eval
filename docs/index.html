@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Het inburgeringsexamen voor taalmodellen</title>
-<meta name="description" content="nl-eval: een Nederlandse benchmark voor taalmodellen, opgezet als inburgeringsexamen. Zes onderdelen met een oordeel, zonder beoordelaarsmodel, met held-out controle en consistentieproeven.">
+<title>Nederlands onder druk</title>
+<meta name="description" content="nl-eval: hoe stabiel is het Nederlands van een taalmodel. Elke opgave wordt in zeven vormen gesteld; een model krijgt de opgave alleen als het ze allemaal goed heeft. Zonder beoordelaarsmodel, met held-out controle.">
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="fonts.css">
 <style>
 :root{
@@ -35,11 +36,12 @@ pre::-webkit-scrollbar{height:8px}pre::-webkit-scrollbar-thumb{background:var(--
 .board{background:var(--blue);color:var(--ink);font-family:var(--cond);line-height:1.2;display:grid;grid-template-rows:auto 1fr}
 .strip{display:flex;justify-content:space-between;align-items:baseline;gap:16px;height:74px;border-bottom:2px solid var(--yel);padding:0 clamp(16px,3.3vw,48px)}
 .strip h1{font-family:var(--disp);font-size:clamp(20px,2.2vw,31px);font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1.05}
+.strip h1 small{font-weight:400;letter-spacing:.02em;text-transform:none;font-size:.62em;color:var(--dim);margin-left:14px}
 .stamp{color:var(--yel);font-family:var(--cond);font-size:clamp(15px,1.6vw,24px);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .cols{display:grid;grid-template-columns:minmax(0,780px) minmax(0,1fr);grid-template-areas:"left right" "left foot";grid-template-rows:auto 1fr;padding:0 clamp(16px,3.3vw,48px) 0}
-.left{grid-area:left}.right{grid-area:right;position:sticky;top:0;align-self:start}.foot{grid-area:foot;padding-left:36px;align-self:start}
-.left{padding-right:36px;border-right:2px solid var(--yel)}
-.right{padding-left:36px;overflow-x:clip}
+.left{grid-area:left;padding-right:36px;border-right:2px solid var(--yel)}
+.right{grid-area:right;padding-left:36px;overflow-x:clip;position:sticky;top:0;align-self:start}
+.foot{grid-area:foot;padding-left:36px;align-self:start}
 .tbl{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{font-family:var(--cond);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:left;padding:10px 6px;border-bottom:1px solid var(--seam);white-space:nowrap}
@@ -47,8 +49,9 @@ th button{all:unset;cursor:pointer;color:inherit;letter-spacing:inherit;text-tra
 th button:hover,th button:focus-visible{color:var(--ink)}
 th button svg{width:10px;height:10px;margin-left:4px;vertical-align:-1px;display:none}th[aria-sort="descending"] button svg.dn,th[aria-sort="ascending"] button svg.up{display:inline}
 td{padding:9px 6px;border-bottom:1px solid var(--seam);vertical-align:top}
-.score{font-family:var(--cond);font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;width:90px;padding-top:12px;white-space:nowrap}
-.score small{display:block;font-family:var(--cond);font-size:13px;font-weight:400;color:var(--dim);margin-top:4px}
+.score{font-family:var(--cond);font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;width:118px;padding-top:12px;white-space:nowrap}
+.score small{display:block;font-family:var(--cond);font-size:13px;font-weight:400;color:var(--dim);margin-top:4px;white-space:normal}
+.score small.y{color:var(--yel)}
 .name{font-size:24px;font-weight:700;line-height:1.05;overflow-wrap:anywhere}
 .prov{font-size:15px;color:var(--dim);letter-spacing:.04em;margin-top:3px}
 .via{font-size:16px;font-weight:600;line-height:1.3;margin-top:4px}
@@ -58,6 +61,7 @@ td{padding:9px 6px;border-bottom:1px solid var(--seam);vertical-align:top}
 .flap{display:inline-block;min-width:150px;text-align:center;font-family:var(--cond);font-size:18px;font-weight:700;letter-spacing:.08em;padding:8px 12px;background:var(--ink);color:var(--blue);position:relative;text-transform:uppercase}
 .flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(8,24,88,.35)}
 .flap.no{background:none;color:var(--yel);padding-left:0;text-align:left}
+.flap.no.dimmed{color:var(--dim-2)}
 tr.dim .score,tr.dim .name,tr.dim .via,tr.dim .via s,tr.dim .prov,tr.dim .score small{color:var(--dim-2)}
 tr.dim .flap{background:var(--dim-2);color:var(--blue)}
 tr.dim .flap.no{background:none;color:#e0b632}
@@ -74,15 +78,12 @@ tr.open .detail,tr.run:focus-within .detail{display:block}
 .perron h2{font-family:var(--cond);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:12px 0 6px;border-bottom:1px solid var(--seam);margin:0}
 .track{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:start;min-height:96px;border-bottom:1px solid var(--seam);padding:14px 0 10px}
 .tl{font-size:22px;font-weight:700;line-height:1.05}
-.tl small{display:block;font-size:13px;font-weight:400;color:var(--dim);margin-top:3px}
 .rail{position:relative;height:calc(8px + var(--rows,3) * 16px);border-bottom:1px solid var(--seam)}
-.pass{position:absolute;left:60%;top:-6px;bottom:-1px;width:2px;background:var(--yel)}
-.band{position:absolute;height:10px}
-.band.ok{background:var(--ink)}.band.un{height:4px;margin-top:3px;background:var(--yel);outline:1px solid var(--yel);outline-offset:2px}.band.no{background:transparent;border:1.5px solid var(--dim)}
+.band{position:absolute;height:10px;background:var(--ink)}
+.band.tick{width:2px;background:var(--dim-2)}
+.band.w{background:var(--yel)}
 .lab{position:absolute;font-size:13px;line-height:14px;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums;background:var(--blue);padding:0 3px;z-index:1}
-.pass{z-index:0}
 .axis{font-size:13px;color:var(--dim);padding-top:6px;font-variant-numeric:tabular-nums}
-.axis .p{color:var(--yel)}
 .lede{font-family:var(--cond);font-size:19px;line-height:1.3;color:var(--ink);margin:18px 0 0;max-width:62ch}
 .legend{margin-top:14px;background:var(--ink);color:var(--blue);padding:12px 16px;font-size:15px;line-height:1.5;font-family:var(--text);display:inline-block}
 
@@ -91,8 +92,7 @@ section.s{padding:48px 0 12px;max-width:1344px}
 section.s+section.s{border-top:1px solid var(--rule);margin-top:36px}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:40px}
 .two>*{min-width:0}
-.ptbl{min-width:0;max-width:100%}
-.ptbl{overflow-x:auto;margin:14px 0}
+.ptbl{overflow-x:auto;margin:14px 0;min-width:0;max-width:100%}
 .ptbl table{min-width:640px}
 .ptbl th{color:var(--tilemute);border-bottom:2px solid var(--tileink);font-size:13px}
 .ptbl td{border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums;font-size:17px}
@@ -102,7 +102,7 @@ section.s+section.s{border-top:1px solid var(--rule);margin-top:36px}
 ul{padding-left:20px;max-width:68ch}li+li{margin-top:6px}
 footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilemute);border-top:2px solid var(--blue);margin-top:48px}
 
-/* ---------- motion: split-flap reveal ---------- */
+/* ---------- motion ---------- */
 @media (prefers-reduced-motion:no-preference){
   .flip{animation:flip .45s cubic-bezier(.2,.8,.2,1) both}
   @keyframes flip{0%{transform:perspective(600px) rotateX(-90deg);opacity:0}60%{opacity:1}100%{transform:none;opacity:1}}
@@ -120,10 +120,11 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
 @media (max-width:700px){
   body{font-size:17px}
   .strip{height:auto;flex-wrap:wrap;padding:12px clamp(16px,3.3vw,48px) 10px;gap:4px 16px}.stamp{white-space:normal}
+  .strip h1 small{display:block;margin:4px 0 0}
   .flapc,th:last-child{display:none}
   .mflap{display:inline-block;margin:6px 0 4px}
   .flap{min-width:0;font-size:14px;padding:6px 8px}
-  .score{font-size:28px;width:72px}
+  .score{font-size:28px;width:84px}
   .name{font-size:20px}
   .track{grid-template-columns:1fr}
   .rail{margin-top:8px}
@@ -135,7 +136,7 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
 
 <header class="board" id="bord">
   <div class="strip">
-    <h1>Het inburgeringsexamen voor taalmodellen</h1>
+    <h1>Nederlands onder druk<small>hoe stabiel is het Nederlands van een taalmodel</small></h1>
     <div class="stamp" id="stamp">bijgewerkt …</div>
   </div>
   <div class="cols">
@@ -143,16 +144,16 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
       <div class="tbl">
       <table id="board">
         <thead><tr>
-          <th aria-sort="descending"><button type="button" data-sort="accuracy">Score<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
-          <th><button type="button" data-sort="model">Model · via<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
-          <th><button type="button" data-sort="verdict">Uitslag<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
+          <th aria-sort="descending"><button type="button" data-sort="score">Worst-case<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
+          <th><button type="button" data-sort="model">Model · onderdelen<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
+          <th><button type="button" data-sort="band">Stabiliteit<svg class="dn" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><svg class="up" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></th>
         </tr></thead>
         <tbody id="rows"><tr><td colspan="3" style="color:var(--dim)">Uitslagen laden…</td></tr></tbody>
       </table>
       </div>
     </div>
     <div class="right perron" id="perron">
-      <h2 id="perron-head">Perron · per onderdeel tegen de slaaglijn van 80%</h2>
+      <h2 id="perron-head">Perron · per onderdeel, van worst-case tot onverstoord</h2>
       <div id="tracks"></div>
       <div class="axis" id="axis"></div>
     </div>
@@ -165,36 +166,38 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
 
 <main class="wrap">
 
-<section class="s" id="examen">
-  <h2>Hoe het examen werkt</h2>
+<section class="s" id="werking">
+  <h2>Hoe dit bord werkt</h2>
   <div class="two">
     <div>
-      <p>Wie in Nederland komt wonen legt een inburgeringsexamen af: lezen, schrijven, spreken, luisteren, kennis van de Nederlandse maatschappij en oriëntatie op de arbeidsmarkt. Dit examen legt taalmodellen langs dezelfde lat, met de onderdelen die zonder spraak te toetsen zijn. Spreken en Luisteren vallen buiten dit examen.</p>
-      <p>Elk onderdeel bestaat uit opgaven met één juist antwoord: meerkeuze, minimale paren die op waarschijnlijkheid worden gescoord, of een zin die exact moet worden herschreven. Er is geen beoordelaarsmodel. Een score is daardoor reproduceerbaar en vrij van de smaak van een tweede model.</p>
+      <p>Op een vaste set opgaven scoren de beste modellen binnen een paar punten van elkaar, en elk van hen haalt elke redelijke grens. Nauwkeurigheid is daarmee een uitgeput getal. Wat niet uitgeput is: of een antwoord overeind blijft als de vraag net anders wordt gesteld, zonder dat het juiste antwoord verandert.</p>
+      <p>Elke opgave wordt daarom in zeven vormen gesteld: onverstoord en in zes varianten die de zin of het woord onder test niet aanraken. Een model krijgt de opgave alleen als het alle zeven vormen goed heeft. Dat aandeel is de <b>worst-case</b> op het bord. De onverstoorde score blijft zichtbaar als het plafond dat een model haalt wanneer niets tegenzit.</p>
+      <p>Het verschil tussen die twee is het verlies onder druk. Onder <span id="b1">5</span> punten noemen we een model <b>stabiel</b>, tot <span id="b2">15</span> punten <b>wankel</b>, daarboven <b>onstabiel</b>. Er is geen slaaglijn en geen oordeel; het bord rapporteert niveaus, verliezen en waar die zitten.</p>
     </div>
-    <div>
-      <p>De uitslag per onderdeel is een oordeel tegen een slaaglijn van <span id="passline">80%</span>: <b>geslaagd</b> als de ondergrens van het 95%-interval boven de lijn ligt, <b>gezakt</b> als de bovengrens eronder blijft, anders <b>onbeslist</b>. Een klein onderdeel kan dus niet slagen op een gelukkige greep. De lijn is een analogie met “voldoende”, door ons gekozen, niet door DUO.</p>
-      <p>Een model is geslaagd als het voor alle zes onderdelen met oordeel slaagt, niet geslaagd zodra het voor één onderdeel zakt, en anders onbeslist. Algemene kennis (Global-MMLU) telt als indicatie, zonder oordeel: MMLU zit in vrijwel elke trainingsset.</p>
-    </div>
-  </div>
-  <div class="ptbl"><table id="sections-table">
-    <thead><tr><th>Onderdeel</th><th>Wat wordt getoetst</th><th>Opgaven</th><th>Oordeel</th></tr></thead>
-    <tbody></tbody>
-  </table></div>
-</section>
-
-<section class="s" id="consistentie">
-  <h2>Consistentie: hoeveel van de score is gewoonte</h2>
-  <div class="two">
-    <div>
-      <p>Een juist antwoord zegt niets over of het model het opnieuw geeft als de vraag net anders staat. Twee verstoringen veranderen niets aan het juiste antwoord: de antwoordopties in omgekeerde volgorde, en de instructie in informele in plaats van formele bewoording. Elke verandering van keuze is instabiliteit van het model, en niets anders.</p>
-      <p>De tabel toont per model het aandeel antwoorden dat van inhoud veranderde. Een model dat op de letter let in plaats van op de zin, draait om zodra de volgorde omkeert.</p>
-    </div>
-    <div class="ptbl"><table id="consistency-table">
-      <thead><tr><th>Model</th><th>Opgaven</th><th>Omgekeerde volgorde</th><th>Informele instructie</th></tr></thead>
-      <tbody></tbody>
+    <div class="ptbl"><table id="variant-table">
+      <thead><tr><th>Vorm</th><th>Wat verandert</th><th>Wat gelijk blijft</th></tr></thead>
+      <tbody>
+        <tr><td class="v">onverstoord</td><td>niets</td><td>alles</td></tr>
+        <tr><td class="v">opties omgekeerd</td><td>de antwoordopties in omgekeerde volgorde</td><td>de opgave en het juiste antwoord</td></tr>
+        <tr><td class="v">opties geschud</td><td>een vaste andere volgorde van de opties</td><td>idem</td></tr>
+        <tr><td class="v">informele instructie</td><td>de antwoordinstructie in spreektaal</td><td>de opgave</td></tr>
+        <tr><td class="v">Engelse instructie</td><td>de antwoordinstructie in het Engels</td><td>de opgave, in het Nederlands</td></tr>
+        <tr><td class="v">afleidende zin</td><td>één irrelevante Nederlandse zin vóór de opgave</td><td>de opgave</td></tr>
+        <tr><td class="v">typefouten</td><td>twee tikfouten in de vraagzin</td><td>de zin of het woord onder test</td></tr>
+      </tbody>
     </table></div>
   </div>
+  <div class="ptbl"><table id="sections-table">
+    <thead><tr><th>Onderdeel</th><th>Wat wordt getoetst</th><th>Opgaven</th><th>In de batterij</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p class="note">Elk onderdeel bestaat uit opgaven met één juist antwoord: meerkeuze, minimale paren, of een zin die exact moet worden herschreven. Er is geen beoordelaarsmodel. Algemene kennis (Global-MMLU) staat erbij als indicatie en telt niet mee in de worst-case.</p>
+</section>
+
+<section class="s" id="verstoringen">
+  <h2>Per verstoring</h2>
+  <p>De nauwkeurigheid per vorm, voor de modellen die de batterij hebben afgelegd. Merk op hoe weinig een enkele vorm beweegt en hoeveel de worst-case zakt: de instabiliteit zit verspreid over opgaven, niet geconcentreerd in één verstoring. Daarom telt het bord per opgave, niet per vorm.</p>
+  <div class="ptbl"><table id="pv-table"><thead></thead><tbody></tbody></table></div>
 </section>
 
 <section class="s" id="besmetting">
@@ -202,63 +205,61 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
   <div class="two">
     <div>
       <p>Elke openbare benchmark verslijt. Een model dat na publicatie is getraind kan de opgaven hebben gezien en scoort dan hoog zonder Nederlands te kennen. Daarom is er een held-out deel dat nooit is gecommit: alleen de id’s en gezouten hashes van de antwoorden staan online, in <code>docs/heldout-manifest.json</code>.</p>
-      <p>De toets vergelijkt de openbare score met de held-out score tegen het kleinste verschil dat het held-out deel kan zien. Met de huidige omvang is dat een ruwe zeef: alleen grove memorisatie valt erdoor. Daarnaast staat er een canary-GUID in de repository; een model dat die reproduceert is op deze repository getraind.</p>
+      <p>De toets vergelijkt de openbare score met de held-out score tegen het kleinste verschil dat het held-out deel kan zien. Daarnaast staat er een canary-GUID in de repository; een model dat die reproduceert is op deze repository getraind.</p>
     </div>
     <div class="ptbl"><table id="heldout-table">
-      <thead><tr><th>Model</th><th>Openbaar</th><th>Held-out</th><th>Verschil</th><th>Ruisgrens</th><th>Oordeel</th></tr></thead>
+      <thead><tr><th>Model</th><th>Openbaar</th><th>Held-out</th><th>Verschil</th><th>Ruisgrens</th><th>Oordeel</th><th>Canary</th></tr></thead>
       <tbody></tbody>
     </table></div>
   </div>
 </section>
 
-<section class="s" id="verschijnselen">
-  <h2>Taalvorm per verschijnsel</h2>
-  <p>De BLiMP-NL minimale paren, uitgesplitst naar taalkundig verschijnsel: twintig paren per verschijnsel, dus geen oordeel per rij, wel een kaart van waar de fouten van een model zich ophopen. Gesorteerd van moeilijkst naar makkelijkst over alle modellen.</p>
-  <div class="ptbl"><table id="phen-table"><thead></thead><tbody></tbody></table></div>
+<section class="s" id="controles">
+  <h2>De controles zijn de vloer</h2>
+  <p>Twee rijen op het bord zijn geen deelnemers. <b>always-a</b> kiest altijd de eerste optie en meet of de antwoordposities in balans zijn; <b>echo</b> herhaalt de vraag en meet of de antwoordextractie ooit iets uit niets maakt. Een bord dat zijn controles verbergt vraagt om vertrouwen in plaats van het te verdienen.</p>
 </section>
 
 <section class="s" id="struikelblokken">
   <h2>Waar de modellen struikelen</h2>
-  <p>De opgaven die de meeste modellen fout hebben, met het juiste antwoord. Dit zijn geen strikvragen: elke opgave staat openbaar in de repository en is door een persoon nagekeken. Het zegt waar het Nederlands van een model ophoudt, niet alleen hoe goed het is.</p>
+  <p>De opgaven die de meeste modellen onverstoord al fout hebben, met het juiste antwoord. Elke opgave staat openbaar in de repository en is door een persoon nagekeken.</p>
   <div class="ptbl"><table id="hardest-table">
     <thead><tr><th>Onderdeel</th><th>Opgave</th><th>Juist</th><th>Fout bij</th></tr></thead>
     <tbody></tbody>
   </table></div>
 </section>
 
-<section class="s" id="controles">
-  <h2>De controles zijn de vloer</h2>
-  <p>Twee rijen op het bord zijn geen deelnemers. <b>always-a</b> kiest altijd de eerste optie en meet of de antwoordposities in balans zijn; <b>echo</b> herhaalt de vraag en meet of de antwoordextractie ooit iets uit niets maakt. Beide horen te zakken. Een suite waar een controle slaagt is kapot, en een bord dat zijn controles verbergt vraagt om vertrouwen in plaats van het te verdienen.</p>
+<section class="s" id="verschijnselen">
+  <h2>Taalvorm per verschijnsel</h2>
+  <p>De BLiMP-NL minimale paren, uitgesplitst naar taalkundig verschijnsel: twintig paren per verschijnsel, onverstoord. Gesorteerd van moeilijkst naar makkelijkst over alle modellen.</p>
+  <div class="ptbl"><table id="phen-table"><thead></thead><tbody></tbody></table></div>
 </section>
 
 <section class="s" id="bestaand">
   <h2>Wat er al bestond, en wat dit toevoegt</h2>
   <div class="two">
     <div>
-      <p>Nederlands is geen onbediende taal. <a href="https://euroeval.com">EuroEval</a> draait een Nederlandse set met vertaalde en eigen taken, <a href="https://doi.org/10.34973/tj4p-y007">BLiMP-NL</a> levert 8.400 minimale paren met menselijke beoordelingen, en <a href="https://huggingface.co/datasets/CohereLabs/Global-MMLU">Global-MMLU</a> een Nederlandse vertaling van MMLU. Dit examen gebruikt de laatste twee als lagen en doet niet alsof ze niet bestaan.</p>
+      <p>Nederlands is geen onbediende taal. <a href="https://euroeval.com">EuroEval</a> draait een Nederlandse set met vertaalde en eigen taken, <a href="https://doi.org/10.34973/tj4p-y007">BLiMP-NL</a> levert 8.400 minimale paren met menselijke beoordelingen, en <a href="https://huggingface.co/datasets/CohereLabs/Global-MMLU">Global-MMLU</a> een Nederlandse vertaling van MMLU. Dit bord gebruikt de laatste twee als lagen en doet niet alsof ze niet bestaan.</p>
     </div>
     <div>
       <ul>
-        <li><b>Examenstructuur in plaats van één getal.</b> Een oordeel per onderdeel, met interval en slaaglijn, zoals het land zelf mensen toetst.</li>
-        <li><b>Geen beoordelaarsmodel.</b> Ook schrijven wordt exact gescoord: een foutieve zin verbeteren heeft één juiste uitkomst.</li>
+        <li><b>Worst-case in plaats van één getal.</b> Een opgave telt pas als ze onder elke vorm goed gaat. Dat raakt niet uitgeput: de batterij kan zwaarder zonder dat er een opgave verandert.</li>
+        <li><b>Geen beoordelaarsmodel, ook niet voor schrijven.</b> Foutverbetering heeft één juiste uitkomst, of een korte lijst.</li>
+        <li><b>Onderdelen die geen vertaalde benchmark heeft.</b> Werkwoordspelling, de twijfelgevallen van Taaladvies, Nederlandse notatie en de Belgisch-Nederlandse varianten.</li>
         <li><b>Besmetting is toetsbaar.</b> Een held-out deel dat nooit is gecommit, plus een canary.</li>
-        <li><b>Consistentie telt mee.</b> Hoeveel van een score omdraait bij een verstoring die het antwoord niet verandert.</li>
-        <li><b>Onderdelen die geen vertaalde benchmark heeft.</b> Werkwoordspelling, de twijfelgevallen van Taaladvies, kennis van de maatschappij en de arbeidsmarkt, Nederlandse notatie en de Belgisch-Nederlandse varianten.</li>
-        <li><b>Menselijke moeilijkheid als maatstaf.</b> Waar een model per token kan scoren, wordt zijn moeilijkheidsprofiel op de BLiMP-NL-paradigma's vergeleken met de menselijke beoordelingen; de beoordelingen zelf vragen een account bij de uitgever en staan niet in deze repository.</li>
+        <li><b>Waar, niet alleen hoeveel.</b> Verlies per onderdeel, per verstoring, per verschijnsel, en de opgaven zelf.</li>
       </ul>
     </div>
   </div>
 </section>
 
 <section class="s" id="beperkingen">
-  <h2>Wat dit examen niet meet</h2>
+  <h2>Wat dit bord niet zegt</h2>
   <ul>
-    <li><b>Spreken en Luisteren</b> zijn niet getoetst; dit is een tekstexamen.</li>
-    <li><b>Kleine onderdelen beslissen traag.</b> Het oordeel volgt de ondergrens van het interval, dus een onderdeel met <span id="n-lezen">60</span> opgaven (Lezen) slaagt pas bij een vrijwel foutloze score. Een onbeslist onderdeel is daardoor vaak een tekort van de set, niet van het model; meer opgaven scherpen elk oordeel.</li>
-    <li><b>De slaaglijn is een keuze.</b> Tachtig procent is een analogie met “voldoende”, geen officiële norm.</li>
+    <li><b>De batterij draait op een steekproef.</b> Gehoste modellen zijn op 150 tot 300 opgaven onder druk getest, gelaagd over de onderdelen; de onverstoorde score staat op de volledige set. De steekproefgrootte staat per rij vermeld.</li>
+    <li><b>De zes vormen zijn een keuze.</b> Andere verstoringen (dialect, langere context, andere opdrachtvolgorde) zijn denkbaar en kunnen erbij; elke toevoeging maakt de worst-case strenger, nooit milder.</li>
+    <li><b>Spreken en luisteren</b> zijn niet getoetst; dit is een tekstbord.</li>
     <li><b>Algemene kennis is een indicatie.</b> Global-MMLU is afgeleid van MMLU, een van de meest besmette benchmarks die er zijn.</li>
-    <li><b>Een run die niet reed</b> staat als zodanig op het bord, met de reden, in plaats van als nul. Een geblokkeerde API-sleutel is geen taalvaardigheid.</li>
-    <li><b>Het bord is klein.</b> Elke score draagt zijn interval; verschillen kleiner dan het kleinste detecteerbare verschil zijn geen rangorde.</li>
+    <li><b>Een run die niet reed</b> staat als zodanig op het bord, met de reden, in plaats van als nul.</li>
   </ul>
 </section>
 
@@ -266,11 +267,10 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
   <h2>Zelf draaien</h2>
   <p>De suite is een Python-pakket met een uitgavenplafond dat wordt afgedwongen, niet geadviseerd. Lokale modellen kosten niets; <span id="cost">de geschatte kosten per gehoste run staan in elk rapport</span>.</p>
 <pre>pip install -e .
-nl-eval --suite all --provider ollama --model qwen2.5:7b --out results/ollama__qwen2.5-7b.json
-nl-eval --suite all --provider anthropic --model claude-haiku-4-5-20251001 --max-spend 0.50 --out results/haiku.json
-nl-eval --consistency --suite core --limit 120 --provider anthropic --model claude-haiku-4-5-20251001 --out results/consistency__haiku.json
-nl-eval --suite holdout --provider anthropic --model claude-haiku-4-5-20251001 --out results/heldout__haiku.json
-nl-eval --contamination-check results/haiku.json results/heldout__haiku.json
+nl-eval --suite all --provider anthropic --model claude-sonnet-5 --max-spend 2.50 --out results/anthropic__claude-sonnet-5.json
+nl-eval --robustness --suite core --limit 300 --provider anthropic --model claude-sonnet-5 --out results/robustness__claude-sonnet-5.json
+nl-eval --suite holdout --provider anthropic --model claude-sonnet-5 --out results/heldout__claude-sonnet-5.json
+nl-eval --canary --provider anthropic --model claude-sonnet-5 --out results/canary__claude-sonnet-5.json
 nl-eval --publish results</pre>
   <p class="note">Broncode, opgaven en de volledige methode: <a href="https://github.com/hoeberigs/nl-eval">github.com/hoeberigs/nl-eval</a>.</p>
 </section>
@@ -280,7 +280,7 @@ nl-eval --publish results</pre>
   <ul>
     <li><b>BLiMP-NL</b> (Suijkerbuijk e.a., Computational Linguistics 2025), CC-BY-4.0; de menselijke beoordelingen CC BY-SA 4.0.</li>
     <li><b>Global-MMLU</b> (Cohere Labs), Apache-2.0; alleen het Nederlandse deel.</li>
-    <li><b>Handgeschreven opgaven</b> (Taalvorm, Schrijven, Lezen, Woordenschat, KNM, ONA), MIT, geschreven voor deze repository.</li>
+    <li><b>Handgeschreven opgaven</b> (Taalvorm, Spelling en grammatica, Schrijven, Lezen, Woordenschat), MIT, geschreven voor deze repository.</li>
   </ul>
 </section>
 
@@ -294,13 +294,15 @@ nl-eval --publish results</pre>
   const VENDOR = [["qwen","Alibaba"],["gemma","Google"],["geitje","Bram Vanroy, op Mistral 7B"],["mistral","Mistral"],["llama","Meta"],["phi","Microsoft"]];
   const provOf = r => r.provider==="ollama" ? ((VENDOR.find(([k])=>r.model.toLowerCase().includes(k))||[null,"open model"])[1] + " · lokaal via Ollama") : (PROV[r.provider]||r.provider);
   const NAMES = {"hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M":"GEITje-7B-ultra"};
-  const ABBR = {"claude-haiku-4-5-20251001":"Haiku","claude-sonnet-5":"Sonnet 5","gpt-5-mini":"GPT-5 mini","gpt-5-nano":"GPT-5 nano","gpt-5":"GPT-5","qwen2.5:7b":"Qwen 7B","gemma3:4b":"Gemma 3 4B","hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M":"GEITje 7B"};
-  const FLAP = {"geslaagd":"Geslaagd","onbeslist":"Onbeslist","niet geslaagd":"Niet geslaagd","onvolledig":"Onvolledig","rijdt niet":"Rijdt niet"};
-  const VORDER = {"geslaagd":0,"onbeslist":1,"onvolledig":2,"niet geslaagd":3,"rijdt niet":4};
+  const ABBR = {"claude-haiku-4-5-20251001":"Haiku","claude-sonnet-5":"Sonnet 5","gpt-5-mini":"GPT-5 mini","gpt-5-nano":"GPT-5 nano","gpt-5":"GPT-5","qwen2.5:7b":"Qwen 7B","gemma3:4b":"Gemma 3 4B","hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M":"GEITje 7B","llama3.2:3b":"Llama 3.2 3B","phi4-mini":"Phi-4 mini"};
+  const VAR = {"origineel":"onverstoord","omgekeerd":"opties omgekeerd","geschud":"opties geschud","informeel":"informele instructie","engels":"Engelse instructie","afleiding":"afleidende zin ervoor","typefouten":"typefouten in de vraag"};
+  const BANDW = {"stabiel":"Stabiel","wankel":"Wankel","onstabiel":"Onstabiel","niet getest":"Niet getest"};
+  const BORDER = {"stabiel":0,"wankel":1,"onstabiel":2,"niet getest":3};
   const pct = x => (x*100).toFixed(1).replace(".",",");
+  const pt = x => (x*100).toFixed(1).replace(".",",");
   const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const mark = (k,c="currentColor") => {
-    const p = k==="geslaagd" ? '<path d="M3 9l4 4 8-8"/>' : k==="onbeslist" ? '<path d="M3 10c2-3 4-3 6 0s4 3 6 0"/>' : k==="gezakt" ? '<path d="M4 4l10 10M14 4L4 14"/>' : '<path d="M3 9h12"/>';
+    const p = k==="ok" ? '<path d="M3 9l4 4 8-8"/>' : k==="un" ? '<path d="M3 10c2-3 4-3 6 0s4 3 6 0"/>' : k==="no" ? '<path d="M4 4l10 10M14 4L4 14"/>' : '<path d="M3 9h12"/>';
     return `<svg class="mk" viewBox="0 0 18 18" width="15" height="15" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
   };
   const label = r => NAMES[r.model] || r.model.replace("-20251001","");
@@ -310,23 +312,31 @@ nl-eval --publish results</pre>
   try { d = await (await fetch("results.json",{cache:"no-store"})).json(); }
   catch(e){ document.getElementById("rows").innerHTML = '<tr><td colspan="3" style="color:var(--yel)">results.json kon niet worden geladen. Draai <code>nl-eval --publish results</code>.</td></tr>'; return; }
 
-  const secs = d.sections.filter(s=>s.verdict);
+  const secs = d.sections.filter(s=>!s.indicator);
   const stampDate = new Date(d.generated_at);
   const stamp = stampDate.toLocaleString("nl-NL",{day:"numeric",month:"numeric",year:"numeric",hour:"2-digit",minute:"2-digit"});
   document.getElementById("stamp").textContent = "bijgewerkt " + stamp;
-  document.getElementById("passline").textContent = pct(d.pass_line).replace(",0","") + "%";
-  document.getElementById("perron-head").textContent = "Perron · per onderdeel tegen de slaaglijn van " + pct(d.pass_line).replace(",0","") + "%";
+  document.getElementById("b1").textContent = Math.round(d.bands.stabiel*100);
+  document.getElementById("b2").textContent = Math.round(d.bands.wankel*100);
   document.getElementById("foot").textContent = `${d.runs.length} runs · bijgewerkt ${stamp}`;
   { const costs = d.runs.filter(r=>r.est_cost_eur!=null && !r.is_control && r.provider!=="ollama" && r.provider.indexOf("hf")!==0).map(r=>r.est_cost_eur);
-    if (costs.length) document.getElementById("cost").textContent = `de duurste gehoste run op het bord is geschat op € ${Math.max(...costs).toFixed(2).replace(".",",")} voor alle ${d.runs[0].n} opgaven`; }
+    if (costs.length) document.getElementById("cost").textContent = `de duurste onverstoorde run op het bord is geschat op € ${Math.max(...costs).toFixed(2).replace(".",",")}, de batterij kost zevenmaal de steekproef`; }
+
+  const tested = r => !!r.robustness && !r.failed;
+  const headline = r => tested(r) ? r.robustness.worst_case : r.accuracy;
 
   function via(r){
     const parts = [];
     for (const s of r.sections){
-      if (!s.verdict_bearing || s.verdict==="niet afgelegd") continue;
-      if (s.verdict==="geslaagd") parts.push(`<span>${esc(s.label)}</span>`);
-      else if (s.verdict==="onbeslist") parts.push(`<span class="u">${mark("onbeslist","#ffc917")}${esc(s.label)}</span>`);
-      else parts.push(`<s>${mark("gezakt","#a9b8e0")}${esc(s.label)}</s>`);
+      if (s.indicator || !s.n) continue;
+      if (tested(r) && s.worst_case!=null){
+        if (s.worst_case < 0.6) parts.push(`<s>${mark("no","#a9b8e0")}${esc(s.label)}</s>`);
+        else if (s.drop >= 0.10) parts.push(`<span class="u">${mark("un","#ffc917")}${esc(s.label)}</span>`);
+        else parts.push(`<span>${esc(s.label)}</span>`);
+      } else {
+        if (s.accuracy < 0.6) parts.push(`<s>${mark("no","#a9b8e0")}${esc(s.label)}</s>`);
+        else parts.push(`<span>${esc(s.label)}</span>`);
+      }
     }
     return parts.length ? parts.join(" · ") : '<span class="u">alleen Taalvorm</span>';
   }
@@ -334,42 +344,62 @@ nl-eval --publish results</pre>
     if (r.failed) return "run niet gereden: " + (r.failure_reason && /429/.test(r.failure_reason) ? "quota van de API-sleutel overschreden (HTTP 429)" : (r.failure_reason||"providerfout").slice(0,90));
     if (r.is_control) return /always/.test(r.model) ? "controle: kiest altijd de eerste optie" : "controle: herhaalt de vraag";
     const out = [];
-    const c = r.consistency;
-    if (c && c.order_reversed.flip_rate!=null){
-      out.push(`${pct(c.order_reversed.flip_rate)}% draait om bij omgekeerde antwoordvolgorde`);
-      if (c.register_swapped.flip_rate>=0.05) out.push(`${pct(c.register_swapped.flip_rate)}% bij informele instructie`);
+    if (tested(r)){
+      const w = r.robustness.weakest_variant;
+      if (w) out.push(`verliest het meest bij ${VAR[w.name]||w.name} (${pt(r.robustness.original - w.accuracy)} pt)`);
+      const secs2 = r.sections.filter(s=>!s.indicator && s.drop!=null).sort((a,b)=>b.drop-a.drop);
+      if (secs2.length && secs2[0].drop>=0.10) out.push(`zwakste onderdeel onder druk: ${secs2[0].label} (${pt(secs2[0].drop)} pt)`);
+    } else {
+      const c = r.consistency;
+      if (c && c.order_reversed.flip_rate!=null) out.push(`omkeerproef: ${pct(c.order_reversed.flip_rate)}% van de antwoorden draait om`);
+      if (r.n > 600 && !r.is_control) out.push("batterij nog niet gedraaid");
     }
-    const fail = r.sections.filter(s=>s.verdict==="gezakt").map(s=>`${s.label} (${pct(s.accuracy)}%)`);
-    if (fail.length) out.push("gezakt voor " + fail.join(", "));
-    const und = r.sections.filter(s=>s.verdict==="onbeslist").map(s=>s.label);
-    if (und.length) out.push(und.join(", ") + ": te weinig opgaven voor een oordeel");
-    if (r.sections.filter(s=>s.verdict_bearing && s.verdict!=="niet afgelegd").length<=1) out.push("alleen BLiMP-NL, gescoord op waarschijnlijkheid");
-    if (r.heldout) out.push(`held-out ${pct(r.heldout.accuracy)}%, ${/no evidence/.test(r.heldout.verdict)?"geen teken van besmetting":r.heldout.verdict}`);
+    if (r.n < 600 && !r.is_control && !r.failed) out.push("alleen BLiMP-NL, gescoord op waarschijnlijkheid");
+    if (r.heldout) out.push(`held-out ${pct(r.heldout.heldout_accuracy)}%, ${r.heldout.verdict.split(":")[0]}`);
     return out.slice(0,3).join(" · ");
   }
   function detail(r){
-    return r.sections.filter(s=>s.n>0).map(s=>`<span>${esc(s.label)} ${pct(s.accuracy)}% <span style="opacity:.7">[${pct(s.ci95[0])}–${pct(s.ci95[1])}] n=${s.n}</span></span>`).join("");
+    return r.sections.filter(s=>s.n>0).map(s=>{
+      const base = `${esc(s.label)} ${pct(s.accuracy)}%`;
+      const rb = tested(r) && s.worst_case!=null ? ` <span style="opacity:.8">onder druk ${pct(s.original)} → ${pct(s.worst_case)}</span>` : "";
+      return `<span>${base}${rb}</span>`;
+    }).join("");
+  }
+  function scoreCell(r){
+    if (tested(r)){
+      const rb = r.robustness;
+      return `${pct(rb.worst_case)}<small class="y">onverstoord ${pct(rb.original)} → ${pct(rb.worst_case)} · ${rb.items} opgaven</small><small>volledige set ${pct(r.accuracy)}</small>`;
+    }
+    return `${pct(r.accuracy)}<small>${pct(r.ci95[0])} – ${pct(r.ci95[1])}</small><small>${r.failed?"":"nog niet onder druk getest"}</small>`;
+  }
+  function flapText(r){
+    if (r.failed) return "Rijdt niet";
+    if (r.is_control) return "Controle";
+    if (tested(r)) return `${BANDW[r.robustness.band]} −${pt(r.robustness.gap)}`;
+    return "Niet getest";
   }
 
-  let sortKey = "accuracy", sortDir = -1;
+  let sortKey = "score", sortDir = -1;
   function renderBoard(animate){
     const runs = d.runs.slice().sort((a,b)=>{
       if (a.is_control!==b.is_control) return a.is_control?1:-1;
       if (a.failed!==b.failed) return a.failed?1:-1;
       const ia = a.n<600, ib = b.n<600; if (ia!==ib) return ia?1:-1;
+      if (sortKey==="score"){ const ta=tested(a), tb=tested(b); if (ta!==tb) return ta?-1:1; }
       let va, vb;
-      if (sortKey==="accuracy"){ va=a.accuracy; vb=b.accuracy; }
+      if (sortKey==="score"){ va=headline(a); vb=headline(b); }
       else if (sortKey==="model"){ va=label(a).toLowerCase(); vb=label(b).toLowerCase(); }
-      else { va=VORDER[a.verdict]; vb=VORDER[b.verdict]; }
+      else { va=tested(a)?a.robustness.gap:9; vb=tested(b)?b.robustness.gap:9; }
       const cmp = va<vb ? -1 : va>vb ? 1 : 0;
       return cmp * sortDir;
     });
     const tb = document.getElementById("rows");
     tb.innerHTML = runs.map((r,i)=>{
-      const dim = (r.failed||r.is_control) ? " dim" : "";
-      const flap = r.failed ? `<span class="flap no">${FLAP[r.verdict]}</span>` : `<span class="flap${animate?" flip":""}" style="animation-delay:${i*70+120}ms">${FLAP[r.verdict]}</span>`;
+      const dim = (r.failed||r.is_control||!tested(r)&&r.n>600&&false) ? " dim" : "";
+      const plain = r.failed || r.is_control || !tested(r);
+      const flap = plain ? `<span class="flap no${r.failed||r.is_control?"":" dimmed"}">${flapText(r)}</span>` : `<span class="flap${animate?" flip":""}" style="animation-delay:${i*70+120}ms">${flapText(r)}</span>`;
       return `<tr class="run${dim}" id="model-${esc(label(r)).replace(/[^a-z0-9]+/gi,"-").toLowerCase()}" style="--i:${i}">
-        <td class="score">${pct(r.accuracy)}<small>${pct(r.ci95[0])} – ${pct(r.ci95[1])}</small></td>
+        <td class="score">${scoreCell(r)}</td>
         <td class="model"><button class="rowbtn" type="button" aria-expanded="false" aria-label="Details van ${esc(label(r))}">
           <div class="name">${esc(label(r))}</div><div class="prov">${esc(provOf(r))}</div>
           <span class="mflap">${flap.replace(' flip','')}</span>
@@ -384,79 +414,86 @@ nl-eval --publish results</pre>
   renderBoard(true);
   document.querySelectorAll("th button[data-sort]").forEach(btn=>btn.addEventListener("click",()=>{
     const k = btn.dataset.sort;
-    if (sortKey===k) sortDir = -sortDir; else { sortKey=k; sortDir = k==="accuracy" ? -1 : 1; }
+    if (sortKey===k) sortDir = -sortDir; else { sortKey=k; sortDir = k==="score" ? -1 : 1; }
     document.querySelectorAll("th[aria-sort]").forEach(th=>th.removeAttribute("aria-sort"));
     btn.parentElement.setAttribute("aria-sort", sortDir===-1 ? "descending" : "ascending");
     renderBoard(true);
   }));
 
-  // perron
-  const real = d.runs.filter(r=>!r.failed && !r.is_control && r.sections.filter(s=>s.n>0 && s.verdict_bearing).length>1);
-  const lows = real.flatMap(r=>r.sections.filter(x=>x.n>0 && x.verdict_bearing).map(x=>x.ci95[0]));
-  const axisMin = Math.max(0, Math.floor(Math.min(...lows, d.pass_line-0.1)*10)/10);
+  // perron: band from worst-case to original per section; tick for untested runs
+  const real = d.runs.filter(r=>!r.failed && !r.is_control && r.n>600);
+  const testedRuns = real.filter(tested), untested = real.filter(r=>!tested(r));
+  const vals = [];
+  real.forEach(r=>r.sections.forEach(s=>{ if (!s.indicator && s.n){ vals.push(s.accuracy); if (s.worst_case!=null) vals.push(s.worst_case);} }));
+  const axisMin = Math.max(0, Math.floor(Math.min(...vals)*10)/10);
   const X = v => Math.max(0, Math.min(100, (v-axisMin)/(1-axisMin)*100));
-  { const ticks=[]; for (let t=axisMin; t<=1.0001; t+=0.1){ const v=Math.round(t*100); const isPass=Math.abs(t-d.pass_line)<1e-6; const tx = t===axisMin ? "none" : v===100 ? "translateX(-100%)" : "translateX(-50%)"; ticks.push(`<span${isPass?' class="p"':''} style="position:absolute;left:${X(t).toFixed(1)}%;transform:${tx}">${v}${isPass?" slaaglijn":(t===axisMin||v===100?"%":"")}</span>`);} document.getElementById("axis").innerHTML=`<div style="position:relative;height:18px">${ticks.join("")}</div>`; }
+  { const ticks=[]; for (let t=axisMin; t<=1.0001; t+=0.1){ const v=Math.round(t*100); const tx = t===axisMin ? "none" : v===100 ? "translateX(-100%)" : "translateX(-50%)"; ticks.push(`<span style="position:absolute;left:${X(t).toFixed(1)}%;transform:${tx}">${v}${(t===axisMin||v===100)?"%":""}</span>`);} document.getElementById("axis").innerHTML=`<div style="position:relative;height:18px">${ticks.join("")}</div>`; }
+  const order = [...testedRuns, ...untested];
   document.getElementById("tracks").innerHTML = secs.map(sec=>{
-    const bands = real.map((r,i)=>{
+    const bands = order.map((r,i)=>{
       const s = r.sections.find(x=>x.id===sec.id); if (!s || !s.n) return "";
-      const [lo,hi] = s.ci95;
-      const cls = s.verdict==="geslaagd"?"ok":s.verdict==="onbeslist"?"un":"no";
-      const P = X(d.pass_line);
-      const nearLine = X(hi) > P-6 && X(hi) < P+6;
-      // A label sits left of its band when the band starts far enough in
-      // for the label to fit, otherwise right of it; it never leaves the rail
-      // on either side, and never detaches from its own band.
-      const leftSide = X(hi) > 62 && X(lo) >= 30;
-      const pos = leftSide ? `right:${(100-X(lo)).toFixed(1)}%;margin-right:8px` : `left:${Math.min(X(hi), 62).toFixed(1)}%;margin-left:8px`;
-      return `<div class="band ${cls}" style="left:${X(lo).toFixed(1)}%;width:${Math.max(1.2,X(hi)-X(lo)).toFixed(1)}%;top:${7+i*16}px" title="${esc(short(r))} ${pct(s.accuracy)}%"></div><div class="lab" style="${pos};top:${i*16+1}px">${esc(short(r))} ${pct(s.accuracy)}</div>`;
+      const top = 7+i*16, ltop = i*16+1;
+      if (tested(r) && s.worst_case!=null){
+        const lo = X(s.worst_case), hi = X(s.original);
+        const left = hi > 62 && lo >= 30;
+        const pos = left ? `right:${(100-lo).toFixed(1)}%;margin-right:8px` : `left:${Math.min(hi,62).toFixed(1)}%;margin-left:8px`;
+        const w = s.drop >= 0.10 ? " w" : "";
+        return `<div class="band${w}" style="left:${lo.toFixed(1)}%;width:${Math.max(1.2,hi-lo).toFixed(1)}%;top:${top}px" title="${esc(short(r))} ${pct(s.original)} → ${pct(s.worst_case)}"></div><div class="lab" style="${pos};top:${ltop}px">${esc(short(r))} ${pct(s.original)} → ${pct(s.worst_case)}</div>`;
+      }
+      const x = X(s.accuracy);
+      const pos = x > 62 ? `right:${(100-x).toFixed(1)}%;margin-right:8px` : `left:${x.toFixed(1)}%;margin-left:8px`;
+      return `<div class="band tick" style="left:${x.toFixed(1)}%;top:${top}px"></div><div class="lab" style="${pos};top:${ltop}px;color:var(--dim-2)">${esc(short(r))} ${pct(s.accuracy)}</div>`;
     }).join("");
-    const n = real.length ? real[0].sections.find(x=>x.id===sec.id).n : 0;
-    return `<div class="track"><div class="tl">${esc(sec.label)}</div><div class="rail" style="--rows:${real.length}"><div class="pass" style="left:${X(d.pass_line)}%"></div>${bands}</div></div>`;
+    return `<div class="track"><div class="tl">${esc(sec.label)}</div><div class="rail" style="--rows:${order.length}">${bands}</div></div>`;
   }).join("");
-  { const real = d.runs.filter(r=>!r.is_control && !r.failed && r.n>600);
-    const pass = real.filter(r=>r.verdict==="geslaagd"), fail = real.filter(r=>r.verdict==="niet geslaagd"), und = real.filter(r=>r.verdict==="onbeslist");
-    const cnt = {}; real.forEach(r=>r.sections.forEach(s=>{ if (s.verdict_bearing && s.verdict!=="geslaagd") cnt[s.label]=(cnt[s.label]||0)+1; }));
-    const worst = Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
-    const naam = r => label(r);
-    let t = `${real.length} modellen legden het volledige examen af. `;
-    t += pass.length ? `Geslaagd: ${pass.map(naam).join(", ")}. ` : "Nog geen model is voor alle onderdelen geslaagd. ";
-    if (und.length) t += `Onbeslist: ${und.map(r=>naam(r)+" ("+r.sections.filter(s=>s.verdict==="onbeslist").map(s=>s.label).join(", ")+")").join("; ")}. `;
-    if (fail.length) t += `Gezakt: ${fail.map(r=>naam(r)+" ("+r.sections.filter(s=>s.verdict==="gezakt").map(s=>s.label).join(", ")+")").join("; ")}. `;
-    if (worst) t += `Het onderdeel dat het vaakst niet wordt gehaald is ${worst[0]}.`;
-    document.getElementById("lede").textContent = t; }
-  document.getElementById("legend").innerHTML = [`zonder teken: geslaagd`, `${mark("onbeslist","#081858")} onbeslist`, `${mark("gezakt","#081858")} gezakt`, `slaaglijn ${pct(d.pass_line).replace(",0","")}%, ondergrens van het 95%-interval`, `klik of tab naar een rij voor de scores per onderdeel`].map(x=>`<span style="white-space:nowrap">${x}</span>`).join(" · ");
+
+  // lede + legend
+  { const t = [];
+    if (testedRuns.length){
+      const best = testedRuns.slice().sort((a,b)=>b.robustness.worst_case-a.robustness.worst_case)[0];
+      const stable = testedRuns.slice().sort((a,b)=>a.robustness.gap-b.robustness.gap)[0];
+      const worst = testedRuns.slice().sort((a,b)=>b.robustness.gap-a.robustness.gap)[0];
+      t.push(`${testedRuns.length} modellen zijn onder druk getest.`);
+      t.push(`Hoogste worst-case: ${label(best)} (${pct(best.robustness.worst_case)}%).`);
+      t.push(`Stabielste: ${label(stable)}, dat ${pt(stable.robustness.gap)} punten verliest tussen onverstoord en worst-case.`);
+      if (worst!==stable) t.push(`Grootste verlies: ${label(worst)}, ${pt(worst.robustness.gap)} punten.`);
+    } else t.push("Nog geen model is onder druk getest.");
+    if (untested.length) t.push(`Nog niet in de batterij: ${untested.map(label).join(", ")}.`);
+    document.getElementById("lede").textContent = t.join(" "); }
+  document.getElementById("legend").innerHTML = [`balk: van worst-case (links) tot onverstoord (rechts)`, `geel: meer dan tien punten verlies in dat onderdeel`, `streepje: alleen onverstoord gemeten`, `${mark("no","#081858")} onder 60%`, `klik of tab naar een rij voor de scores per onderdeel`].map(x=>`<span style="white-space:nowrap">${x}</span>`).join(" · ");
 
   // sections table
   const ref = real[0] || d.runs[0];
   document.querySelector("#sections-table tbody").innerHTML = d.sections.map(sec=>{
     const s = ref.sections.find(x=>x.id===sec.id);
-    return `<tr><td class="v">${esc(sec.label)}</td><td>${esc(sec.what)}</td><td class="n">${s?s.n:0}</td><td>${sec.verdict?"oordeel tegen de slaaglijn":"indicatie, geen oordeel"}</td></tr>`;
+    return `<tr><td class="v">${esc(sec.label)}</td><td>${esc(sec.what)}</td><td class="n">${s?s.n:0}</td><td>${sec.indicator?"nee, indicatie":"ja"}</td></tr>`;
   }).join("");
-  const lz = ref.sections.find(x=>x.id==="lezen"); if (lz) document.getElementById("n-lezen").textContent = lz.n;
+
+  // per-variant table
+  { const models = testedRuns;
+    const variants = models.length ? Object.keys(models[0].robustness.per_variant) : [];
+    document.querySelector("#pv-table thead").innerHTML = `<tr><th>Model</th>${variants.map(v=>`<th style="text-align:right">${esc(VAR[v]||v)}</th>`).join("")}<th style="text-align:right">worst-case</th></tr>`;
+    document.querySelector("#pv-table tbody").innerHTML = models.length ? models.map(r=>`<tr><td class="v">${esc(label(r))}</td>${variants.map(v=>`<td class="n">${pct(r.robustness.per_variant[v])}%</td>`).join("")}<td class="n"><b>${pct(r.robustness.worst_case)}%</b></td></tr>`).join("") : '<tr><td>nog geen batterij gedraaid</td></tr>'; }
+
+  // held-out
+  const ho = d.runs.filter(r=>r.heldout);
+  document.querySelector("#heldout-table tbody").innerHTML = ho.length ? ho.map(r=>{
+    const h=r.heldout; const cn = r.canary ? `${r.canary.reproduced} van ${r.canary.probes}` : "–";
+    return `<tr><td class="v">${esc(label(r))}</td><td class="n">${pct(h.public_accuracy)}%</td><td class="n">${pct(h.heldout_accuracy)}% (n=${h.n})</td><td class="n">${(h.gap*100).toFixed(1).replace(".",",")} pt</td><td class="n">${(h.noise_floor*100).toFixed(1).replace(".",",")} pt</td><td>${esc(h.verdict.split(":")[0])}</td><td class="n">${cn}</td></tr>`;
+  }).join("") : '<tr><td colspan="7">nog geen held-out run</td></tr>';
+
+  // hardest
+  { const SEC = {}; d.sections.forEach(s=>s.categories.forEach(c=>SEC[c]=s.label));
+    const h = d.hardest || [];
+    document.querySelector("#hardest-table tbody").innerHTML = h.length ? h.map(x=>`<tr><td class="v">${esc(SEC[x.category]||x.category)}</td><td>${x.context?`<span style="color:var(--tilemute)">${esc(x.context)}</span><br>`:""}${esc(x.question)}</td><td><b>${esc(x.answer)}</b></td><td class="n">${x.missed_by.length} van ${x.of}<br><span style="font-size:13px;color:var(--tilemute)">${esc(x.missed_by.map(m=>NAMES[m]||m.replace("-20251001","")).join(", "))}</span></td></tr>`).join("") : '<tr><td colspan="4">nog geen runs</td></tr>'; }
 
   // phenomena
   { const ph = d.phenomena || [];
     if (ph.length) {
       const models = Object.keys(ph[0].by_model);
       document.querySelector("#phen-table thead").innerHTML = `<tr><th>Verschijnsel</th>${models.map(m=>`<th style="text-align:right">${esc(ABBR[m]||m.replace("-20251001",""))}</th>`).join("")}</tr>`;
-      document.querySelector("#phen-table tbody").innerHTML = ph.map(r=>`<tr><td class="v" style="text-transform:none;letter-spacing:0">${esc(r.phenomenon)}</td>${models.map(m=>{const v=r.by_model[m]; return `<td class="n"${v!=null&&v<d.pass_line?' style="color:#8a1d1d;font-weight:600"':''}>${v==null?"–":(v<d.pass_line?mark("gezakt","#8a1d1d"):"")+pct(v)+"%"}</td>`;}).join("")}</tr>`).join("");
+      document.querySelector("#phen-table tbody").innerHTML = ph.map(r=>`<tr><td class="v" style="text-transform:none;letter-spacing:0">${esc(r.phenomenon)}</td>${models.map(m=>{const v=r.by_model[m]; return `<td class="n"${v!=null&&v<0.8?' style="color:#8a1d1d;font-weight:600"':''}>${v==null?"–":(v<0.8?mark("no","#8a1d1d"):"")+pct(v)+"%"}</td>`;}).join("")}</tr>`).join("");
     } else document.querySelector("#phen-table tbody").innerHTML = '<tr><td>nog geen runs</td></tr>'; }
-
-  // hardest items
-  { const SEC = {}; d.sections.forEach(s=>s.categories.forEach(c=>SEC[c]=s.label));
-    const h = d.hardest || [];
-    document.querySelector("#hardest-table tbody").innerHTML = h.length ? h.map(x=>`<tr><td class="v">${esc(SEC[x.category]||x.category)}</td><td>${x.context?`<span style="color:var(--tilemute)">${esc(x.context)}</span><br>`:""}${esc(x.question)}</td><td><b>${esc(x.answer)}</b></td><td class="n">${x.missed_by.length} van ${x.of}<br><span style="font-size:13px;color:var(--tilemute)">${esc(x.missed_by.map(m=>m.replace("-20251001","")).join(", "))}</span></td></tr>`).join("") : '<tr><td colspan="4">nog geen runs</td></tr>'; }
-
-  // consistency
-  const cons = d.runs.filter(r=>r.consistency);
-  document.querySelector("#consistency-table tbody").innerHTML = cons.length ? cons.map(r=>`<tr><td class="v">${esc(label(r))}</td><td class="n">${r.consistency.items_probed}</td><td class="n">${pct(r.consistency.order_reversed.flip_rate)}%</td><td class="n">${pct(r.consistency.register_swapped.flip_rate)}%</td></tr>`).join("") : '<tr><td colspan="4">nog geen consistentieproef gedraaid</td></tr>';
-
-  // held-out
-  const ho = d.runs.filter(r=>r.heldout);
-  document.querySelector("#heldout-table tbody").innerHTML = ho.length ? ho.map(r=>{
-    const h=r.heldout; const v = /no evidence/.test(h.verdict) ? "geen teken van besmetting" : /suggestive/.test(h.verdict) ? "verdacht" : "waarschijnlijk besmet";
-    return `<tr><td class="v">${esc(label(r))}</td><td class="n">${pct(h.public_accuracy)}%</td><td class="n">${pct(h.heldout_accuracy)}% (n=${h.n})</td><td class="n">${(h.gap*100).toFixed(1).replace(".",",")} pt</td><td class="n">${(h.noise_floor*100).toFixed(1).replace(".",",")} pt</td><td>${v}</td></tr>`;
-  }).join("") : '<tr><td colspan="6">nog geen held-out run</td></tr>';
 })();
 </script>
 </body>

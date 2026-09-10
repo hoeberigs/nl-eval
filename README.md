@@ -1,81 +1,88 @@
-# nl-eval: het inburgeringsexamen voor taalmodellen
+# nl-eval: Nederlands onder druk
 
-A Dutch benchmark for language models, structured the way the Netherlands
-tests people who move here: an exam with sections, a pass line per section,
-and a verdict. No judge model anywhere. Every item is scored deterministically,
-a held-out split makes contamination testable, and consistency probes report
-how much of a score is positional habit rather than Dutch.
+How stable is a language model's Dutch? Every item is asked in its original
+form and in six meaning-preserving variants; a model gets the item only when
+it answers all seven correctly. That share, **worst-case accuracy**, is the
+headline. Plain accuracy stays on the board as the ceiling a model reaches
+when nothing is disturbed. No judge model anywhere, a held-out split that was
+never committed, and controls on the board as the floor.
 
 Live board: <https://hoeberigs.github.io/nl-eval/>
 
-## The exam
+## Why worst case
+
+On a fixed item set the best models sit within a few points of each other and
+all of them clear any sensible line. Accuracy is a solved axis. What is not
+solved is whether an answer survives a change that leaves the correct answer
+untouched. Under any single variant the per-variant accuracy barely moves; the
+worst case over all variants moves a lot, because the instability is spread
+across items rather than concentrated in one perturbation. Only a per-item
+aggregation exposes it, and it leaves headroom that can be tightened by adding
+variants without touching an item.
+
+## The battery
+
+| Form | What changes | What stays |
+|---|---|---|
+| onverstoord | nothing | everything |
+| opties omgekeerd | the options in reverse order | item and correct answer |
+| opties geschud | a fixed other order of the options | idem |
+| informele instructie | the answer instruction in informal Dutch | the item |
+| Engelse instructie | the answer instruction in English | the item, in Dutch |
+| afleidende zin | one irrelevant Dutch sentence before the item | the item |
+| typefouten | two typos in the carrier question | the sentence or word under test |
+
+A drop from original to worst case under 5 points is **stabiel**, under 15
+**wankel**, above that **onstabiel**. There is no pass line and no verdict.
+
+## The items
 
 | Onderdeel | What it tests | Items | Scoring |
 |---|---|---:|---|
 | Taalvorm | word order, Belgian versus Dutch variants, notation conventions, plus the 440 BLiMP-NL minimal pairs | 570 | MCQ; minimal pairs by likelihood where the provider can score, MCQ otherwise |
-| Spelling en grammatica | de/het, diminutives, tussen-n and compounds, verb spelling (d/t/dt), the Taaladvies doubt cases (hen/hun, als/dan, die/dat, prepositions, inflection) | 273 | MCQ |
-| Schrijven | rewrite a sentence with exactly one error | 69 | exact match against the corrected sentence; alternative corrections accepted where more than one is right |
-| Lezen | practical passages: letters, leaflets, notices, contracts, rosters, with a question on a condition, exception, date or action; some answers are "dat staat er niet" | 60 | MCQ |
+| Spelling en grammatica | de/het, diminutives, tussen-n and compounds, verb spelling (d/t/dt), the Taaladvies doubt cases | 273 | MCQ |
+| Schrijven | rewrite a sentence with exactly one error | 69 | exact match; alternative corrections accepted where more than one is right |
+| Lezen | practical passages with a question on a condition, exception, date or action; some answers are "dat staat er niet" | 60 | MCQ |
 | Woordenschat | idioms, false friends with English and German | 92 | MCQ |
-| KNM | kennis van de Nederlandse maatschappij: institutions, customs, geography, rights and duties | 120 | MCQ |
-| ONA en register | orientation on the labour market; formal versus informal register | 50 | MCQ |
-| Algemene kennis | Global-MMLU, Dutch split; an indicator, never a verdict | 299 | MCQ |
+| Algemene kennis | Global-MMLU, Dutch split; an indicator, outside the worst case | 299 | MCQ |
 
-1,533 items in total, 794 of them written for this repository. Spreken and
-Luisteren are out of scope: this is a text exam.
+1,363 items, 624 written for this repository. The battery runs on a
+stratified sample of the multiple-choice items (150 or 300 per model, noted
+per row); the undisturbed score is computed on the full set. Text only:
+speech is out of scope.
 
-### The verdict rule
+## Results, 10 September 2026
 
-Each verdict-bearing section gets a Wilson 95% interval. It **passes** when the
-lower bound clears the pass line, **fails** when the upper bound stays below
-it, and is **undecided** otherwise. A small section cannot pass on a lucky
-draw, and that is deliberate. The pass line is 0.80, an analogy to
-"voldoende" chosen here; it is not a DUO threshold and the page says so.
+| Model | Worst case | Original (sample) | Drop | Band | Full set | Held-out |
+|---|---:|---:|---:|---|---:|---:|
+| claude-sonnet-5 | **90.0%** (n=150) | 98.0% | 8.0 | wankel | 93.3% | 97.4% (geen teken van besmetting) |
+| gpt-5 | **87.3%** (n=150) | 92.0% | 4.7 | stabiel | 90.9% | 92.2% (geen teken van besmetting) |
+| claude-haiku-4-5 | **78.7%** (n=300) | 90.3% | 11.7 | wankel | 89.4% | 90.8% (geen teken van besmetting) |
+| gpt-5-mini | **75.7%** (n=300) | 90.3% | 14.7 | wankel | 88.3% | 90.2% (geen teken van besmetting) |
+| gpt-5-nano | **63.3%** (n=300) | 83.0% | 19.7 | onstabiel | 80.2% | 77.8% (geen teken van besmetting) |
+| qwen2.5:7b (local) | not tested | | | | 74.6% | 71.2% (geen teken van besmetting) |
+| gemma3:4b (local) | not tested | | | | 67.3% | 70.6% (geen teken van besmetting) |
+| GEITje-7B-ultra (local) | not tested | | | | 53.9% | 56.9% (geen teken van besmetting) |
+| llama3.2:3b (local) | not tested | | | | 53.9% | 64.7% (geen teken van besmetting) |
+| phi4-mini (local) | not tested | | | | 52.3% | 66.7% (geen teken van besmetting) |
+| GroNLP/gpt2-small-dutch | | | | BLiMP-NL only, by likelihood | 87.3% | |
+| gemini-3.6-flash | did not run | | | provider quota error | | |
+| always-a (control) | not tested | | | | 35.2% | not run |
+| echo (control) | not tested | | | | 0.0% | not run |
 
-A model passes the exam when it passes every verdict-bearing section, fails as
-soon as it fails one, and is undecided otherwise. A run whose replies are
-mostly provider errors is shown as "rijdt niet" with its reason, never as a
-zero. The rule lives in one place, `src/nleval/publish.py`; the page renders
-verdicts and never computes them.
+Readings from the board:
 
-## Results, 9 September 2026
-
-| Model | Score (n=1533) | Verdict | Open or failed sections | Order-flip | Register-flip | Held-out |
-|---|---:|---|---|---:|---:|---:|
-| claude-sonnet-5 | 93.9% | passed | all sections passed | 0.8% | 0.8% | 97.5% (no sign of contamination) |
-| gpt-5 | 91.8% | passed | all sections passed | 2.5% | 0.0% | 92.6% (no sign of contamination) |
-| claude-haiku-4-5 | 89.8% | passed | all sections passed | 18.1% | 3.1% | 91.4% (no sign of contamination) |
-| gpt-5-mini | 89.0% | undecided | Spelling en grammatica undecided | 25.0% | 8.8% | 90.8% (no sign of contamination) |
-| gpt-5-nano | 81.3% | failed | Spelling en grammatica gezakt (74.0%); Lezen undecided; KNM undecided | 46.2% | 8.1% | 79.1% (no sign of contamination) |
-| qwen2.5:7b (local) | 74.7% | failed | Spelling en grammatica undecided; Schrijven undecided; Lezen undecided; Woordenschat undecided; KNM gezakt (69.2%); ONA en register undecided | 26.2% | 3.1% | 71.8% (no sign of contamination) |
-| gemma3:4b (local) | 68.9% | failed | Taalvorm undecided; Spelling en grammatica gezakt (64.8%); Schrijven undecided; Lezen gezakt (66.7%); Woordenschat undecided; KNM undecided; ONA en register undecided | 38.8% | 5.6% | 70.5% (no sign of contamination) |
-| GEITje-7B-ultra (local) | 56.4% | failed | Taalvorm gezakt (60.7%); Spelling en grammatica gezakt (52.8%); Schrijven gezakt (49.3%); Lezen gezakt (53.3%); Woordenschat undecided; KNM undecided; ONA en register undecided | 47.5% | 2.5% | 58.3% (no sign of contamination) |
-| llama3.2:3b (local) | 56.0% | failed | Taalvorm gezakt (56.3%); Spelling en grammatica gezakt (54.6%); Schrijven gezakt (53.6%); Lezen gezakt (68.3%); Woordenschat gezakt (68.5%); KNM gezakt (70.0%); ONA en register undecided | 38.8% | 3.8% | 66.3% (no sign of contamination) |
-| phi4-mini (local) | 53.6% | failed | Taalvorm gezakt (61.8%); Spelling en grammatica gezakt (56.4%); Schrijven gezakt (20.3%); Lezen undecided; Woordenschat gezakt (55.4%); KNM gezakt (60.0%); ONA en register undecided | 35.0% | 8.8% | 67.5% (no sign of contamination) |
-| GroNLP/gpt2-small-dutch | 87.3% on BLiMP-NL only, by likelihood | incomplete | | | | |
-| gemini-3.6-flash | did not run | did not run | provider quota error | | | |
-| always-a (control) | 34.1% | failed | every section failed | not run | not run | not run |
-| echo (control) | 0.0% | failed | every section failed | not run | not run | not run |
-
-Four readings from the board:
-
-- **Three models pass the whole exam**: claude-sonnet-5, gpt-5 and
-  claude-haiku-4-5, every verdict-bearing section above the line on its lower
-  bound. gpt-5-mini is undecided on one section; the small and local models
-  fail.
-- **Consistency separates the tiers more sharply than accuracy.** On reversed
-  options sonnet-5 changes 0.8% of its answers, gpt-5 2.5%, haiku 18%,
-  gpt-5-mini 25%, gpt-5-nano 46%: nano's score is half habit. The two smaller
-  OpenAI models also show a first-option reflex on two-option items.
-- **Spelling and grammar is the section that separates the mid-tier.** Haiku
-  passes it; gpt-5-mini is undecided and gpt-5-nano fails it. The d/t items
-  and the Taaladvies doubt cases do the work.
-- **No sign of contamination** on any hosted model: public and held-out
-  scores sit within the noise floor of the 163-item held-out set, and no
-  model reproduces the canary.
-
-Full per-section numbers, intervals, perron view and every run's estimated
-cost are on the page and in `docs/results.json`.
+- **Worst case separates what accuracy blurs.** The four hosted models span
+  nine points of accuracy and fifteen points of worst case.
+- **The most stable model is not the highest-scoring one.** gpt-5 loses 4.7
+  points between original and worst case; claude-sonnet-5 scores higher and
+  loses 8.0, most of it on reading passages with one irrelevant sentence in
+  front of them.
+- **The mid-tier collapses on the Dutch-specific sections.** Haiku and
+  gpt-5-mini look like gpt-5 on accuracy and sit twelve points behind it on
+  worst case; their losses concentrate on de/het and the Taaladvies cases.
+- **No sign of contamination** on any hosted model against the held-out set,
+  and no model reproduces the canary.
 
 ## What this adds to what existed
 
@@ -85,86 +92,64 @@ minimal pairs with human ratings, and Global-MMLU carries a Dutch translation
 of MMLU. This suite uses the last two as layers and does not pretend they are
 absent. What it adds:
 
-- **Exam structure instead of one number.** A verdict per section with an
-  interval and a published pass line.
+- **Worst case over a variant battery as the headline**, with the per-variant
+  and per-section drops as the diagnosis.
 - **Sections no translated benchmark has.** Werkwoordspelling, the Taaladvies
-  doubt cases, KNM, ONA, Belgian versus Dutch variants, Dutch notation.
+  doubt cases, Belgian versus Dutch variants, Dutch notation.
 - **No judge model, including for writing.** Error correction has one right
-  answer, or a short list of them, so Schrijven is exact-match.
+  answer, or a short list of them.
 - **Contamination is testable.** `heldout/` was gitignored from the first
   commit; `--holdout-status` refuses to call it clean if git ever tracked it;
   `docs/heldout-manifest.json` commits to ids and salted answer hashes. See
   [CANARY.md](CANARY.md).
-- **Consistency is measured.** Options reversed and register swapped, both
-  leaving the correct answer unchanged; reported as flip rates.
-- **Where, not only how much.** The page lists the items most models miss,
-  with the key, and breaks the BLiMP-NL minimal pairs down by linguistic
-  phenomenon (22 phenomena, 20 pairs each), so a reader sees where a
-  model's Dutch gives way: parasitic gaps and determiners are the hardest
-  across all models on the board.
+- **Where, not only how much.** The items most models miss, and the BLiMP-NL
+  pairs broken down by linguistic phenomenon.
 
 ## Item quality
 
 Items were written by hand and audited with a disagreement queue: every item
 where two or more strong models agree on the same wrong answer was re-checked
-by a person. Most flags were model errors (twelve provinces, a two-month
-proeftijd, "wier", "koninkje"); the audit found and fixed five items with a
-second defensible answer or an ambiguous prompt. The queue is a review aid,
-never a judge: keys are decided by a person.
-
-## Controls ship with the suite
-
-`always-a` picks the first option and checks position balance. `echo` repeats
-the prompt and checks that extraction never invents an answer. Both must fail.
-They stay on the board as the floor.
+by a person. Of roughly 620 hand-written items, three are missed by both
+frontier models and all three keys hold. The queue is a review aid, never a
+judge.
 
 ## Running it
 
 ```bash
 pip install -e .
 nl-eval --validate
-nl-eval --suite all --provider ollama --model qwen2.5:7b --out results/ollama__qwen2.5-7b.json
-nl-eval --suite all --provider anthropic --model claude-haiku-4-5-20251001 --max-spend 0.50 --out results/anthropic__claude-haiku-4-5.json
-nl-eval --consistency --suite core --limit 120 --provider anthropic --model claude-haiku-4-5-20251001 --out results/consistency__claude-haiku-4-5.json
-nl-eval --suite holdout --provider anthropic --model claude-haiku-4-5-20251001 --out results/heldout__claude-haiku-4-5.json
-nl-eval --contamination-check results/anthropic__claude-haiku-4-5.json results/heldout__claude-haiku-4-5.json
-nl-eval --canary --provider anthropic --model claude-haiku-4-5-20251001 --out results/canary__claude-haiku-4-5.json
+nl-eval --suite all --provider anthropic --model claude-sonnet-5 --max-spend 2.50 --out results/anthropic__claude-sonnet-5.json
+nl-eval --robustness --suite core --limit 300 --provider anthropic --model claude-sonnet-5 --out results/robustness__claude-sonnet-5.json
+nl-eval --suite holdout --provider anthropic --model claude-sonnet-5 --out results/heldout__claude-sonnet-5.json
+nl-eval --canary --provider anthropic --model claude-sonnet-5 --out results/canary__claude-sonnet-5.json
 nl-eval --compare results/a.json results/b.json
 nl-eval --publish results
 ```
 
-Providers: `ollama` (any Ollama model, including Hugging Face GGUF builds such
-as GEITje), `hf` (local likelihood scoring), `anthropic`, `openai`, `google`,
-plus the controls. Keys come from `ANTHROPIC_API_KEY`,
-`OPENAI_API_KEY`, `GEMINI_API_KEY`. Runs use a small thread pool and an
-append-only checkpoint; a killed run resumes by item id from the finished
-report, so a grown item set only pays for the new items, and every report
-records its estimated cost.
-
-### The spend ceiling is enforced
-
-`--max-spend` refuses to start a run whose estimate exceeds it. Local providers
-are priced at zero. A full hosted run on all items costs about EUR 0.20 on a
-small model.
+Providers: `ollama` (any Ollama model, including Hugging Face GGUF builds),
+`hf` (local likelihood scoring), `anthropic`, `openai`, `google`, plus the
+controls. Keys come from `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`,
+`GEMINI_API_KEY`. Runs resume by item id from the finished report; every
+report records its estimated cost; `--max-spend` refuses a run whose estimate
+exceeds it. The battery costs seven times its sample: about €2 for a frontier
+model on 300 items.
 
 ## Statistics
 
 `--compare` reports McNemar with an exact binomial fallback, a paired
 bootstrap interval on the difference, and the minimum detectable difference
-for the item count, so two scores closer than the suite can resolve are not
-reported as a ranking. Human alignment against the BLiMP-NL ratings is a
-Spearman correlation over paradigms (`--human-ratings`).
+for the item count. Human alignment against the BLiMP-NL ratings is a
+Spearman correlation over paradigms (`--human-ratings`); the ratings file is
+distributed behind a publisher account and is not computed on the board.
 
 ## Known limits
 
-- Human alignment on the BLiMP-NL paradigms needs the ratings file, which the
-  publisher distributes behind an account; it is not computed on the board.
-- The held-out split has 163 items; its noise floor is about 9 points, so it
-  catches gross memorisation, not subtle leakage.
+- The battery is a sample; the sample size is on every row.
+- The six variants are a choice; more can be added, and each addition makes
+  the worst case stricter.
 - Global-MMLU is an indicator; MMLU is among the most contaminated benchmarks.
 - Gemini has not been run: the key available returned quota errors on every
   current model id.
-- The pass line is a documented choice, not a norm.
 
 ## Tests
 
