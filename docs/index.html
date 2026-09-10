@@ -72,7 +72,7 @@ tr.run:hover td,tr.run:focus-within td{background:rgba(255,255,255,.04)}
 .detail span{display:inline-block;margin-right:12px;white-space:nowrap}
 tr.open .detail,tr.run:focus-within .detail{display:block}
 .rowbtn{all:unset;cursor:pointer;display:block;width:100%}
-.rowbtn:focus-visible{outline:2px solid var(--yel);outline-offset:3px}
+.rowbtn:focus-visible{outline:3px solid var(--yel);outline-offset:3px}
 
 /* perron */
 .perron h2{font-family:var(--cond);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:12px 0 6px;border-bottom:1px solid var(--seam);margin:0}
@@ -85,7 +85,8 @@ tr.open .detail,tr.run:focus-within .detail{display:block}
 .lab{position:absolute;font-size:13px;line-height:14px;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums;background:var(--blue);padding:0 3px;z-index:1}
 .axis{font-size:13px;color:var(--dim);padding-top:6px;font-variant-numeric:tabular-nums}
 .lede{font-family:var(--cond);font-size:19px;line-height:1.3;color:var(--ink);margin:18px 0 0;max-width:62ch}
-.legend{margin-top:14px;background:var(--ink);color:var(--blue);padding:12px 16px;font-size:15px;line-height:1.5;font-family:var(--text);display:inline-block}
+.legend{margin-top:14px;background:var(--ink);color:var(--blue);padding:12px 16px;font-size:15px;line-height:1.5;font-family:var(--text);display:block;max-width:62ch}
+.legend .li+.li::before{content:" · "}
 
 /* ---------- prose ---------- */
 section.s{padding:48px 0 12px;max-width:1344px}
@@ -93,6 +94,7 @@ section.s+section.s{border-top:1px solid var(--rule);margin-top:36px}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:40px}
 .two>*{min-width:0}
 .ptbl{overflow-x:auto;margin:14px 0;min-width:0;max-width:100%}
+.ptbl::-webkit-scrollbar,.tbl::-webkit-scrollbar{height:8px}.ptbl::-webkit-scrollbar-thumb{background:var(--rule)}.tbl::-webkit-scrollbar-thumb{background:var(--dim-2)}
 .ptbl table{min-width:640px}
 .ptbl th{color:var(--tilemute);border-bottom:2px solid var(--tileink);font-size:13px}
 .ptbl td{border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums;font-size:17px}
@@ -153,7 +155,8 @@ footer{padding:36px clamp(16px,3.3vw,48px) 48px;font-size:15px;color:var(--tilem
       </div>
     </div>
     <div class="right perron" id="perron">
-      <h2 id="perron-head">Perron · per onderdeel, van worst-case tot onverstoord</h2>
+      <h2 id="perron-head">Perron · worst-case is goed in alle zeven vormen; de balk loopt van worst-case tot onverstoord</h2>
+      <div class="axis" id="axis-top"></div>
       <div id="tracks"></div>
       <div class="axis" id="axis"></div>
     </div>
@@ -352,7 +355,7 @@ nl-eval --publish results</pre>
     } else {
       const c = r.consistency;
       if (c && c.order_reversed.flip_rate!=null) out.push(`omkeerproef: ${pct(c.order_reversed.flip_rate)}% van de antwoorden draait om`);
-      if (r.n > 600 && !r.is_control) out.push("batterij nog niet gedraaid");
+      if (r.n > 600 && !r.is_control) out.push("nog niet in de batterij");
     }
     if (r.n < 600 && !r.is_control && !r.failed) out.push("alleen BLiMP-NL, gescoord op waarschijnlijkheid");
     if (r.heldout) out.push(`held-out ${pct(r.heldout.heldout_accuracy)}%, ${r.heldout.verdict.split(":")[0]}`);
@@ -368,15 +371,15 @@ nl-eval --publish results</pre>
   function scoreCell(r){
     if (tested(r)){
       const rb = r.robustness;
-      return `${pct(rb.worst_case)}<small class="y">onverstoord ${pct(rb.original)} → ${pct(rb.worst_case)} · ${rb.items} opgaven</small><small>volledige set ${pct(r.accuracy)}</small>`;
+      return `${pct(rb.worst_case)}<small class="y">onverstoord ${pct(rb.original)} op ${rb.items} opgaven</small><small>hele set ${pct(r.accuracy)}</small>`;
     }
-    return `${pct(r.accuracy)}<small>${pct(r.ci95[0])} – ${pct(r.ci95[1])}</small><small>${r.failed?"":"nog niet onder druk getest"}</small>`;
+    return `${pct(r.accuracy)}<small>${pct(r.ci95[0])} – ${pct(r.ci95[1])}</small><small>${(r.failed||r.is_control)?"":"nog niet in de batterij"}</small>`;
   }
   function flapText(r){
     if (r.failed) return "Rijdt niet";
     if (r.is_control) return "Controle";
     if (tested(r)) return `${BANDW[r.robustness.band]} −${pt(r.robustness.gap)}`;
-    return "Niet getest";
+    return "Niet in de batterij";
   }
 
   let sortKey = "score", sortDir = -1;
@@ -424,10 +427,12 @@ nl-eval --publish results</pre>
   const real = d.runs.filter(r=>!r.failed && !r.is_control && r.n>600);
   const testedRuns = real.filter(tested), untested = real.filter(r=>!tested(r));
   const vals = [];
-  real.forEach(r=>r.sections.forEach(s=>{ if (!s.indicator && s.n){ vals.push(s.accuracy); if (s.worst_case!=null) vals.push(s.worst_case);} }));
+  testedRuns.forEach(r=>r.sections.forEach(s=>{ if (!s.indicator && s.n && s.worst_case!=null) vals.push(s.worst_case); }));
+  if (!vals.length) real.forEach(r=>r.sections.forEach(s=>{ if (!s.indicator && s.n) vals.push(s.accuracy); }));
   const axisMin = Math.max(0, Math.floor(Math.min(...vals)*10)/10);
   const X = v => Math.max(0, Math.min(100, (v-axisMin)/(1-axisMin)*100));
-  { const ticks=[]; for (let t=axisMin; t<=1.0001; t+=0.1){ const v=Math.round(t*100); const tx = t===axisMin ? "none" : v===100 ? "translateX(-100%)" : "translateX(-50%)"; ticks.push(`<span style="position:absolute;left:${X(t).toFixed(1)}%;transform:${tx}">${v}${(t===axisMin||v===100)?"%":""}</span>`);} document.getElementById("axis").innerHTML=`<div style="position:relative;height:18px">${ticks.join("")}</div>`; }
+  const below = v => v < axisMin;
+  { const ticks=[]; for (let t=axisMin; t<=1.0001; t+=0.1){ const v=Math.round(t*100); const tx = t===axisMin ? "none" : v===100 ? "translateX(-100%)" : "translateX(-50%)"; ticks.push(`<span style="position:absolute;left:${X(t).toFixed(1)}%;transform:${tx}">${t===axisMin?"≤":""}${v}${(t===axisMin||v===100)?"%":""}</span>`);} const html=`<div style="position:relative;height:18px">${ticks.join("")}</div>`; document.getElementById("axis").innerHTML=html; document.getElementById("axis-top").innerHTML=html; }
   const order = [...testedRuns, ...untested];
   document.getElementById("tracks").innerHTML = secs.map(sec=>{
     const bands = order.map((r,i)=>{
@@ -438,11 +443,13 @@ nl-eval --publish results</pre>
         const left = hi > 62 && lo >= 30;
         const pos = left ? `right:${(100-lo).toFixed(1)}%;margin-right:8px` : `left:${Math.min(hi,62).toFixed(1)}%;margin-left:8px`;
         const w = s.drop >= 0.10 ? " w" : "";
+        if (s.drop < 0.001) return `<div class="band tick" style="left:${hi.toFixed(1)}%;top:${top}px;background:var(--ink)"></div><div class="lab" style="${pos};top:${ltop}px">${esc(short(r))} ${pct(s.original)}, geen verlies</div>`;
         return `<div class="band${w}" style="left:${lo.toFixed(1)}%;width:${Math.max(1.2,hi-lo).toFixed(1)}%;top:${top}px" title="${esc(short(r))} ${pct(s.original)} → ${pct(s.worst_case)}"></div><div class="lab" style="${pos};top:${ltop}px">${esc(short(r))} ${pct(s.original)} → ${pct(s.worst_case)}</div>`;
       }
       const x = X(s.accuracy);
       const pos = x > 62 ? `right:${(100-x).toFixed(1)}%;margin-right:8px` : `left:${x.toFixed(1)}%;margin-left:8px`;
-      return `<div class="band tick" style="left:${x.toFixed(1)}%;top:${top}px"></div><div class="lab" style="${pos};top:${ltop}px;color:var(--dim-2)">${esc(short(r))} ${pct(s.accuracy)}</div>`;
+      const txt = below(s.accuracy) ? `${esc(short(r))} ${pct(s.accuracy)}, buiten de schaal` : `${esc(short(r))} ${pct(s.accuracy)}`;
+      return `<div class="band tick" style="left:${x.toFixed(1)}%;top:${top}px"></div><div class="lab" style="${pos};top:${ltop}px;color:var(--dim-2)">${txt}</div>`;
     }).join("");
     return `<div class="track"><div class="tl">${esc(sec.label)}</div><div class="rail" style="--rows:${order.length}">${bands}</div></div>`;
   }).join("");
@@ -458,9 +465,11 @@ nl-eval --publish results</pre>
       t.push(`Stabielste: ${label(stable)}, dat ${pt(stable.robustness.gap)} punten verliest tussen onverstoord en worst-case.`);
       if (worst!==stable) t.push(`Grootste verlies: ${label(worst)}, ${pt(worst.robustness.gap)} punten.`);
     } else t.push("Nog geen model is onder druk getest.");
-    if (untested.length) t.push(`Nog niet in de batterij: ${untested.map(label).join(", ")}.`);
+    const partial = d.runs.filter(r=>!r.failed && !r.is_control && r.n<=600);
+    const rest = [...untested.map(label), ...partial.map(r=>label(r)+" (alleen Taalvorm)")];
+    if (rest.length) t.push(`Nog niet in de batterij: ${rest.join(", ")}.`);
     document.getElementById("lede").textContent = t.join(" "); }
-  document.getElementById("legend").innerHTML = [`balk: van worst-case (links) tot onverstoord (rechts)`, `geel: meer dan tien punten verlies in dat onderdeel`, `streepje: alleen onverstoord gemeten`, `${mark("no","#081858")} onder 60%`, `klik of tab naar een rij voor de scores per onderdeel`].map(x=>`<span style="white-space:nowrap">${x}</span>`).join(" · ");
+  document.getElementById("legend").innerHTML = [`balk: van worst-case (links) tot onverstoord (rechts)`, `geel: meer dan tien punten verlies in dat onderdeel`, `streepje: alleen onverstoord gemeten`, `${mark("no","#081858")} onder 60%`, `klik of tab naar een rij voor de scores per onderdeel`].map(x=>`<span class="li">${x}</span>`).join("");
 
   // sections table
   const ref = real[0] || d.runs[0];
@@ -479,7 +488,7 @@ nl-eval --publish results</pre>
   const ho = d.runs.filter(r=>r.heldout);
   document.querySelector("#heldout-table tbody").innerHTML = ho.length ? ho.map(r=>{
     const h=r.heldout; const cn = r.canary ? `${r.canary.reproduced} van ${r.canary.probes}` : "–";
-    return `<tr><td class="v">${esc(label(r))}</td><td class="n">${pct(h.public_accuracy)}%</td><td class="n">${pct(h.heldout_accuracy)}% (n=${h.n})</td><td class="n">${(h.gap*100).toFixed(1).replace(".",",")} pt</td><td class="n">${(h.noise_floor*100).toFixed(1).replace(".",",")} pt</td><td>${esc(h.verdict.split(":")[0])}</td><td class="n">${cn}</td></tr>`;
+    return `<tr><td class="v">${esc(label(r))}</td><td class="n">${pct(h.public_accuracy)}%</td><td class="n">${pct(h.heldout_accuracy)}% (n=${h.n})</td><td class="n">${(h.gap*100).toFixed(1).replace(".",",")} pt</td><td class="n">${(h.noise_floor*100).toFixed(1).replace(".",",")} pt</td><td style="white-space:nowrap">${esc(h.verdict.split(":")[0])}</td><td class="n">${cn}</td></tr>`;
   }).join("") : '<tr><td colspan="7">nog geen held-out run</td></tr>';
 
   // hardest

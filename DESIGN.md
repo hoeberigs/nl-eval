@@ -83,10 +83,10 @@ components:
 
 **Creative North Star: "The NS Departure Board"**
 
-A station board, not a leaderboard: one row per model, passed sections listed as stations it runs via, a flap reading the stability band, ONBESLIST or NIET the stability band. Below the board, light tile and prose.
+A station board, not a leaderboard: one row per model, sections that lose more than ten points listed as stations it runs via, a flap reading the stability band, WANKEL or NIET the stability band. Below the board, light tile and prose.
 
 **Key Characteristics:**
-- One yellow: remarks, pass line, stamp, focus.
+- One yellow: remarks, stability band, stamp, focus.
 - State is a flap, strike or glyph before it is a colour.
 - No boxes, cards, radius, gradients or shadows; rows ride hairlines.
 
@@ -97,7 +97,7 @@ A station board, not a leaderboard: one row per model, passed sections listed as
 - **Board Ink** (#f4f6fb): board type, flap face, legend panel, passed bands.
 
 ### Secondary
-- **Remark Yellow** (#ffc917): stamp, the 2px strip and column rules, remark lines, undecided sections and bands, pass line, cancelled-run flap text, selection, focus rings.
+- **Remark Yellow** (#ffc917): stamp, the 2px strip and column rules, remark lines, sections that lose more than ten points and bands, stability band, cancelled-run flap text, selection, focus rings.
 
 ### Neutral
 - **Board Dim** (#a9b8e0): column heads, intervals, provider, struck sections, failed-band outline.
@@ -153,7 +153,7 @@ Passed in ink, undecided in yellow, failed struck in dim, middot-separated.
 Ink rectangle, blue uppercase text, hinge seam. A run that did not ride shows the cancelled variant: yellow text, no face.
 
 ### Perron Track
-96px row: section name left, rail right; one band per model at 14px pitch, 2px yellow pass line, 50 to 100 axis with the pass mark in yellow.
+96px row: section name left, rail right; one band per model at 14px pitch, 2px yellow stability band, 50 to 100 axis with the pass mark in yellow.
 
 ### Legend Panel
 The one calm panel: glyph then word per verdict, pass rule, click hint.
@@ -189,4 +189,4 @@ Commands and file names use the system monospace stack `ui-monospace, SFMono-Reg
 
 ## Reframe, 10 September 2026
 
-The exam vocabulary is gone. The score cell carries worst-case accuracy with the undisturbed score beneath it; the flap carries the stability band and the drop; the via line marks sections that lose more than ten points under pressure (yellow, wave) or sit under 60% (struck, cross). On the perron a band runs from worst case (left) to undisturbed (right); untested models are a 2px tick in the dim token. No pass line.
+The exam vocabulary is gone. The score cell carries worst-case accuracy with the undisturbed score beneath it; the flap carries the stability band and the drop; the via line marks sections that lose more than ten points under pressure (yellow, wave) or sit under 60% (struck, cross). On the perron a band runs from worst case (left) to undisturbed (right); untested models are a 2px tick in the dim token. No stability band.
