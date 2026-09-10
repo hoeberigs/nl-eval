@@ -81,6 +81,10 @@ Readings from the board:
 - **The mid-tier collapses on the Dutch-specific sections.** Haiku and
   gpt-5-mini look like gpt-5 on accuracy and sit twelve points behind it on
   worst case; their losses concentrate on de/het and the Taaladvies cases.
+- **Every local model is onstabiel.** qwen2.5 loses 24 points between
+  original and worst case, gemma3 29, llama3.2 30, phi4-mini 30, GEITje 39:
+  a Dutch fine-tune of Mistral 7B that scores 61% undisturbed keeps 22% of
+  its items under pressure.
 - **No sign of contamination** on any hosted model against the held-out set,
   and no model reproduces the canary.
 
