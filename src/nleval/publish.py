@@ -216,6 +216,7 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
     consistency: dict[str, dict] = {}
     heldout: dict[str, dict] = {}
     canary: dict[str, dict] = {}
+    robust: dict[str, dict] = {}
     mains: list[tuple[str, dict]] = []
 
     for f in sorted(results_dir.glob("*.json")):
@@ -223,6 +224,10 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
         if not doc:
             continue
         stem = f.stem
+        if stem.startswith("robustness__") and "robustness" in doc:
+            r = doc["robustness"]
+            robust[doc.get("model", stem)] = {k: v for k, v in r.items() if k != "detail"}
+            continue
         if stem.startswith("canary__") and "reproduced" in doc:
             canary[doc.get("model", stem)] = {"reproduced": doc["reproduced"], "probes": doc["probes"], "verdict": doc.get("verdict")}
             continue
@@ -274,6 +279,7 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
                 "failed": failed,
                 "est_cost_eur": s.get("est_cost_eur"),
                 "canary": canary.get(model),
+                "robustness": robust.get(model),
                 "error_share": round(n_err / len(items), 3) if items else 0.0,
                 "failure_reason": reason,
                 "consistency": consistency.get(model),
