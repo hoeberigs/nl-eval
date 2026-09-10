@@ -199,6 +199,13 @@ def collect(results_dir: Path, items_meta: dict, out: Path) -> dict:
             continue
         stem = f.stem
         if stem.startswith("robustness__") and "robustness" in doc:
+            # A battery whose calls mostly failed measured the provider, not
+            # the model; it never reaches the board.
+            det = doc["robustness"].get("detail", [])
+            calls = sum(len(x.get("answers", {})) for x in det)
+            failed_calls = sum(1 for x in det for v in x.get("answers", {}).values() if v.get("got") is None)
+            if calls and failed_calls / calls > 0.5:
+                continue
             robust[doc.get("model", stem)] = doc["robustness"]
             continue
         if stem.startswith("canary__") and "reproduced" in doc:
