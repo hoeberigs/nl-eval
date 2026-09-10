@@ -83,7 +83,7 @@ components:
 
 **Creative North Star: "The NS Departure Board"**
 
-A station board, not a leaderboard: one row per model, passed sections listed as stations it runs via, a flap reading GESLAAGD, ONBESLIST or NIET GESLAAGD. Below the board, light tile and prose.
+A station board, not a leaderboard: one row per model, passed sections listed as stations it runs via, a flap reading the stability band, ONBESLIST or NIET the stability band. Below the board, light tile and prose.
 
 **Key Characteristics:**
 - One yellow: remarks, pass line, stamp, focus.
@@ -185,3 +185,8 @@ Under 700px the Uitslag column is hidden and the verdict flap is rendered direct
 ## Code
 
 Commands and file names use the system monospace stack `ui-monospace, SFMono-Regular, Menlo, monospace` at 0.9em; blocks sit on the signal blue with board ink, scrollbars themed with the dim token. It carries real commands only, never a costume for "technical".
+
+
+## Reframe, 10 September 2026
+
+The exam vocabulary is gone. The score cell carries worst-case accuracy with the undisturbed score beneath it; the flap carries the stability band and the drop; the via line marks sections that lose more than ten points under pressure (yellow, wave) or sit under 60% (struck, cross). On the perron a band runs from worst case (left) to undisturbed (right); untested models are a 2px tick in the dim token. No pass line.

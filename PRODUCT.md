@@ -25,17 +25,17 @@ benchmark numbers by default.
 
 ## Product Purpose
 
-Answer whether a model actually commands Dutch the way the country tests
-people who move here: form, writing, reading, vocabulary, knowledge of Dutch
-society, and register. Success is a reader who leaves knowing which
-capabilities a model passes and fails, how sure that verdict is, and whether
-the score can be trusted at all.
+Answer how stable a model's Dutch is: every item is asked in its original
+form and in six meaning-preserving variants, and the headline is the share
+of items a model gets right under all of them. Success is a reader who leaves
+knowing a model's worst case, how much it loses under pressure and where, and
+whether the score can be trusted at all.
 
 ## Positioning
 
-Structured as an inburgeringsexamen for language models rather than a
-translated English benchmark. Three properties a neighbouring benchmark cannot
-copy cheaply: every item is scored without a judge model (multiple choice,
+Worst-case accuracy over a variant battery rather than a single accuracy
+number, on Dutch-specific sections rather than a translated English
+benchmark. Three properties a neighbouring benchmark cannot copy cheaply: every item is scored without a judge model (multiple choice,
 likelihood on minimal pairs, exact-match error correction), so the score is
 reproducible and free of judge bias; a never-committed held-out split and a
 canary make contamination testable rather than assumed; and consistency
@@ -50,9 +50,9 @@ Global-MMLU. This suite supplements them; it does not pretend they are absent.
 - Layers are never blended into one number. Per-section results with Wilson
   intervals, the chance baseline, and the controls (echo, always-a) stay
   visible on the page as the floor.
-- A pass/fail verdict per section is an analogy to the civic exam, documented
-  as an analogy: a section passes when the lower bound of its interval clears
-  a stated threshold. The threshold is published next to the verdict.
+- No pass line and no verdict. The board reports levels, drops and where the
+  drops sit; the stability bands (stabiel, wankel, onstabiel) are published
+  thresholds on the drop, not judgements.
 - Spreken and Luisteren (speech) are out of scope and the page says so.
 - Global-MMLU is presented as an indicator, never as evidence, because MMLU
   is heavily contaminated.
@@ -63,14 +63,16 @@ Global-MMLU. This suite supplements them; it does not pretend they are absent.
 
 ## Terminology
 
-- **Taal·vorm** — language form: de/het, diminutives, spelling, word order,
-  variants, formatting, and the BLiMP-NL minimal pairs.
+- **Taalvorm** — word order, variants, formatting and the BLiMP-NL minimal
+  pairs; **Spelling en grammatica** — de/het, diminutives, spelling, verb
+  spelling, Taaladvies cases.
 - **Schrijven** — exact-match error correction: the model rewrites a flawed
   sentence; scored against the corrected string.
 - **Lezen** — short passage comprehension in Dutch.
-- **KNM** — Kennis van de Nederlandse Maatschappij, civics items.
-- **ONA / register** — orientation on the Dutch labour market and formal vs
-  informal register.
+- **Worst-case** — share of items answered correctly under the original form
+  and all six variants of the battery.
+- **Drop** — original minus worst-case, in accuracy points; banded as
+  stabiel, wankel, onstabiel.
 - **Flip rate** — share of answers that change under a perturbation that does
   not change the correct answer.
 - **Held-out gap** — public minus held-out accuracy, read against the minimum
@@ -78,7 +80,7 @@ Global-MMLU. This suite supplements them; it does not pretend they are absent.
 
 ## Accessibility
 
-Colour never carries a verdict alone; pass and fail are also words and
+Colour never carries a state alone; bands and drops are also words and
 symbols. Contrast in light and dark checked before shipping. Tables scroll in
 their own container, never the page.
 
