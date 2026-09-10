@@ -98,6 +98,8 @@ def main(argv=None) -> int:
                     help="publish ids and salted answer hashes, never the items")
     ap.add_argument("--contamination-check", nargs=2, metavar=("PUBLIC.json","HELDOUT.json"),
                     help="compare a model's public score against its held-out score")
+    ap.add_argument("--robustness", action="store_true",
+                    help="ask each MCQ item in its original form and six meaning-preserving variants; report worst-case accuracy")
     ap.add_argument("--consistency", action="store_true",
                     help="re-ask each MCQ with options reversed and with an informal instruction; report flip rates")
     ap.add_argument("--canary", action="store_true",
@@ -161,6 +163,20 @@ def main(argv=None) -> int:
         docs = [json.loads(Path(f).read_text(encoding="utf-8"))["summary"]
                 for f in args.contamination_check]
         print(json.dumps(contamination_check(docs[0], docs[1]), indent=2, ensure_ascii=False))
+        return 0
+
+    if args.robustness:
+        from .robustness import robustness
+        items = _load(args)
+        try:
+            call = providers.get(args.provider, args.model)
+        except providers.ProviderError as e:
+            print(str(e), file=sys.stderr)
+            return 2
+        rep = robustness(items, call, limit=args.limit, workers=args.workers)
+        out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps({"model": args.model, "provider": args.provider, "robustness": rep}, indent=1, ensure_ascii=False))
+        print(json.dumps({k: v for k, v in rep.items() if k != "detail"}, indent=2, ensure_ascii=False))
         return 0
 
     if args.consistency:
