@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-10T12:20:35Z",
+ "generated_at": "2026-09-10T15:34:49Z",
  "bands": {
   "stabiel": 0.05,
   "wankel": 0.15
@@ -309,9 +309,9 @@
     "gpt-5-nano": 0.65,
     "qwen2.5:7b": 0.75,
     "gemma3:4b": 0.2,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.4
+    "phi4-mini": 0.4,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.565
   },
@@ -326,9 +326,9 @@
     "gpt-5-nano": 0.75,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 0.4,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.35
+    "phi4-mini": 0.35,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.635
   },
@@ -343,9 +343,9 @@
     "gpt-5-nano": 0.8,
     "qwen2.5:7b": 0.85,
     "gemma3:4b": 0.8,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.65
+    "phi4-mini": 0.65,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.745
   },
@@ -360,9 +360,9 @@
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 0.7,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.6,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.5
+    "phi4-mini": 0.5,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.6
    },
    "mean": 0.755
   },
@@ -377,9 +377,9 @@
     "gpt-5-nano": 0.85,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 0.7,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.55,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.25
+    "phi4-mini": 0.25,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.55
    },
    "mean": 0.755
   },
@@ -394,9 +394,9 @@
     "gpt-5-nano": 0.9,
     "qwen2.5:7b": 0.75,
     "gemma3:4b": 0.6,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.65,
-    "phi4-mini": 0.55
+    "phi4-mini": 0.55,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.78
   },
@@ -411,9 +411,9 @@
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.95,
     "gemma3:4b": 0.5,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.5
+    "phi4-mini": 0.5,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.785
   },
@@ -428,9 +428,9 @@
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 0.7,
     "gemma3:4b": 0.9,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.5
+    "phi4-mini": 0.5,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.805
   },
@@ -445,9 +445,9 @@
     "gpt-5-nano": 0.85,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 0.65,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.8,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.7
+    "phi4-mini": 0.7,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.8
    },
    "mean": 0.825
   },
@@ -462,9 +462,9 @@
     "gpt-5-nano": 0.8,
     "qwen2.5:7b": 0.9,
     "gemma3:4b": 0.9,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.6,
     "llama3.2:3b": 0.55,
-    "phi4-mini": 0.55
+    "phi4-mini": 0.55,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.6
    },
    "mean": 0.83
   },
@@ -479,9 +479,9 @@
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.85,
     "gemma3:4b": 0.8,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.85,
-    "phi4-mini": 0.55
+    "phi4-mini": 0.55,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.845
   },
@@ -496,9 +496,9 @@
     "gpt-5-nano": 0.9,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 1.0,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.55,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.5
+    "phi4-mini": 0.5,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.55
    },
    "mean": 0.845
   },
@@ -513,9 +513,9 @@
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.9,
     "gemma3:4b": 0.8,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.65,
-    "phi4-mini": 0.6
+    "phi4-mini": 0.6,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.845
   },
@@ -530,9 +530,9 @@
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 0.9,
     "gemma3:4b": 0.9,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.6,
     "llama3.2:3b": 0.6,
-    "phi4-mini": 0.8
+    "phi4-mini": 0.8,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.6
    },
    "mean": 0.855
   },
@@ -547,9 +547,9 @@
     "gpt-5-nano": 0.9,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 0.85,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.55,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.85
+    "phi4-mini": 0.85,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.55
    },
    "mean": 0.865
   },
@@ -564,9 +564,9 @@
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 0.9,
     "gemma3:4b": 0.85,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.55,
     "llama3.2:3b": 0.55,
-    "phi4-mini": 0.9
+    "phi4-mini": 0.9,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.55
    },
    "mean": 0.87
   },
@@ -581,9 +581,9 @@
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 1.0,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.8,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.6
+    "phi4-mini": 0.6,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.8
    },
    "mean": 0.87
   },
@@ -598,9 +598,9 @@
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 0.9,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.85
+    "phi4-mini": 0.85,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.875
   },
@@ -615,9 +615,9 @@
     "gpt-5-nano": 0.95,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 1.0,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.9,
     "llama3.2:3b": 0.55,
-    "phi4-mini": 0.8
+    "phi4-mini": 0.8,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.9
    },
    "mean": 0.9
   },
@@ -632,9 +632,9 @@
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.8,
     "gemma3:4b": 1.0,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 1.0,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.95
+    "phi4-mini": 0.95,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 1.0
    },
    "mean": 0.91
   },
@@ -649,9 +649,9 @@
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 0.95,
     "gemma3:4b": 0.85,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5,
     "llama3.2:3b": 0.95,
-    "phi4-mini": 0.85
+    "phi4-mini": 0.85,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.5
    },
    "mean": 0.91
   },
@@ -666,9 +666,9 @@
     "gpt-5-nano": 1.0,
     "qwen2.5:7b": 1.0,
     "gemma3:4b": 1.0,
-    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.8,
     "llama3.2:3b": 0.5,
-    "phi4-mini": 0.95
+    "phi4-mini": 0.95,
+    "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M": 0.8
    },
    "mean": 0.925
   }
@@ -1530,10 +1530,10 @@
       0.8061,
       0.8665
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 81,
+     "original": 0.7284,
+     "worst_case": 0.4938,
+     "drop": 0.2346
     },
     {
      "id": "grammatica",
@@ -1545,10 +1545,10 @@
       0.7235,
       0.8219
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 137,
+     "original": 0.7883,
+     "worst_case": 0.4745,
+     "drop": 0.3138
     },
     {
      "id": "schrijven",
@@ -1575,10 +1575,10 @@
       0.5923,
       0.8149
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 27,
+     "original": 0.6667,
+     "worst_case": 0.4074,
+     "drop": 0.2593
     },
     {
      "id": "woordenschat",
@@ -1590,10 +1590,10 @@
       0.6527,
       0.8272
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 55,
+     "original": 0.7636,
+     "worst_case": 0.7273,
+     "drop": 0.0363
     },
     {
      "id": "kennis",
@@ -1611,7 +1611,36 @@
      "drop": null
     }
    ],
-   "robustness": null,
+   "robustness": {
+    "items": 300,
+    "variants": [
+     "origineel",
+     "omgekeerd",
+     "geschud",
+     "informeel",
+     "engels",
+     "afleiding",
+     "typefouten"
+    ],
+    "per_variant": {
+     "origineel": 0.7567,
+     "omgekeerd": 0.7333,
+     "geschud": 0.7433,
+     "informeel": 0.7667,
+     "engels": 0.75,
+     "afleiding": 0.6967,
+     "typefouten": 0.7467
+    },
+    "original": 0.7567,
+    "worst_case": 0.52,
+    "gap": 0.2367,
+    "reading": "worst_case: share of items answered correctly under the original and all six variants",
+    "band": "onstabiel",
+    "weakest_variant": {
+     "name": "afleiding",
+     "accuracy": 0.6967
+    }
+   },
    "consistency": {
     "items_probed": 160,
     "order_reversed": {
@@ -1664,10 +1693,10 @@
       0.7339,
       0.8028
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 81,
+     "original": 0.7407,
+     "worst_case": 0.3457,
+     "drop": 0.395
     },
     {
      "id": "grammatica",
@@ -1679,10 +1708,10 @@
       0.59,
       0.7026
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 137,
+     "original": 0.6496,
+     "worst_case": 0.3212,
+     "drop": 0.3284
     },
     {
      "id": "schrijven",
@@ -1709,10 +1738,10 @@
       0.5406,
       0.7727
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 27,
+     "original": 0.5926,
+     "worst_case": 0.3704,
+     "drop": 0.2222
     },
     {
      "id": "woordenschat",
@@ -1724,10 +1753,10 @@
       0.6761,
       0.8456
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 55,
+     "original": 0.7636,
+     "worst_case": 0.6727,
+     "drop": 0.0909
     },
     {
      "id": "kennis",
@@ -1745,7 +1774,36 @@
      "drop": null
     }
    ],
-   "robustness": null,
+   "robustness": {
+    "items": 300,
+    "variants": [
+     "origineel",
+     "omgekeerd",
+     "geschud",
+     "informeel",
+     "engels",
+     "afleiding",
+     "typefouten"
+    ],
+    "per_variant": {
+     "origineel": 0.69,
+     "omgekeerd": 0.6633,
+     "geschud": 0.6767,
+     "informeel": 0.6933,
+     "engels": 0.7167,
+     "afleiding": 0.6733,
+     "typefouten": 0.6667
+    },
+    "original": 0.69,
+    "worst_case": 0.3967,
+    "gap": 0.2933,
+    "reading": "worst_case: share of items answered correctly under the original and all six variants",
+    "band": "onstabiel",
+    "weakest_variant": {
+     "name": "omgekeerd",
+     "accuracy": 0.6633
+    }
+   },
    "consistency": {
     "items_probed": 160,
     "order_reversed": {
@@ -1774,140 +1832,6 @@
   },
   {
    "provider": "ollama",
-   "model": "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M",
-   "is_control": false,
-   "failed": false,
-   "failure_reason": null,
-   "n": 1363,
-   "correct": 735,
-   "accuracy": 0.5393,
-   "ci95": [
-    0.5127,
-    0.5656
-   ],
-   "unparsed": 0,
-   "est_cost_eur": 0.0,
-   "sections": [
-    {
-     "id": "taalvorm",
-     "label": "Taalvorm",
-     "indicator": false,
-     "n": 570,
-     "accuracy": 0.607,
-     "ci95": [
-      0.5663,
-      0.6463
-     ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
-    },
-    {
-     "id": "grammatica",
-     "label": "Spelling en grammatica",
-     "indicator": false,
-     "n": 273,
-     "accuracy": 0.5275,
-     "ci95": [
-      0.4683,
-      0.5859
-     ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
-    },
-    {
-     "id": "schrijven",
-     "label": "Schrijven",
-     "indicator": false,
-     "n": 69,
-     "accuracy": 0.4928,
-     "ci95": [
-      0.3783,
-      0.6079
-     ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
-    },
-    {
-     "id": "lezen",
-     "label": "Lezen",
-     "indicator": false,
-     "n": 60,
-     "accuracy": 0.5333,
-     "ci95": [
-      0.4089,
-      0.6537
-     ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
-    },
-    {
-     "id": "woordenschat",
-     "label": "Woordenschat",
-     "indicator": false,
-     "n": 92,
-     "accuracy": 0.8261,
-     "ci95": [
-      0.736,
-      0.89
-     ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
-    },
-    {
-     "id": "kennis",
-     "label": "Algemene kennis",
-     "indicator": true,
-     "n": 299,
-     "accuracy": 0.3445,
-     "ci95": [
-      0.2929,
-      0.4
-     ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
-    }
-   ],
-   "robustness": null,
-   "consistency": {
-    "items_probed": 160,
-    "order_reversed": {
-     "n": 160,
-     "flips": 76,
-     "flip_rate": 0.475,
-     "reading": "share of answers that changed content when the options were listed back to front"
-    },
-    "register_swapped": {
-     "n": 160,
-     "flips": 4,
-     "flip_rate": 0.025,
-     "reading": "share of answers that changed when the instruction was phrased informally"
-    }
-   },
-   "heldout": {
-    "n": 153,
-    "public_accuracy": 0.5393,
-    "heldout_accuracy": 0.5686,
-    "gap": -0.0294,
-    "noise_floor": 0.1596,
-    "verdict": "geen teken van besmetting"
-   },
-   "canary": null,
-   "generated_at": "2026-09-09T20:49:04Z"
-  },
-  {
-   "provider": "ollama",
    "model": "llama3.2:3b",
    "is_control": false,
    "failed": false,
@@ -1932,10 +1856,10 @@
       0.5222,
       0.6033
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 81,
+     "original": 0.5679,
+     "worst_case": 0.2222,
+     "drop": 0.3456
     },
     {
      "id": "grammatica",
@@ -1947,10 +1871,10 @@
       0.4865,
       0.6038
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 137,
+     "original": 0.511,
+     "worst_case": 0.1679,
+     "drop": 0.3431
     },
     {
      "id": "schrijven",
@@ -1977,10 +1901,10 @@
       0.5577,
       0.7869
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 27,
+     "original": 0.7407,
+     "worst_case": 0.4444,
+     "drop": 0.2963
     },
     {
      "id": "woordenschat",
@@ -1992,10 +1916,10 @@
       0.5841,
       0.7707
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 55,
+     "original": 0.7455,
+     "worst_case": 0.6182,
+     "drop": 0.1273
     },
     {
      "id": "kennis",
@@ -2013,7 +1937,36 @@
      "drop": null
     }
    ],
-   "robustness": null,
+   "robustness": {
+    "items": 300,
+    "variants": [
+     "origineel",
+     "omgekeerd",
+     "geschud",
+     "informeel",
+     "engels",
+     "afleiding",
+     "typefouten"
+    ],
+    "per_variant": {
+     "origineel": 0.59,
+     "omgekeerd": 0.61,
+     "geschud": 0.5833,
+     "informeel": 0.6,
+     "engels": 0.5833,
+     "afleiding": 0.5833,
+     "typefouten": 0.57
+    },
+    "original": 0.59,
+    "worst_case": 0.29,
+    "gap": 0.3,
+    "reading": "worst_case: share of items answered correctly under the original and all six variants",
+    "band": "onstabiel",
+    "weakest_variant": {
+     "name": "typefouten",
+     "accuracy": 0.57
+    }
+   },
    "consistency": {
     "items_probed": 160,
     "order_reversed": {
@@ -2066,10 +2019,10 @@
       0.577,
       0.6565
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 81,
+     "original": 0.5432,
+     "worst_case": 0.2222,
+     "drop": 0.321
     },
     {
      "id": "grammatica",
@@ -2081,10 +2034,10 @@
       0.5048,
       0.6216
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 137,
+     "original": 0.4817,
+     "worst_case": 0.1533,
+     "drop": 0.3285
     },
     {
      "id": "schrijven",
@@ -2111,10 +2064,10 @@
       0.5749,
       0.801
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 27,
+     "original": 0.6667,
+     "worst_case": 0.4815,
+     "drop": 0.1852
     },
     {
      "id": "woordenschat",
@@ -2126,10 +2079,10 @@
       0.4526,
       0.6517
      ],
-     "sample_n": null,
-     "original": null,
-     "worst_case": null,
-     "drop": null
+     "sample_n": 55,
+     "original": 0.5818,
+     "worst_case": 0.3454,
+     "drop": 0.2364
     },
     {
      "id": "kennis",
@@ -2147,7 +2100,36 @@
      "drop": null
     }
    ],
-   "robustness": null,
+   "robustness": {
+    "items": 300,
+    "variants": [
+     "origineel",
+     "omgekeerd",
+     "geschud",
+     "informeel",
+     "engels",
+     "afleiding",
+     "typefouten"
+    ],
+    "per_variant": {
+     "origineel": 0.5333,
+     "omgekeerd": 0.54,
+     "geschud": 0.54,
+     "informeel": 0.55,
+     "engels": 0.56,
+     "afleiding": 0.5067,
+     "typefouten": 0.5233
+    },
+    "original": 0.5333,
+    "worst_case": 0.2367,
+    "gap": 0.2966,
+    "reading": "worst_case: share of items answered correctly under the original and all six variants",
+    "band": "onstabiel",
+    "weakest_variant": {
+     "name": "afleiding",
+     "accuracy": 0.5067
+    }
+   },
    "consistency": {
     "items_probed": 160,
     "order_reversed": {
@@ -2173,6 +2155,169 @@
    },
    "canary": null,
    "generated_at": "2026-09-09T21:52:02Z"
+  },
+  {
+   "provider": "ollama",
+   "model": "hf.co/BramVanroy/GEITje-7B-ultra-GGUF:Q4_K_M",
+   "is_control": false,
+   "failed": false,
+   "failure_reason": null,
+   "n": 1363,
+   "correct": 735,
+   "accuracy": 0.5393,
+   "ci95": [
+    0.5127,
+    0.5656
+   ],
+   "unparsed": 0,
+   "est_cost_eur": 0.0,
+   "sections": [
+    {
+     "id": "taalvorm",
+     "label": "Taalvorm",
+     "indicator": false,
+     "n": 570,
+     "accuracy": 0.607,
+     "ci95": [
+      0.5663,
+      0.6463
+     ],
+     "sample_n": 81,
+     "original": 0.6297,
+     "worst_case": 0.1482,
+     "drop": 0.4815
+    },
+    {
+     "id": "grammatica",
+     "label": "Spelling en grammatica",
+     "indicator": false,
+     "n": 273,
+     "accuracy": 0.5275,
+     "ci95": [
+      0.4683,
+      0.5859
+     ],
+     "sample_n": 137,
+     "original": 0.511,
+     "worst_case": 0.0511,
+     "drop": 0.4599
+    },
+    {
+     "id": "schrijven",
+     "label": "Schrijven",
+     "indicator": false,
+     "n": 69,
+     "accuracy": 0.4928,
+     "ci95": [
+      0.3783,
+      0.6079
+     ],
+     "sample_n": null,
+     "original": null,
+     "worst_case": null,
+     "drop": null
+    },
+    {
+     "id": "lezen",
+     "label": "Lezen",
+     "indicator": false,
+     "n": 60,
+     "accuracy": 0.5333,
+     "ci95": [
+      0.4089,
+      0.6537
+     ],
+     "sample_n": 27,
+     "original": 0.5185,
+     "worst_case": 0.2222,
+     "drop": 0.2963
+    },
+    {
+     "id": "woordenschat",
+     "label": "Woordenschat",
+     "indicator": false,
+     "n": 92,
+     "accuracy": 0.8261,
+     "ci95": [
+      0.736,
+      0.89
+     ],
+     "sample_n": 55,
+     "original": 0.8728,
+     "worst_case": 0.7454,
+     "drop": 0.1273
+    },
+    {
+     "id": "kennis",
+     "label": "Algemene kennis",
+     "indicator": true,
+     "n": 299,
+     "accuracy": 0.3445,
+     "ci95": [
+      0.2929,
+      0.4
+     ],
+     "sample_n": null,
+     "original": null,
+     "worst_case": null,
+     "drop": null
+    }
+   ],
+   "robustness": {
+    "items": 300,
+    "variants": [
+     "origineel",
+     "omgekeerd",
+     "geschud",
+     "informeel",
+     "engels",
+     "afleiding",
+     "typefouten"
+    ],
+    "per_variant": {
+     "origineel": 0.61,
+     "omgekeerd": 0.58,
+     "geschud": 0.59,
+     "informeel": 0.6133,
+     "engels": 0.6,
+     "afleiding": 0.56,
+     "typefouten": 0.6033
+    },
+    "original": 0.61,
+    "worst_case": 0.22,
+    "gap": 0.39,
+    "reading": "worst_case: share of items answered correctly under the original and all six variants",
+    "band": "onstabiel",
+    "weakest_variant": {
+     "name": "afleiding",
+     "accuracy": 0.56
+    }
+   },
+   "consistency": {
+    "items_probed": 160,
+    "order_reversed": {
+     "n": 160,
+     "flips": 76,
+     "flip_rate": 0.475,
+     "reading": "share of answers that changed content when the options were listed back to front"
+    },
+    "register_swapped": {
+     "n": 160,
+     "flips": 4,
+     "flip_rate": 0.025,
+     "reading": "share of answers that changed when the instruction was phrased informally"
+    }
+   },
+   "heldout": {
+    "n": 153,
+    "public_accuracy": 0.5393,
+    "heldout_accuracy": 0.5686,
+    "gap": -0.0294,
+    "noise_floor": 0.1596,
+    "verdict": "geen teken van besmetting"
+   },
+   "canary": null,
+   "generated_at": "2026-09-09T20:49:04Z"
   },
   {
    "provider": "hf-dutch-gpt2-logprob",

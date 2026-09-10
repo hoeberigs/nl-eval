@@ -60,11 +60,11 @@ speech is out of scope.
 | claude-haiku-4-5 | **78.7%** (n=300) | 90.3% | 11.7 | wankel | 89.4% | 90.8% (geen teken van besmetting) |
 | gpt-5-mini | **75.7%** (n=300) | 90.3% | 14.7 | wankel | 88.3% | 90.2% (geen teken van besmetting) |
 | gpt-5-nano | **63.3%** (n=300) | 83.0% | 19.7 | onstabiel | 80.2% | 77.8% (geen teken van besmetting) |
-| qwen2.5:7b (local) | not tested | | | | 74.6% | 71.2% (geen teken van besmetting) |
-| gemma3:4b (local) | not tested | | | | 67.3% | 70.6% (geen teken van besmetting) |
-| GEITje-7B-ultra (local) | not tested | | | | 53.9% | 56.9% (geen teken van besmetting) |
-| llama3.2:3b (local) | not tested | | | | 53.9% | 64.7% (geen teken van besmetting) |
-| phi4-mini (local) | not tested | | | | 52.3% | 66.7% (geen teken van besmetting) |
+| qwen2.5:7b (local) | **52.0%** (n=300) | 75.7% | 23.7 | onstabiel | 74.6% | 71.2% (geen teken van besmetting) |
+| gemma3:4b (local) | **39.7%** (n=300) | 69.0% | 29.3 | onstabiel | 67.3% | 70.6% (geen teken van besmetting) |
+| llama3.2:3b (local) | **29.0%** (n=300) | 59.0% | 30.0 | onstabiel | 53.9% | 64.7% (geen teken van besmetting) |
+| phi4-mini (local) | **23.7%** (n=300) | 53.3% | 29.7 | onstabiel | 52.3% | 66.7% (geen teken van besmetting) |
+| GEITje-7B-ultra (local) | **22.0%** (n=300) | 61.0% | 39.0 | onstabiel | 53.9% | 56.9% (geen teken van besmetting) |
 | GroNLP/gpt2-small-dutch | | | | BLiMP-NL only, by likelihood | 87.3% | |
 | gemini-3.6-flash | did not run | | | provider quota error | | |
 | always-a (control) | not tested | | | | 35.2% | not run |
